@@ -25,14 +25,6 @@ QString StdFunc::DeviceIP = "";
 QString StdFunc::s_OrganizationString = "";
 int StdFunc::m_tuneRequestCount = 0;
 
-// clang-format off
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QtCore/QTextCodec>
-#else
-#include <QtCore5Compat/QTextCodec>
-#endif
-// clang-format on
-
 /*! \brief Initialization function for static class fields.
  *  \details Initialize next fields by values: system home directory, organization, device IP, etc...
  */
@@ -273,17 +265,11 @@ quint32 StdFunc::Ping(quint32 addr)
     pingProcess->start(exec, params, QIODevice::ReadOnly);
     if (pingProcess->waitForFinished(100))
     {
-        QTextCodec *codec = QTextCodec::codecForMib(2086);
-        QString p_stdout = codec->toUnicode(pingProcess->readAllStandardOutput());
-        QString p_stderr = codec->toUnicode(pingProcess->readAllStandardError());
-#if QT_VERSION >= 0x050C00
-        QStringList list = p_stderr.isEmpty() ? p_stdout.split("\r\n", Qt::SkipEmptyParts)
-                                              : p_stderr.split("\r\n", Qt::SkipEmptyParts);
-#else
+        QString p_stdout = pingProcess->readAllStandardOutput();
+        QString p_stderr = pingProcess->readAllStandardError();
         QStringList list = p_stderr.isEmpty() ? p_stdout.split("\r\n") : p_stderr.split("\r\n");
-#endif
         if (std::any_of(list.constBegin(), list.constEnd(),
-                [](const QString &i) { return i.contains("TTL", Qt::CaseInsensitive); }))
+                        [](const QString &i) { return i.contains("TTL", Qt::CaseInsensitive); }))
         {
             delete pingProcess;
             return addr;

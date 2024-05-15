@@ -30,7 +30,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-find_package(QT NAMES Qt6 Qt5)
+find_package(QT NAMES Qt6)
 find_package(Qt${QT_VERSION_MAJOR}
   COMPONENTS Core Network Xml REQUIRED
 )
@@ -96,13 +96,13 @@ target_link_libraries(
 )
 
 # Using Qt6: linking Qt5 Compatibility library
-if (${QT_VERSION_MAJOR} EQUAL 6)
-  find_package(Qt${QT_VERSION_MAJOR}
-    COMPONENTS Core5Compat REQUIRED)
-  target_link_libraries(
-    ${PROJECT_NAME} PUBLIC
-    Qt${QT_VERSION_MAJOR}::Core5Compat)
-endif()
+#if (${QT_VERSION_MAJOR} EQUAL 6)
+#  find_package(Qt${QT_VERSION_MAJOR}
+#    COMPONENTS Core5Compat REQUIRED)
+#  target_link_libraries(
+##    ${PROJECT_NAME} PUBLIC
+ #   Qt${QT_VERSION_MAJOR}::Core5Compat)
+#endif()
 
 # Linking liblzma
 if(PROJECT_TARGET_NAME MATCHES "win")
