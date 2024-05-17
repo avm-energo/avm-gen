@@ -13,7 +13,7 @@ private:
     u8 value[elements];
 
 public:
-    explicit uint24() noexcept;
+    uint24() noexcept;
     explicit uint24(const uint24 &val) noexcept;
     explicit uint24(const u32 val) noexcept;
 
