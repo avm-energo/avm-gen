@@ -100,7 +100,6 @@ public:
 
     static quint32 Ping(quint32 addr);
     static quint32 CheckPort(quint32 ip4Addr, quint16 port);
-    static std::string execCommand(std::string command, int &exitCode);
 
     static void RemoveSubstr(std::string &str, std::string &substr);
 

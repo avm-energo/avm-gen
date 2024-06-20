@@ -1,4 +1,4 @@
-#include "executecommand.h"
+#include "gen/executecommand.h"
 
 #include <QThread>
 
