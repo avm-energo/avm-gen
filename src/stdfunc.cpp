@@ -315,13 +315,14 @@ quint32 StdFunc::CheckPort(quint32 ip4Addr, quint16 port)
     return ip4Addr;
 }
 
-std::string StdFunc::execCommand(std::string command)
+std::string StdFunc::execCommand(std::string command, int &exitCode)
 {
     char buffer[128];
     std::string result = "";
     FILE *pipe = popen(command.c_str(), "r");
     if (!pipe)
     {
+        exitCode = -2;
         qCritical() << "popen() failed!";
         return std::string();
     }
@@ -334,10 +335,11 @@ std::string StdFunc::execCommand(std::string command)
     } catch (...)
     {
         pclose(pipe);
-        qCritical() << "popen() failed!";
+        exitCode = -2;
+        qCritical() << "exception in fgets!";
         return std::string();
     }
-    pclose(pipe);
+    exitCode = pclose(pipe);
     return result;
 }
 
