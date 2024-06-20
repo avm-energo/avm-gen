@@ -315,6 +315,32 @@ quint32 StdFunc::CheckPort(quint32 ip4Addr, quint16 port)
     return ip4Addr;
 }
 
+std::string StdFunc::execCommand(std::string command)
+{
+    char buffer[128];
+    std::string result = "";
+    FILE *pipe = popen(command.c_str(), "r");
+    if (!pipe)
+    {
+        qCritical() << "popen() failed!";
+        return std::string();
+    }
+    try
+    {
+        while (fgets(buffer, sizeof buffer, pipe) != NULL)
+        {
+            result += buffer;
+        }
+    } catch (...)
+    {
+        pclose(pipe);
+        qCritical() << "popen() failed!";
+        return std::string();
+    }
+    pclose(pipe);
+    return result;
+}
+
 /*! \brief Removes specified substring from specified string.
  *  \param str[in, out] The string from which the substring will be removed.
  *  \param substr[i] The substring that will be removed from string.
