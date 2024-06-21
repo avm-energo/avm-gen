@@ -6,7 +6,7 @@ ExecuteCommandAsync::ExecuteCommandAsync(QObject *parent) : QObject(parent)
 {
 }
 
-void ExecuteCommandAsync::execute(std::string &command)
+void ExecuteCommandAsync::execute(const QString &command)
 {
     ExecuteCommandThread *threadObj = new ExecuteCommandThread;
     threadObj->setCommand(command);
@@ -25,7 +25,7 @@ ExecuteCommandThread::ExecuteCommandThread(QObject *parent) : QObject(parent)
 {
 }
 
-void ExecuteCommandThread::setCommand(std::string &cmd)
+void ExecuteCommandThread::setCommand(const QString &cmd)
 {
     command = cmd;
 }
@@ -33,8 +33,8 @@ void ExecuteCommandThread::setCommand(std::string &cmd)
 void ExecuteCommandThread::run()
 {
     char buffer[128];
-    std::string result = "";
-    FILE *pipe = popen(command.c_str(), "r");
+    QString result = "";
+    FILE *pipe = popen(command.toLatin1(), "r");
     if (!pipe)
     {
         emit finished(-1);

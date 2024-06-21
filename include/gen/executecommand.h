@@ -8,12 +8,12 @@ class ExecuteCommandAsync : public QObject
 public:
     ExecuteCommandAsync(QObject *parent = nullptr);
 
-    void execute(std::string &command);
+    void execute(const QString &command);
 
 private slots:
 
 signals:
-    void resultAcquired(std::string &str);
+    void resultAcquired(const QString &str);
     void finished(int result);
 };
 
@@ -22,15 +22,15 @@ class ExecuteCommandThread : public QObject
     Q_OBJECT
 public:
     ExecuteCommandThread(QObject *parent = nullptr);
-    void setCommand(std::string &cmd);
+    void setCommand(const QString &cmd);
 
 private:
-    std::string command;
+    QString command;
 
 public slots:
     void run();
 
 signals:
-    void resultAcquired(std::string &str);
+    void resultAcquired(const QString &str);
     void finished(int result);
 };
