@@ -41,12 +41,12 @@ void ExecuteCommandThread::run()
         qDebug() << "pipe open failed";
         emit finished(-1);
     }
-    qDebug() << "pipe opened";
+    //    qDebug() << "pipe opened";
     try
     {
         while (fgets(buffer, sizeof buffer, pipe) != NULL)
         {
-            qDebug() << "++buffer: " << buffer;
+            //            qDebug() << "++buffer: " << buffer;
             result += buffer;
         }
     } catch (...)
@@ -54,7 +54,7 @@ void ExecuteCommandThread::run()
         pclose(pipe);
         emit finished(-2);
     }
-    qDebug() << "result is: " << result.c_str();
+    //    qDebug() << "result is: " << result.c_str();
     emit finished(pclose(pipe));
     emit resultAcquired(result.c_str());
 }
