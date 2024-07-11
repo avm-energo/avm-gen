@@ -71,16 +71,10 @@ quint32 StdFunc::StrToVer(const QString &str)
 {
     auto dotPos = str.indexOf('.');
     auto dashPos = str.indexOf('-');
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    int mv = str.leftRef(dotPos).toInt() << 24;
-    int lv = str.midRef(dotPos + 1, dashPos - dotPos - 1).toInt() << 16;
-    int sv = str.rightRef(str.size() - dashPos - 1).toInt();
-#else
     // Don't trust clazy: Qt6 QString hasn't leftRef, midRef and rightRef methods
     int mv = str.left(dotPos).toInt() << 24;
     int lv = str.mid(dotPos + 1, dashPos - dotPos - 1).toInt() << 16;
     int sv = str.right(str.size() - dashPos - 1).toInt();
-#endif
     return (mv | lv | sv);
 }
 

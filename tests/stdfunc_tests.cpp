@@ -18,6 +18,7 @@ void GenTestClass::strToVerTest()
     QCOMPARE(expectedValue, realValue);
     QVERIFY(StdFunc::StrToVer("3.3-0001") > StdFunc::StrToVer("3.3-0000"));
     QVERIFY(StdFunc::StrToVer("4.3-0001") > StdFunc::StrToVer("3.3-0000"));
+    QVERIFY(StdFunc::StrToVer("ABCDEF.GHI") == 0);
 }
 
 void GenTestClass::enumToStrTest()
@@ -64,7 +65,7 @@ void GenTestClass::stdToByteArrayTest04()
     auto first = StdFunc::toByteArray(data);
     auto second = StdFunc::toByteArray(qToBigEndian(data));
     StdFunc::Wait();
-    // qDebug() << first << second;
+    qDebug() << first << second;
     QVERIFY(first != second);
 }
 

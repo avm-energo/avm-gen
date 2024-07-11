@@ -11,13 +11,18 @@ struct MsgDescr
     const char *prefix;
 };
 
-const static QMap<QtMsgType, MsgDescr> msgTypes {
-    { QtDebugMsg, { Logger::LogLevels::LOGLEVEL_DEBUG, "[DEBUG]" } },      //
-    { QtWarningMsg, { Logger::LogLevels::LOGLEVEL_WARN, "[WARNING]" } },   //
-    { QtCriticalMsg, { Logger::LogLevels::LOGLEVEL_CRIT, "[CRITICAL]" } }, //
-    { QtFatalMsg, { Logger::LogLevels::LOGLEVEL_FATAL, "[FATAL]" } },      //
-    { QtInfoMsg, { Logger::LogLevels::LOGLEVEL_INFO, "[INFO]" } }          //
+const static QMap<Logger::MessageTypes, MsgDescr> _msgTypes {
+    { Logger::Debug, { Logger::LogLevels::LOGLEVEL_DEBUG, "[DEBUG]" } },      //
+    { Logger::Info, { Logger::LogLevels::LOGLEVEL_INFO, "[INFO]" } },         //
+    { Logger::Warning, { Logger::LogLevels::LOGLEVEL_WARN, "[WARNING]" } },   //
+    { Logger::Critical, { Logger::LogLevels::LOGLEVEL_CRIT, "[CRITICAL]" } }, //
+    { Logger::Fatal, { Logger::LogLevels::LOGLEVEL_FATAL, "[FATAL]" } },      //
+    { Logger::All, { Logger::LogLevels::LOGLEVEL_FATAL, "" } }                //
 };
+
+const static QMap<QtMsgType, Logger::MessageTypes> _msgTypesTranslateMap { { QtDebugMsg, Logger::Debug },
+    { QtInfoMsg, Logger::Info }, { QtWarningMsg, Logger::Warning }, { QtCriticalMsg, Logger::Critical },
+    { QtFatalMsg, Logger::Fatal } };
 
 const QMap<QString, Logger::LogLevels> _logLevelsMap = { { "Debug", Logger::LogLevels::LOGLEVEL_DEBUG },
     { "Info", Logger::LogLevels::LOGLEVEL_INFO }, { "Fatal", Logger::LogLevels::LOGLEVEL_FATAL },
@@ -29,7 +34,8 @@ QMutex Logger::_mutex;
 
 void Logger::messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    if (_logLevel < msgTypes.value(type).loglevel)
+    Logger::MessageTypes msgType = _msgTypesTranslateMap[type];
+    if (_logLevel < _msgTypes.value(msgType).loglevel)
         return;
     QMutexLocker locker(&_mutex);
     QStringList buffer = QString(context.file).split("\\");
@@ -47,19 +53,20 @@ void Logger::messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogConte
         msg                                                           // Message
     };
     ErrorQueue::GetInstance().pushError(tmpm);
-    writeLog(type, msg);
+    writeLog(msgType, msg);
 }
 
 void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     Q_UNUSED(context)
-    if (_logLevel < msgTypes.value(type).loglevel)
+    Logger::MessageTypes msgType = _msgTypesTranslateMap[type];
+    if (_logLevel < _msgTypes.value(msgType).loglevel)
         return;
     QMutexLocker locker(&_mutex);
-    writeLog(type, msg);
+    writeLog(msgType, msg);
 }
 
-void Logger::writeLog(QtMsgType type, const QString &msg)
+void Logger::writeLog(Logger::MessageTypes type, const QString &msg)
 {
     QFile logFile;
     QTextStream out;
@@ -68,7 +75,7 @@ void Logger::writeLog(QtMsgType type, const QString &msg)
     if (logFile.open(QFile::ReadWrite | QFile::Text | QFile::Append))
     {
         out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz "); // Log datetime
-        out << msgTypes.value(type).prefix << msg << "\n";
+        out << _msgTypes.value(type).prefix << msg << "\n";
         out.flush(); // Flush buffer
         Files::checkNGzip(&logFile);
         logFile.close();
@@ -88,8 +95,8 @@ void Logger::writeStart(const QString &filename)
         << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") + "\n"
         << QCoreApplication::applicationName() << " v." << QCoreApplication::applicationVersion();
     out.flush();
-    // logFile.close();
     Files::checkNGzip(&logFile);
+    logFile.close();
 }
 
 void Logger::setLogLevel(LogLevels level)

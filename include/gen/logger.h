@@ -22,9 +22,19 @@ public:
         LOGLEVEL_FATAL = 0
     };
 
+    enum MessageTypes
+    {
+        Debug,
+        Info,
+        Warning,
+        Critical,
+        Fatal,
+        All
+    };
+
     void static messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     void static messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg);
-    void static writeLog(QtMsgType type, const QString &msg);
+    void static writeLog(MessageTypes type, const QString &msg);
     void static writeStart(const QString &filename);
     void static setLogLevel(LogLevels level);
     void static setLogLevel(const QString &level);
