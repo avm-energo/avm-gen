@@ -32,7 +32,7 @@ endif()
 
 find_package(QT NAMES Qt6 Qt5)
 find_package(Qt${QT_VERSION_MAJOR}
-  COMPONENTS Core Network Xml REQUIRED
+  COMPONENTS Core Network REQUIRED
 )
 
 if(NOT DEFINED PROJECT_ARCHITECTURE)
@@ -91,7 +91,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 target_link_libraries(
   ${PROJECT_NAME} PUBLIC
   Qt${QT_VERSION_MAJOR}::Core
-  Qt${QT_VERSION_MAJOR}::Xml
   Qt${QT_VERSION_MAJOR}::Network
 )
 
