@@ -23,21 +23,17 @@ const QMap<QString, Logger::LogLevels> _logLevelsMap = { { "Debug", Logger::LogL
     { "Info", Logger::LogLevels::LOGLEVEL_INFO }, { "Fatal", Logger::LogLevels::LOGLEVEL_FATAL },
     { "Warn", Logger::LogLevels::LOGLEVEL_WARN }, { "Error", Logger::LogLevels::LOGLEVEL_CRIT } };
 
-static QString logFilename = "coma.log"; // имя по умолчанию
+static QString s_logFilename = "logger.log"; // имя по умолчанию
 Logger::LogLevels Logger::_logLevel = Logger::LogLevels::LOGLEVEL_WARN;
 QMutex Logger::_mutex;
 
-void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void Logger::messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     if (_logLevel < msgTypes.value(type).loglevel)
         return;
     QMutexLocker locker(&_mutex);
-    const char space = ' ';
-    //    const char colon = ':';
     QStringList buffer = QString(context.file).split("\\");
     QString sourceFile = buffer.isEmpty() ? "" : buffer.takeLast();
-    QFile logFile;
-    QTextStream out;
 
     std::string function = context.function ? context.function : "";
     std::string rubbish(" __cdecl");
@@ -51,22 +47,39 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
         msg                                                           // Message
     };
     ErrorQueue::GetInstance().pushError(tmpm);
+    writeLog(type, msg);
+}
 
-    logFile.setFileName(logFilename);
+void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    Q_UNUSED(context)
+    if (_logLevel < msgTypes.value(type).loglevel)
+        return;
+    QMutexLocker locker(&_mutex);
+    writeLog(type, msg);
+}
+
+void Logger::writeLog(QtMsgType type, const QString &msg)
+{
+    QFile logFile;
+    QTextStream out;
+    logFile.setFileName(s_logFilename);
     out.setDevice(&logFile);
-    logFile.open(QFile::ReadWrite | QFile::Text | QFile::Append);
-    out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz "); // Log datetime
-    out << msgTypes.value(type).prefix << space << msg << "\n";
-    out.flush(); // Flush buffer
-    // logFile.close();
-    Files::checkNGzip(&logFile);
+    if (logFile.open(QFile::ReadWrite | QFile::Text | QFile::Append))
+    {
+        out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz "); // Log datetime
+        out << msgTypes.value(type).prefix << msg << "\n";
+        out.flush(); // Flush buffer
+        Files::checkNGzip(&logFile);
+        logFile.close();
+    }
 }
 
 void Logger::writeStart(const QString &filename)
 {
     QMutexLocker locker(&_mutex);
-    logFilename = filename;
-    QFile logFile(logFilename);
+    s_logFilename = filename;
+    QFile logFile(s_logFilename);
     Files::makePath(logFile);
     QTextStream out;
     out.setDevice(&logFile);
