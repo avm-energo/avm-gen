@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(gen
   DESCRIPTION "gen"
-  VERSION 1.4.0)
+  VERSION 1.5.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,8 +19,21 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_BINARY_DIR}")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(GNUInstallDirs)
-include(DetermineTargetArchitecture)
 include(SetProjectTargetName)
+
+# Getting CMake system name
+string(TOLOWER "${CMAKE_SYSTEM_NAME}" SYSTEM_NAME)
+
+if(SYSTEM_NAME STREQUAL "linux")
+    message(STATUS "Compiling for linux")
+    add_compile_definitions(SYSTEM_TYPE=0)
+elseif(SYSTEM_NAME STREQUAL "windows")
+    message(STATUS "Compiling for windows")
+    add_compile_definitions(SYSTEM_TYPE=1)
+else()
+    message(STATUS "Compiling for unknown")
+    add_compile_definitions(SYSTEM_TYPE=2)
+endif()
 
 # Setup build type if it's not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -32,16 +45,15 @@ endif()
 
 find_package(QT NAMES Qt6)
 find_package(Qt${QT_VERSION_MAJOR}
-  COMPONENTS Core Network Xml REQUIRED
+  COMPONENTS Core Network REQUIRED
 )
 
-if(NOT DEFINED PROJECT_ARCHITECTURE)
-  target_architecture(PROJECT_ARCHITECTURE)
-  set_project_target_name(${PROJECT_ARCHITECTURE} PROJECT_TARGET_NAME USER_DIRECTORY)
-endif()
-
-if(PROJECT_TARGET_NAME MATCHES "win")
-  include(ConanInstallDependencies)
+find_package(LibLZMA 5.2.5 QUIET)
+if (${LibLZMA_FOUND})
+    message(STATUS "Using installed liblzma")
+else()
+    message(STATUS "Using external xz-utils")
+    include(lzma)
 endif()
 
 #------------------------------------------------------------------------------#
@@ -52,23 +64,28 @@ file(GLOB_RECURSE cpp_sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE public_headers ${PROJECT_SOURCE_DIR}/include/*.h)
 
 # Library building settings
-if(GEN_STATIC)
-  message(STATUS "GEN STATIC LIBRARY")
-  add_library(${PROJECT_NAME} STATIC ${public_headers} ${cpp_sources})
-  target_compile_definitions(${PROJECT_NAME} PUBLIC -DHAVE_STATIC_BUILD)
+if(BUILD_SHARED_LIBS)
+    message(STATUS "GEN SHARED LIBRARY")
+    add_library(${PROJECT_NAME} SHARED ${public_headers} ${cpp_sources})
+    target_compile_definitions(${PROJECT_NAME} PRIVATE -DGEN_EXPORTS)
+    target_compile_definitions(${PROJECT_NAME} INTERFACE -DGEN_IMPORTS)
 else()
-  message(STATUS "GEN SHARED LIBRARY")
-  add_library(${PROJECT_NAME} SHARED ${public_headers} ${cpp_sources})
-  target_compile_definitions(${PROJECT_NAME} PRIVATE -DGEN_EXPORTS)
-  target_compile_definitions(${PROJECT_NAME} INTERFACE -DGEN_IMPORTS)
+    message(STATUS "GEN STATIC LIBRARY")
+    add_library(${PROJECT_NAME} STATIC ${public_headers} ${cpp_sources})
+    target_compile_definitions(${PROJECT_NAME} PUBLIC -DHAVE_STATIC_BUILD)
 endif()
+
 target_include_directories(${PROJECT_NAME} PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+include_directories(${LibLZMA_INCLUDE_DIR})
+
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
 
+add_dependencies(${PROJECT_NAME} LibLZMA)
+
 # Using compile warnings to detect bugs and mistakes
-if(MSVC)
+if(SYSTEM_NAME STREQUAL "windows")
   target_compile_options(${PROJECT_NAME} PRIVATE /W4)
 else() # # GCC or Clang
   target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
@@ -76,7 +93,7 @@ endif()
 
 # Using sanitizers for library in debug build type
 if(GEN_USING_SANITIZERS)
-  if(MSVC)
+  if(SYSTEM_NAME STREQUAL "windows")
     message(STATUS "MSVC version: ${MSVC_VERSION}, toolset version: ${MSVC_TOOLSET_VERSION}")
   else() # GCC or Clang
     target_compile_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address,undefined -fstack-protector)
@@ -91,33 +108,9 @@ set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 target_link_libraries(
   ${PROJECT_NAME} PUBLIC
   Qt${QT_VERSION_MAJOR}::Core
-  Qt${QT_VERSION_MAJOR}::Xml
   Qt${QT_VERSION_MAJOR}::Network
+  ${LibLZMA_IMPORTED_LOCATION_${CMAKE_BUILD_TYPE}}
 )
-
-# Using Qt6: linking Qt5 Compatibility library
-#if (${QT_VERSION_MAJOR} EQUAL 6)
-#  find_package(Qt${QT_VERSION_MAJOR}
-#    COMPONENTS Core5Compat REQUIRED)
-#  target_link_libraries(
-##    ${PROJECT_NAME} PUBLIC
- #   Qt${QT_VERSION_MAJOR}::Core5Compat)
-#endif()
-
-# Linking liblzma
-if(PROJECT_TARGET_NAME MATCHES "win")
-  # Getting liblzma from conan xz_utils packet
-  find_package(LibLZMA)
-  if(LibLZMA_FOUND)
-    include_directories(${LibLZMA_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} PRIVATE LibLZMA::LibLZMA)
-  else()
-    message(FATAL_ERROR "liblzma not found, please install it manually!")
-  endif()
-else()
-  # Getting liblzma from APT: apt-get install liblzma-dev
-  target_link_libraries(${PROJECT_NAME} PUBLIC lzma)
-endif()
 
 # Building tests
 if (GEN_BUILD_TESTS)

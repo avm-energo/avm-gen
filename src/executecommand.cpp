@@ -33,8 +33,10 @@ void ExecuteCommandThread::setCommand(const QString &cmd)
 
 void ExecuteCommandThread::run()
 {
-    char buffer[128];
     std::string result = "";
+
+#if(SYSTEM_TYPE==0) // linux
+    char buffer[128];
     FILE *pipe = popen(command.toLatin1(), "r");
     if (!pipe)
     {
@@ -56,5 +58,10 @@ void ExecuteCommandThread::run()
     }
     //    qDebug() << "result is: " << result.c_str();
     emit finished(pclose(pipe));
+#elif(SYSTEM_TYPE==1) // windows
+// to be developed: https://learn.microsoft.com/en-us/windows/win32/procthread/creating-a-child-process-with-redirected-input-and-output?redirectedfrom=MSDN
+
+#else
+#endif
     emit resultAcquired(result.c_str());
 }
