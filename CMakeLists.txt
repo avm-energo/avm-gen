@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(gen
   DESCRIPTION "gen"
-  VERSION 1.5.0)
+  VERSION 1.5.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -11,7 +11,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-option(GEN_STATIC "Build gen as static library" OFF)
 option(GEN_USING_SANITIZERS "Using ASan and UBSan for gen and its tests" ON)
 option(GEN_BUILD_TESTS "Build gen library tests" ON)
 
@@ -61,26 +60,24 @@ endif()
 #------------------------------------------------------------------------------#
 # Define target sources
 file(GLOB_RECURSE cpp_sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
-file(GLOB_RECURSE public_headers ${PROJECT_SOURCE_DIR}/include/*.h)
+file(GLOB_RECURSE h_sources ${PROJECT_SOURCE_DIR}/include/*.h)
+file(GLOB_RECURSE public_headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/ LIST_DIRECTORIES true ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/*.h)
 
 # Library building settings
 if(BUILD_SHARED_LIBS)
     message(STATUS "GEN SHARED LIBRARY")
-    add_library(${PROJECT_NAME} SHARED ${public_headers} ${cpp_sources})
+    add_library(${PROJECT_NAME} SHARED ${h_sources} ${cpp_sources})
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DGEN_EXPORTS)
     target_compile_definitions(${PROJECT_NAME} INTERFACE -DGEN_IMPORTS)
 else()
     message(STATUS "GEN STATIC LIBRARY")
-    add_library(${PROJECT_NAME} STATIC ${public_headers} ${cpp_sources})
+    add_library(${PROJECT_NAME} STATIC ${h_sources} ${cpp_sources})
     target_compile_definitions(${PROJECT_NAME} PUBLIC -DHAVE_STATIC_BUILD)
 endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
-
-message(STATUS "LibLZMA_HEADERS_APIDIR: ${liblzma_SOURCE_DIR}/src/liblzma/api")
-message(STATUS "LibLZMA_BINARY_DIR: ${liblzma_BINARY_DIR}")
 target_include_directories(${PROJECT_NAME} PRIVATE ${liblzma_INCLUDE_DIRS} ${liblzma_SOURCE_DIR}/src/liblzma/api)
 
 # Linking Qt core libraries for using in gen library
@@ -89,11 +86,8 @@ target_link_libraries(
   Qt${QT_VERSION_MAJOR}::Core
   Qt${QT_VERSION_MAJOR}::Network
   liblzma
-  # ${liblzma_BINARY_DIR}/lzma.lib
 )
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
-
-# add_dependencies(${PROJECT_NAME} LibLZMA)
 
 # Using compile warnings to detect bugs and mistakes
 if(SYSTEM_NAME STREQUAL "windows")
@@ -115,13 +109,6 @@ endif()
 # Set project version as gen target property
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 
-message(STATUS "CMAKE_BUILD_TYPE is: ${CMAKE_BUILD_TYPE}")
-
-# get_target_property(liblzma_lib LibLZMA IMPORTED_LOCATION_${CMAKE_BUILD_TYPE})
-# message(STATUS "liblzma is: ${liblzma_lib}")
-# add_library(liblzma ${liblzma_lib})
-
-
 # Building tests
 if (GEN_BUILD_TESTS)
   add_subdirectory(tests)
@@ -134,7 +121,9 @@ install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
 )
 
+message(STATUS "public headers are: ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/${public_headers}")
+
 # --- Install include headers ---
 install(FILES
-  ${public_headers}
+  ${CMAKE_CURRENT_SOURCE_DIR}/${public_headers}
   DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")

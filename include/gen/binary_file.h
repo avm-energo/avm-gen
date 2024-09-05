@@ -41,6 +41,7 @@ private:
     inline void checking(const char *where) const noexcept
     {
         Q_ASSERT_X(m_file.size() % s_recordSize == 0, where, "Incorrect file size");
+        Q_UNUSED(where)
     }
 
 public:
