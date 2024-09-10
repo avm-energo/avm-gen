@@ -78,6 +78,8 @@ endif()
 target_include_directories(${PROJECT_NAME} PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+
+
 target_include_directories(${PROJECT_NAME} PRIVATE ${liblzma_INCLUDE_DIRS} ${liblzma_SOURCE_DIR}/src/liblzma/api)
 
 # Linking Qt core libraries for using in gen library
@@ -120,8 +122,6 @@ install(TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
 )
-
-message(STATUS "public headers are: ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/${public_headers}")
 
 # --- Install include headers ---
 install(FILES
