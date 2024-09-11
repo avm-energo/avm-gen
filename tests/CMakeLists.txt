@@ -36,6 +36,6 @@ endif()
 
 # Linking all necessary libraries
 target_link_libraries(${PROJECT_NAME}
-  gen
+  avm-gen
   Qt${QT_VERSION_MAJOR}::Core
   Qt${QT_VERSION_MAJOR}::Test)
