@@ -15,6 +15,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_BINARY_DIR}")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
 # Getting CMake system name
 string(TOLOWER "${CMAKE_SYSTEM_NAME}" SYSTEM_NAME)
@@ -95,13 +96,23 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     endif()
 endif()
 
-# Linking Qt core libraries for using in gen library
 target_link_libraries(
-  ${PROJECT_NAME} PUBLIC
-  Qt${QT_VERSION_MAJOR}::Core
-  Qt${QT_VERSION_MAJOR}::Network
-  liblzma
+    ${PROJECT_NAME} PUBLIC
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Network
 )
+# Linking Qt core libraries for using in gen library
+if (${LibLZMA_FOUND})
+    target_link_libraries(
+        ${PROJECT_NAME} PUBLIC
+        LibLZMA::LibLZMA
+    )
+else()
+    target_link_libraries(
+        ${PROJECT_NAME} PUBLIC
+        liblzma
+    )
+endif()
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
 
 # Using compile warnings to detect bugs and mistakes
