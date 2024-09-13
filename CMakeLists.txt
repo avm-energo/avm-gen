@@ -76,7 +76,7 @@ add_library(avm-energo::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # Set project version as gen target property
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER public_headers)
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER ${public_headers})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${liblzma_INCLUDE_DIRS} ${liblzma_SOURCE_DIR}/src/liblzma/api)
 
