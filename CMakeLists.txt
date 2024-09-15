@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
 
 project(avm-gen
   DESCRIPTION "General library for AVM-Energo C++ projects"
@@ -161,8 +161,7 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
         "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
-
-# # --- Install include headers ---
-# install(FILES
-#   ${CMAKE_CURRENT_SOURCE_DIR}/${public_headers}
-#   DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
+# if (NOT ${LibLZMA_FOUND})
+#     install(FILES "${liblzma_BINARY_DIR}/liblzma.dll" DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
+#     install(FILES "${liblzma_BINARY_DIR}/lzma.lib" DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
+# endif()
