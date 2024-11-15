@@ -33,5 +33,5 @@ public:
         QDomElement &root, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues);
 
 private:
-    static QString getAttrValue(const QString &string, const QString &attrname);
+    static QString getAttrValue(QString &string, const QString &attrname);
 };

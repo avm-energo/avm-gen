@@ -61,7 +61,7 @@ void XmlFunc::replaceDomWithNewAttrRecursively(
     }
 }
 
-QString XmlFunc::getAttrValue(const QString &string, const QString &attrname)
+QString XmlFunc::getAttrValue(QString &string, const QString &attrname)
 {
     QString tmps;
     int index;
@@ -80,6 +80,7 @@ QString XmlFunc::getAttrValue(const QString &string, const QString &attrname)
             }
             return tmps;
         }
+        string = string.sliced(index);
     }
     return QString();
 }
