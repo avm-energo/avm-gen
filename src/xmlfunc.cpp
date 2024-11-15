@@ -7,20 +7,20 @@ XmlFunc::XmlFunc()
 // check attrname to contain attrs.at(0) in it and if so
 // replace all attrs oldvalues with newvalues
 
-void XmlFunc::replaceDomWithNewAttrRecursively(QByteArray &data, const QString &name, const QString &attrname,
-    const QStringList &attrs, const QString &attrcheckvalue, const QStringList &newvalues)
+void XmlFunc::replaceDomWithNewAttrRecursively(
+    QByteArray &data, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues)
 {
     QDomDocument doc;
     doc.setContent(data);
     // recurivelly change color
     QDomElement root = doc.documentElement();
 
-    replaceDomWithNewAttrRecursively(root, name, attrname, attrs, attrcheckvalue, newvalues);
+    replaceDomWithNewAttrRecursively(root, findInfo, attrs, newvalues);
     data = doc.toByteArray();
 }
 
-void XmlFunc::replaceDomWithNewAttrRecursively(QDomElement &root, const QString &name, const QString &attrname,
-    const QStringList &attrs, const QString &attrcheckvalue, const QStringList &newvalues)
+void XmlFunc::replaceDomWithNewAttrRecursively(
+    QDomElement &root, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues)
 {
     assert(attrs.size() == newvalues.size());
     QDomNodeList nodes = root.childNodes();
@@ -28,14 +28,14 @@ void XmlFunc::replaceDomWithNewAttrRecursively(QDomElement &root, const QString 
     {
         QDomNode node = nodes.at(i);
         //        QString tmps = node.nodeName();
-        if (node.nodeName() == name) // path
+        if (node.nodeName() == findInfo.DomElementName) // path
         {
             QDomNode newnode = node;
             QDomElement element = newnode.toElement();
-            QString tmps = element.attribute(attrname); // style
+            QString tmps = element.attribute(findInfo.AttrName); // style
             int count = 0;
-            QString attrvalue = getAttrValue(tmps, attrs.first());
-            if (attrvalue == attrcheckvalue)
+            QString attrvalue = getAttrValue(tmps, findInfo.ParameterName);
+            if (attrvalue == findInfo.ParameterValue)
             {
                 while (!attrvalue.isEmpty())
                 {
@@ -49,14 +49,14 @@ void XmlFunc::replaceDomWithNewAttrRecursively(QDomElement &root, const QString 
                             attrvalue.clear();
                     }
                 }
-                element.setAttribute(attrname, tmps);
+                element.setAttribute(findInfo.ParameterName, tmps);
                 root.replaceChild(newnode, node);
             }
         }
         else
         {
             QDomElement element = node.toElement();
-            replaceDomWithNewAttrRecursively(element, name, attrname, attrs, attrcheckvalue, newvalues);
+            replaceDomWithNewAttrRecursively(element, findInfo, attrs, newvalues);
         }
     }
 }
@@ -64,21 +64,22 @@ void XmlFunc::replaceDomWithNewAttrRecursively(QDomElement &root, const QString 
 QString XmlFunc::getAttrValue(const QString &string, const QString &attrname)
 {
     QString tmps;
-    int index = string.indexOf(attrname);
-    if (index == -1)
-        return QString();
-    index += attrname.size();
-    if (index >= string.size())
-        return QString();
-    if (string.at(index++) == ':')
+    int index;
+    while ((index = string.indexOf(attrname)) != -1)
     {
-        while ((index < string.size()) && (string.at(index) == ' '))
-            index++;
-        while ((index < string.size()) && (string.at(index) != ';') && (string.at(index) != '\"'))
+        index += attrname.size();
+        if (index >= string.size())
+            return QString();
+        if (string.at(index++) == ':')
         {
-            tmps += string.at(index++);
+            while ((index < string.size()) && (string.at(index) == ' '))
+                index++;
+            while ((index < string.size()) && (string.at(index) != ';') && (string.at(index) != '\"'))
+            {
+                tmps += string.at(index++);
+            }
+            return tmps;
         }
-        return tmps;
     }
     return QString();
 }
