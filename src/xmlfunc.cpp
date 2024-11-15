@@ -16,6 +16,7 @@ void XmlFunc::replaceDomWithNewAttrRecursively(QByteArray &data, const QString &
     QDomElement root = doc.documentElement();
 
     replaceDomWithNewAttrRecursively(root, name, attrname, attrs, attrcheckvalue, newvalues);
+    data = doc.toByteArray();
 }
 
 void XmlFunc::replaceDomWithNewAttrRecursively(QDomElement &root, const QString &name, const QString &attrname,
