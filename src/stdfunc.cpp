@@ -116,6 +116,20 @@ QString StdFunc::GetSystemHomeDir()
     return SystemHomeDir;
 }
 
+QString StdFunc::WhoAmI()
+{
+    QProcess process;
+
+    process.setProgram("whoami");
+
+    process.start();
+
+    while (process.state() != QProcess::NotRunning)
+        qApp->processEvents();
+
+    return process.readAll();
+}
+
 /*! \brief Sets new device's IP.
  *  \param ip String that contains new IP address.
  */
@@ -263,7 +277,7 @@ quint32 StdFunc::Ping(quint32 addr)
         QString p_stderr = pingProcess->readAllStandardError();
         QStringList list = p_stderr.isEmpty() ? p_stdout.split("\r\n") : p_stderr.split("\r\n");
         if (std::any_of(list.constBegin(), list.constEnd(),
-                        [](const QString &i) { return i.contains("TTL", Qt::CaseInsensitive); }))
+                [](const QString &i) { return i.contains("TTL", Qt::CaseInsensitive); }))
         {
             delete pingProcess;
             return addr;

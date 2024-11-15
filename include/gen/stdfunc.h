@@ -2,8 +2,6 @@
 
 #include <QObject>
 #include <QString>
-#include <cmath>
-#include <functional>
 #include <gen/gen_export.h>
 #include <gen/uint24.h>
 #include <memory>
@@ -37,7 +35,7 @@ template <typename T> using UniquePointer = std::unique_ptr<T, QtHelper::deleteL
 /// \brief Декларация для определния простых (POD) типов.
 /// \see https://en.cppreference.com/w/cpp/types/is_pod
 template <typename T> //
-constexpr static auto is_simple_v = std::is_standard_layout_v<T> &&std::is_trivial_v<T>;
+constexpr static auto is_simple_v = std::is_standard_layout_v<T> && std::is_trivial_v<T>;
 
 constexpr int defaultRatio = 3;
 constexpr int maxRatio = 5;
@@ -72,6 +70,7 @@ public:
     static void SetHomeDir(const QString &dir);
     static QString GetHomeDir();
     static QString GetSystemHomeDir();
+    static QString WhoAmI();
     static void SetDeviceIP(const QString &ip);
     static QString ForDeviceIP();
     static void SetOrganizationString(const QString &str);

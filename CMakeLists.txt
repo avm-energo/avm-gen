@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(avm-gen
   DESCRIPTION "General library for AVM-Energo C++ projects"
-  VERSION 1.6)
+  VERSION 1.7)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -41,7 +41,7 @@ endif()
 
 find_package(QT NAMES Qt6)
 find_package(Qt${QT_VERSION_MAJOR}
-  COMPONENTS Core Network REQUIRED
+  COMPONENTS Core Network Xml REQUIRED
 )
 
 find_package(LibLZMA QUIET)
@@ -100,6 +100,7 @@ target_link_libraries(
     ${PROJECT_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Network
+    Qt${QT_VERSION_MAJOR}::Xml
 )
 # Linking Qt core libraries for using in gen library
 if (${LibLZMA_FOUND})
