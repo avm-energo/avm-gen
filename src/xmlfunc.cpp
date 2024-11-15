@@ -49,7 +49,7 @@ void XmlFunc::replaceDomWithNewAttrRecursively(
                             attrvalue.clear();
                     }
                 }
-                element.setAttribute(findInfo.ParameterName, tmps);
+                element.setAttribute(findInfo.AttrName, tmps);
                 root.replaceChild(newnode, node);
             }
         }
