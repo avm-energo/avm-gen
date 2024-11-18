@@ -7,7 +7,7 @@ XmlFunc::XmlFunc()
 // check attrname to contain attrs.at(0) in it and if so
 // replace all attrs oldvalues with newvalues
 
-void XmlFunc::replaceDomWithNewAttrRecursively(
+void XmlFunc::replaceComplicatedAttrRecursively(
     QByteArray &data, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues)
 {
     QDomDocument doc;
@@ -16,6 +16,36 @@ void XmlFunc::replaceDomWithNewAttrRecursively(
     QDomElement root = doc.documentElement();
 
     replaceDomWithNewAttrRecursively(root, findInfo, attrs, newvalues);
+    data = doc.toByteArray();
+}
+
+void XmlFunc::replaceSimpleAttr(
+    QByteArray &data, const QString &elementName, QStringList &attrs, QStringList &newvalues)
+{
+    QDomDocument doc;
+    doc.setContent(data);
+    // recurivelly change color
+    QDomElement root = doc.documentElement();
+    assert(attrs.size() == newvalues.size());
+    assert(!attrs.isEmpty());
+    QDomNodeList nodes = root.childNodes();
+    for (int i = 0; i < nodes.size(); ++i)
+    {
+        QDomNode node = nodes.at(i);
+        if (node.nodeName() == elementName)
+        {
+            QDomNode newnode = node;
+            QDomElement element = newnode.toElement();
+            while ((!attrs.isEmpty()) && (!newvalues.isEmpty()))
+            {
+                const QString attr = attrs.takeFirst();
+                const QString value = newvalues.takeFirst();
+                if (element.hasAttribute(attr))
+                    element.setAttribute(attr, value);
+            }
+            root.replaceChild(newnode, node);
+        }
+    }
     data = doc.toByteArray();
 }
 

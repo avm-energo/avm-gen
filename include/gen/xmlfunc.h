@@ -19,16 +19,15 @@ public:
 
     /// \brief Load bytearray contents to xml document and edit contents changing attributes attrs to newvalues
 
-    // static void replaceDomWithNewAttrRecursively(QByteArray &data, const QString &name, const QString &attrname,
-    //     const QStringList &attrs, const QString &attrcheckvalue, const QStringList &newvalues);
-    static void replaceDomWithNewAttrRecursively(
+    static void replaceComplicatedAttrRecursively(
         QByteArray &data, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues);
+
+    static void replaceSimpleAttr(
+        QByteArray &data, const QString &elementName, QStringList &attrs, QStringList &newvalues);
 
     /// \brief Recursively parse xml contents and edit contents changing attributes attrs to newvalues
     /// check ParameterName in AttrName to contain ParameterValue and if so replace all attrs oldvalues with newvalues
 
-    // static void replaceDomWithNewAttrRecursively(QDomElement &root, const QString &name, const QString &attrname,
-    //     const QStringList &attrs, const QString &attrcheckvalue, const QStringList &newvalues);
     static void replaceDomWithNewAttrRecursively(
         QDomElement &root, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues);
 
