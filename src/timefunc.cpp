@@ -20,6 +20,13 @@ bool TimeFunc::WaitFor(bool &flag, int timeoutms)
     return true;
 }
 
+int TimeFunc::curTimeZone()
+{
+    QDateTime datetime = QDateTime::currentDateTime();
+    datetime.setTimeSpec(Qt::LocalTime);
+    return (datetime.offsetFromUtc() / 3600);
+}
+
 QString TimeFunc::NsTimeToString(quint64 nstime)
 {
     quint32 unixtime = nstime / 1000000000L; // unix время

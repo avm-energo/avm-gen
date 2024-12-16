@@ -33,4 +33,7 @@ public:
         return userTimeZone().displayName(QTimeZone::StandardTime, QTimeZone::OffsetName);
     }
     static bool WaitFor(bool &flag, int timeoutms = TIMEOUT_MAIN);
+
+    /// \brief get current system timezone in int from -12 to +14
+    static int curTimeZone();
 };
