@@ -1,33 +1,36 @@
-#include <gen/xmlfunc.h>
+#include <gen/xml/xmlattr.h>
+#include <gen/xml/xmlbase.h>
 
-XmlFunc::XmlFunc()
+XmlAttr::XmlAttr()
 {
 }
 
 // check attrname to contain attrs.at(0) in it and if so
 // replace all attrs oldvalues with newvalues
 
-void XmlFunc::replaceComplicatedAttrRecursively(
+bool XmlAttr::replaceComplicatedAttrRecursively(
     QByteArray &data, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues)
 {
     QDomDocument doc;
     doc.setContent(data);
     // recurivelly change color
-    QDomElement root = doc.documentElement();
-
+    QDomElement root;
+    if (!XmlBase::getXMLFromByteArray(data, root))
+        return false;
     replaceDomWithNewAttrRecursively(root, findInfo, attrs, newvalues);
-    data = doc.toByteArray();
+    data = XmlBase::toByteArray();
+    return true;
 }
 
-void XmlFunc::replaceSimpleAttr(
+bool XmlAttr::replaceSimpleAttr(
     QByteArray &data, const QString &elementName, QStringList &attrs, QStringList &newvalues)
 {
-    QDomDocument doc;
-    doc.setContent(data);
-    // recurivelly change color
-    QDomElement root = doc.documentElement();
+    QDomElement root;
+    if (!XmlBase::getXMLFromByteArray(data, root))
+        return false;
     assert(attrs.size() == newvalues.size());
     assert(!attrs.isEmpty());
+    // recurivelly change color
     QDomNodeList nodes = root.childNodes();
     for (int i = 0; i < nodes.size(); ++i)
     {
@@ -46,10 +49,11 @@ void XmlFunc::replaceSimpleAttr(
             root.replaceChild(newnode, node);
         }
     }
-    data = doc.toByteArray();
+    data = XmlBase::toByteArray();
+    return true;
 }
 
-void XmlFunc::replaceDomWithNewAttrRecursively(
+void XmlAttr::replaceDomWithNewAttrRecursively(
     QDomElement &root, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues)
 {
     assert(attrs.size() == newvalues.size());
@@ -91,7 +95,7 @@ void XmlFunc::replaceDomWithNewAttrRecursively(
     }
 }
 
-QString XmlFunc::getAttrValue(QString &string, const QString &attrname)
+QString XmlAttr::getAttrValue(QString &string, const QString &attrname)
 {
     QString tmps;
     int index;

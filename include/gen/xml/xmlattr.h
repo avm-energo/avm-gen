@@ -4,7 +4,7 @@
 #include <QDomDocument>
 #include <QStringList>
 
-class XmlFunc
+class XmlAttr
 {
 public:
     struct AttrsSearchedStruct
@@ -15,14 +15,14 @@ public:
         QString ParameterValue; // the value of the parameter to check
     };
 
-    XmlFunc();
+    XmlAttr();
 
     /// \brief Load bytearray contents to xml document and edit contents changing attributes attrs to newvalues
 
-    static void replaceComplicatedAttrRecursively(
+    static bool replaceComplicatedAttrRecursively(
         QByteArray &data, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues);
 
-    static void replaceSimpleAttr(
+    static bool replaceSimpleAttr(
         QByteArray &data, const QString &elementName, QStringList &attrs, QStringList &newvalues);
 
     /// \brief Recursively parse xml contents and edit contents changing attributes attrs to newvalues
