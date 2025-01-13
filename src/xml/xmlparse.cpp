@@ -28,7 +28,7 @@ const QStringList XmlParse::parseArray(const QDomNode &node, const QString &tag)
     return retList;
 }
 
-const QString XmlParse::parseString(const QDomNode &node, const QString &tagName) const
+const QString XmlParse::parseString(const QDomNode &node, const QString &tagName)
 {
     auto textNode = node.firstChildElement(tagName);
     if (!textNode.isNull())
@@ -59,9 +59,9 @@ void XmlParse::callForEachChild(const QDomNode &parent, const std::function<void
 void XmlParse::parseNode(
     const QDomNode &parent, const QString &tagName, const std::function<void(const QDomNode &)> &functor)
 {
-    callIfNodeExist(parent, tagName,             //
-        [this, &functor](const QDomNode &node) { //
-            callForEachChild(node, functor);     //
+    callIfNodeExist(parent, tagName,         //
+        [&functor](const QDomNode &node) {   //
+            callForEachChild(node, functor); //
         });
 }
 

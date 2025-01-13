@@ -4,9 +4,8 @@
 #include <QObject>
 #include <gen/gen_export.h>
 
-class XmlBase : public QObject
+class XmlBase
 {
-    Q_OBJECT
 public:
     XmlBase();
 
@@ -17,10 +16,7 @@ public:
     static QByteArray GENLIB_EXPORT toByteArray();
 
     /// \brief Returns QDomDocument for a file with the specified filename from user's local folder.
-    QDomElement GENLIB_EXPORT getXMLFirstElementFromFile(const QString &filename, const QString &tag);
-
-signals:
-    void error();
+    static QDomElement GENLIB_EXPORT getXMLFirstElementFromFile(const QString &filename, const QString &tag);
 
 private:
     static QDomDocument s_xmlDocument;

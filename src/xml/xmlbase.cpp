@@ -6,7 +6,7 @@
 
 QDomDocument XmlBase::s_xmlDocument = QDomDocument();
 
-XmlBase::XmlBase() : QObject()
+XmlBase::XmlBase()
 {
 }
 
@@ -65,6 +65,5 @@ QDomElement XmlBase::getXMLFirstElementFromFile(const QString &filename, const Q
     }
     else
         qDebug() << "File not found: " << filename;
-    emit error();
     return QDomElement();
 }

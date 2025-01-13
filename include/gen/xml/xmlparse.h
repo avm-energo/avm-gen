@@ -55,18 +55,18 @@ public:
     }
 
     /// \brief Возвращает содержимое ноды tagName в QString.
-    const QString GENLIB_EXPORT parseString(const QDomNode &node, const QString &tagName) const;
+    static const QString GENLIB_EXPORT parseString(const QDomNode &node, const QString &tagName);
     /// \brief Callback для вызова функции functor, если у указанного
     /// узла parent существует дочерний узел с именем tagName.
-    void GENLIB_EXPORT callIfNodeExist(const QDomNode &parent, const QString &tagName, //
+    static void GENLIB_EXPORT callIfNodeExist(const QDomNode &parent, const QString &tagName, //
         const std::function<void(const QDomNode &node)> &functor);
     /// \brief Callback для вызова функции functor, для каждого
     /// дочернего узла node указанного узла parent.
-    void GENLIB_EXPORT callForEachChild(
+    static void GENLIB_EXPORT callForEachChild(
         const QDomNode &parent, const std::function<void(const QDomNode &node)> &functor);
     /// \brief Вызов callForEachChild внутри callIfNodeExist для функции functor.
     /// \see callIfNodeExist, callForEachChild.
-    void GENLIB_EXPORT parseNode(const QDomNode &parent, const QString &tagName, //
+    static void GENLIB_EXPORT parseNode(const QDomNode &parent, const QString &tagName, //
         const std::function<void(const QDomNode &node)> &functor);
 
     /// \brief Парсинг содержимого строки в число.
