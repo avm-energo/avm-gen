@@ -3,19 +3,17 @@
 #include <QDomNode>
 #include <QObject>
 #include <QtDebug>
+#include <gen/gen_export.h>
 
 class XmlParse
 {
 public:
     XmlParse();
 
-    /// \brief Проверка, существует ли указанный файл.
-    bool isFileExist(const QString &filename);
-
     /// \brief Парсит ноду с дочерними элементами в QStringList.
-    static const QStringList parseArray(const QDomNode &node, const QString &tag);
+    static const QStringList GENLIB_EXPORT parseArray(const QDomNode &node, const QString &tag);
     /// \brief Парсинг значений указанного типа в из ноды tag в QList.
-    template <typename T> static const QList<T> parseNumArray(const QDomNode &node, const QString &tag)
+    template <typename T> static const QList<T> GENLIB_EXPORT parseNumArray(const QDomNode &node, const QString &tag)
     {
         QList<quint32> retList = {};
         bool state = false;
@@ -31,7 +29,7 @@ public:
     };
 
     /// \brief Парсинг содержимого узла в число указанного типа.
-    template <typename T> static T parseNum(const QDomElement &numNode)
+    template <typename T> static T GENLIB_EXPORT parseNum(const QDomElement &numNode)
     {
         auto numString = numNode.text();
         if (!numString.isEmpty())
@@ -47,7 +45,7 @@ public:
     }
 
     /// \brief Нахождение узла с указанным именем и парсинг его содержимого, возврат числа.
-    template <typename T> static T parseNumFromNode(const QDomNode &node, const QString &tagName)
+    template <typename T> static T GENLIB_EXPORT parseNumFromNode(const QDomNode &node, const QString &tagName)
     {
         auto numNode = node.firstChildElement(tagName);
         if (!numNode.isNull())
@@ -57,21 +55,22 @@ public:
     }
 
     /// \brief Возвращает содержимое ноды tagName в QString.
-    const QString parseString(const QDomNode &node, const QString &tagName) const;
+    const QString GENLIB_EXPORT parseString(const QDomNode &node, const QString &tagName) const;
     /// \brief Callback для вызова функции functor, если у указанного
     /// узла parent существует дочерний узел с именем tagName.
-    void callIfNodeExist(const QDomNode &parent, const QString &tagName, //
+    void GENLIB_EXPORT callIfNodeExist(const QDomNode &parent, const QString &tagName, //
         const std::function<void(const QDomNode &node)> &functor);
     /// \brief Callback для вызова функции functor, для каждого
     /// дочернего узла node указанного узла parent.
-    void callForEachChild(const QDomNode &parent, const std::function<void(const QDomNode &node)> &functor);
+    void GENLIB_EXPORT callForEachChild(
+        const QDomNode &parent, const std::function<void(const QDomNode &node)> &functor);
     /// \brief Вызов callForEachChild внутри callIfNodeExist для функции functor.
     /// \see callIfNodeExist, callForEachChild.
-    void parseNode(const QDomNode &parent, const QString &tagName, //
+    void GENLIB_EXPORT parseNode(const QDomNode &parent, const QString &tagName, //
         const std::function<void(const QDomNode &node)> &functor);
 
     /// \brief Парсинг содержимого строки в число.
-    template <typename T> static T parseNumString(const QString &numStr, bool &state);
+    template <typename T> static T GENLIB_EXPORT parseNumString(const QString &numStr, bool &state);
 };
 
 // Template specializations

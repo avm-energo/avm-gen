@@ -3,6 +3,7 @@
 #include <QByteArray>
 #include <QDomDocument>
 #include <QStringList>
+#include <gen/gen_export.h>
 
 class XmlAttr
 {
@@ -19,16 +20,16 @@ public:
 
     /// \brief Load bytearray contents to xml document and edit contents changing attributes attrs to newvalues
 
-    static bool replaceComplicatedAttrRecursively(
+    static bool GENLIB_EXPORT replaceComplicatedAttrRecursively(
         QByteArray &data, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues);
 
-    static bool replaceSimpleAttr(
+    static bool GENLIB_EXPORT replaceSimpleAttr(
         QByteArray &data, const QString &elementName, QStringList &attrs, QStringList &newvalues);
 
     /// \brief Recursively parse xml contents and edit contents changing attributes attrs to newvalues
     /// check ParameterName in AttrName to contain ParameterValue and if so replace all attrs oldvalues with newvalues
 
-    static void replaceDomWithNewAttrRecursively(
+    static void GENLIB_EXPORT replaceDomWithNewAttrRecursively(
         QDomElement &root, AttrsSearchedStruct &findInfo, const QStringList &attrs, const QStringList &newvalues);
 
 private:
