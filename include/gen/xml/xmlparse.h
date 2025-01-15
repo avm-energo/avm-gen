@@ -13,7 +13,7 @@ public:
     /// \brief Парсит ноду с дочерними элементами в QStringList.
     static const QStringList GENLIB_EXPORT parseArray(const QDomNode &node, const QString &tag);
     /// \brief Парсинг значений указанного типа в из ноды tag в QList.
-    template <typename T> static const QList<T> GENLIB_EXPORT parseNumArray(const QDomNode &node, const QString &tag)
+    template <typename T> static const QList<T> parseNumArray(const QDomNode &node, const QString &tag)
     {
         QList<quint32> retList = {};
         bool state = false;
@@ -29,7 +29,7 @@ public:
     };
 
     /// \brief Парсинг содержимого узла в число указанного типа.
-    template <typename T> static T GENLIB_EXPORT parseNum(const QDomElement &numNode)
+    template <typename T> static T parseNum(const QDomElement &numNode)
     {
         auto numString = numNode.text();
         if (!numString.isEmpty())
@@ -45,7 +45,7 @@ public:
     }
 
     /// \brief Нахождение узла с указанным именем и парсинг его содержимого, возврат числа.
-    template <typename T> static T GENLIB_EXPORT parseNumFromNode(const QDomNode &node, const QString &tagName)
+    template <typename T> static T parseNumFromNode(const QDomNode &node, const QString &tagName)
     {
         auto numNode = node.firstChildElement(tagName);
         if (!numNode.isNull())
@@ -75,12 +75,12 @@ public:
 
 // Template specializations
 /// \brief Template specialization for converting QString to double.
-template <> double XmlParse::parseNumString(const QString &numStr, bool &state);
+template <> double GENLIB_EXPORT XmlParse::parseNumString(const QString &numStr, bool &state);
 /// \brief Template specialization for converting QString to int.
-template <> int XmlParse::parseNumString(const QString &numStr, bool &state);
+template <> int GENLIB_EXPORT XmlParse::parseNumString(const QString &numStr, bool &state);
 /// \brief Template specialization for converting QString to uint16.
-template <> quint16 XmlParse::parseNumString(const QString &numStr, bool &state);
+template <> quint16 GENLIB_EXPORT XmlParse::parseNumString(const QString &numStr, bool &state);
 /// \brief Template specialization for converting QString to uint32.
-template <> quint32 XmlParse::parseNumString(const QString &numStr, bool &state);
+template <> quint32 GENLIB_EXPORT XmlParse::parseNumString(const QString &numStr, bool &state);
 /// \brief Template specialization for converting QString to uint64.
-template <> quint64 XmlParse::parseNumString(const QString &numStr, bool &state);
+template <> quint64 GENLIB_EXPORT XmlParse::parseNumString(const QString &numStr, bool &state);
