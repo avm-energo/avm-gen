@@ -9,18 +9,18 @@ class GENLIB_EXPORT ErrorQueue : public QObject, public Singleton<ErrorQueue>
 {
     Q_OBJECT
 public:
-    explicit GENLIB_EXPORT ErrorQueue(token);
-    const std::vector<ErrorMsg> GENLIB_EXPORT *errMsgPool();
-    ErrorMsg GENLIB_EXPORT popError();
-    void GENLIB_EXPORT pushError(const ErrorMsg &msg);
+    explicit ErrorQueue(token);
+    const std::vector<ErrorMsg> *errMsgPool();
+    ErrorMsg popError();
+    void pushError(const ErrorMsg &msg);
 
-    void GENLIB_EXPORT clearCounter();
-    auto GENLIB_EXPORT counter() const
+    void clearCounter();
+    auto counter() const
     {
         return m_newErrors;
     }
 signals:
-    void GENLIB_EXPORT errCounts(size_t size);
+    void errCounts(size_t size);
 
 private:
     std::vector<ErrorMsg> m_errMsgPool;
