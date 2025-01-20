@@ -55,43 +55,51 @@ enum Msg
     FileOpenError,            ///< Test24
     FileWriteError,           ///< Test25
     Cancelled,                ///< Tune process was cancelled
+    StepError,                ///
+    TuneCoefError,            ///
+    PswCheckError,            ///
+    DataError,                ///
     UnknownError = 0xff       ///< Test26
 };
 
 /// \brief Map with keys as Msg and values as QString with description of error.
 const QMap<Msg, QString> MsgStr {
-    { ResEmpty, "Пустой результат" },                          //
-    { GeneralError, "Ошибка" },                                //
-    { NoError, "Успешно" },                                    //
-    { Timeout, "Таймаут операции" },                           //
-    { CrcError, "Ошибка контрольной суммы" },                  //
-    { FlashError, "Ошибка записи во Flash-память" },           //
-    { SizeError, "Ошибка размера данных" },                    //
-    { WrongCommandError, "Некорректная команда" },             //
-    { WrongFormatError, "Формат неверен" },                    //
-    { UnknownBlock, "Неизвестный блок данных" },               //
-    { UnknownFileReq, "Запрошен неизвестный файл" },           //
-    { UnknownFileSent, "Отправлен неизвестный файл" },         //
-    { NoMezzanine, "Нет мезонина" },                           //
-    { WrongType, "Неверный тип платы" },                       //
-    { FileNameError, "Нет такого файла" },                     //
-    { WrongBlockAC, "Ошибка блока Bac" },                      //
-    { DescError, "Ошибка описания S2" },                       //
-    { StartupInitError, "Ошибка задания начальных значений" }, //
-    { HeaderSizeError, "Неверный размер заголовка S2" },       //
-    { NoIdError, "Нет такого ИД S2" },                         //
-    { NoConfError, "Нет конфигурации" },                       //
-    { NoTuneError, "Нет настроечных параметров" },             //
-    { WriteError, "Ошибка записи" },                           //
-    { NoDeviceError, "Нет такого устройства" },                //
-    { ReadError, "Ошибка чтения" },                            //
-    { OpenError, "Ошибка открытия порта" },                    //
-    { NullDataError, "Приняты нулевые данные" },               //
-    { FileNameError, "Ошибка номера файла" },                  //
-    { FileOpenError, "Ошибка открытия файла" },                //
-    { FileWriteError, "Ошибка записи файла" },                 //
-    { Cancelled, "Операция прервана" },                        //
-    { UnknownError, "Неизвестная ошибка" }                     //
+    { ResEmpty, "Пустой результат" },                                         //
+    { GeneralError, "Ошибка" },                                               //
+    { NoError, "Успешно" },                                                   //
+    { Timeout, "Таймаут операции" },                                          //
+    { CrcError, "Ошибка контрольной суммы" },                                 //
+    { FlashError, "Ошибка записи во Flash-память" },                          //
+    { SizeError, "Ошибка размера данных" },                                   //
+    { WrongCommandError, "Некорректная команда" },                            //
+    { WrongFormatError, "Формат неверен" },                                   //
+    { UnknownBlock, "Неизвестный блок данных" },                              //
+    { UnknownFileReq, "Запрошен неизвестный файл" },                          //
+    { UnknownFileSent, "Отправлен неизвестный файл" },                        //
+    { NoMezzanine, "Нет мезонина" },                                          //
+    { WrongType, "Неверный тип платы" },                                      //
+    { FileNameError, "Нет такого файла" },                                    //
+    { WrongBlockAC, "Ошибка блока Bac" },                                     //
+    { DescError, "Ошибка описания S2" },                                      //
+    { StartupInitError, "Ошибка задания начальных значений" },                //
+    { HeaderSizeError, "Неверный размер заголовка S2" },                      //
+    { NoIdError, "Нет такого ИД S2" },                                        //
+    { NoConfError, "Нет конфигурации" },                                      //
+    { NoTuneError, "Нет настроечных параметров" },                            //
+    { WriteError, "Ошибка записи" },                                          //
+    { NoDeviceError, "Нет такого устройства" },                               //
+    { ReadError, "Ошибка чтения" },                                           //
+    { OpenError, "Ошибка открытия порта" },                                   //
+    { NullDataError, "Приняты нулевые данные" },                              //
+    { FileNameError, "Ошибка номера файла" },                                 //
+    { FileOpenError, "Ошибка открытия файла" },                               //
+    { FileWriteError, "Ошибка записи файла" },                                //
+    { Cancelled, "Операция прервана" },                                       //
+    { StepError, "Некорректный номер шага" },                                 //
+    { TuneCoefError, "Ошибка в настроечных коэффициентах, деление на ноль" }, //
+    { PswCheckError, "Неправильный пароль" },                                 //
+    { DataError, "Ошибка данных" },                                           //
+    { UnknownError, "Неизвестная ошибка" }                                    //
 };
 
 Q_ENUM_NS(Msg)
