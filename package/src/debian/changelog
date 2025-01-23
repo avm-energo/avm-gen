@@ -1,0 +1,5 @@
+libavm-gen (1.8.2) unstable; urgency=low
+
+  * toString(float) in StdFunc
+
+ -- AVM-Energo <support@avmenergo.ru>  Wed, 22 Jan 2025 16:26:40 +0300

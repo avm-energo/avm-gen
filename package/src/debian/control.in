@@ -1,0 +1,9 @@
+Source: libavm-gen
+Priority: optional
+Maintainer: AVM-Energo <support@avmenergo.ru>
+Section: misc
+
+Package: libavm-gen
+Description: General lib for AVM-Energo projects
+Architecture: amd64
+Depends: ${shlibs:Depends}

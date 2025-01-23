@@ -88,6 +88,16 @@ float StdFunc::ToFloat(const QString &text, bool *ok)
     return tmpf;
 }
 
+QString StdFunc::toString(float value, int precision, bool exp)
+{
+    if (value >= MAXFLOAT || value <= -MAXFLOAT)
+        return "***";
+    else if (exp == true)
+        return QString::number(value, 'e', precision);
+    else
+        return QString::number(value, 'f', precision);
+}
+
 /*! \brief Checks that the number is in the specified interval.
  *  \param var Checked number.
  *  \param base,tolerance Limits of specified interval.

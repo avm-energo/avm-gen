@@ -67,6 +67,7 @@ public:
     static quint32 StrToVer(const QString &str);
     static bool FloatIsWithinLimits(double var, double base, double tolerance);
     static float ToFloat(const QString &text, bool *ok = nullptr);
+    static QString toString(float value, int precision = 5, bool exp = false);
     static void SetHomeDir(const QString &dir);
     static QString GetHomeDir();
     static QString GetSystemHomeDir();
