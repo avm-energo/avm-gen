@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(avm-gen
   DESCRIPTION "General library for AVM-Energo C++ projects"
-  VERSION 1.8.2)
+  VERSION 1.9.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
