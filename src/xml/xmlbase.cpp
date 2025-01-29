@@ -12,6 +12,16 @@ XmlBase::XmlBase()
 
 bool XmlBase::getXMLFromByteArray(const QByteArray &ba, QDomElement &element)
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
+    QString errstr;
+    int errline, errcolumn;
+    if(!(s_xmlDocument.setContent(ba, &errstr, &errline, &errcolumn)))
+    {
+        qDebug() << "Error while parsing bytearray, line: " << errline << ", column: " << errcolumn
+                 << "\nError message is: " << errstr;
+        return false;
+    }
+#else
     QDomDocument::ParseResult result = s_xmlDocument.setContent(ba);
     if (!result.errorMessage.isEmpty())
     {
@@ -20,6 +30,7 @@ bool XmlBase::getXMLFromByteArray(const QByteArray &ba, QDomElement &element)
         return false;
     }
     // recurivelly change color
+#endif
     element = s_xmlDocument.documentElement();
     return true;
 }
@@ -42,10 +53,17 @@ QDomElement XmlBase::getXMLFirstElementFromFile(const QString &filename, const Q
     {
         if (file.open(QIODevice::ReadOnly))
         {
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
+            QString errstr;
+            int errline, errcolumn;
+            if (doc.setContent(&file, &errstr, &errline, &errcolumn))
+            {
+#else
             QDomDocument::ParseResult res = doc.setContent(&file);
-            file.close();
             if (res)
             {
+#endif
+                file.close();
                 if (!doc.isNull())
                 {
                     element = doc.firstChildElement(tag);
@@ -56,8 +74,14 @@ QDomElement XmlBase::getXMLFirstElementFromFile(const QString &filename, const Q
             }
             else
             {
+                file.close();
+#if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
+                qDebug() << "Error while parsing bytearray, line: " << errline << ", column: " << errcolumn
+                         << "\nError message is: " << errstr;
+#else
                 qDebug() << "File: " << filename << " Error: " + res.errorMessage << //
                     " Line: " << res.errorLine << " Column: " << res.errorColumn;
+#endif
             }
         }
         else

@@ -114,7 +114,11 @@ QString XmlAttr::getAttrValue(QString &string, const QString &attrname)
             }
             return tmps;
         }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        string = string.mid(index);
+#else
         string = string.sliced(index);
+#endif
     }
     return QString();
 }
