@@ -1,3 +1,9 @@
+libavm-gen (1.9.0) unstable; urgency=low
+
+  * deb11 support added
+
+ -- AVM-Energo <support@avmenergo.ru>  Thu, 30 Jan 2025 17:28:18 +0300
+
 libavm-gen (1.8.2) unstable; urgency=low
 
   * toString(float) in StdFunc
