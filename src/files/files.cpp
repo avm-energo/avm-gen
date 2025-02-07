@@ -1,9 +1,8 @@
-#include "gen/files.h"
-
 #include <QDirIterator>
 #include <QIODevice>
 #include <QStorageInfo>
 #include <QtDebug>
+#include <gen/files.h>
 #include <gen/files/lzma_util.h>
 #include <gen/stdfunc.h>
 

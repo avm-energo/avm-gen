@@ -26,7 +26,7 @@ public:
                 retList.append(T(0));
         }
         return retList;
-    };
+    }
 
     /// \brief Парсинг содержимого узла в число указанного типа.
     template <typename T> static T parseNum(const QDomElement &numNode)
