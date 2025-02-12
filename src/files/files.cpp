@@ -1,6 +1,8 @@
 #include <QDirIterator>
 #include <QIODevice>
+#include <QRandomGenerator>
 #include <QStorageInfo>
+#include <QTemporaryFile>
 #include <QtDebug>
 #include <gen/files.h>
 #include <gen/files/lzma_util.h>
@@ -157,4 +159,14 @@ void Files::makePath(const QFile &path)
 {
     QFileInfo fi(path);
     QDir().mkpath(fi.dir().path());
+}
+
+const QString Files::SaveToTempFile(const QByteArray &src)
+{
+    QTemporaryFile file;
+    file.setAutoRemove(false);
+    file.open();
+    file.write(src);
+    file.close();
+    return file.fileName();
 }

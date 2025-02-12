@@ -6,7 +6,7 @@
 
 namespace Files
 {
-
+constexpr int FILENAMEMAXSYMBOLS = 10;
 QString GENLIB_EXPORT ChooseFileForSave(const QString &res, const QString &filenamestr = "");
 bool GENLIB_EXPORT isFileExist(const QString &filename);
 Error::Msg GENLIB_EXPORT LoadFromFile(const QString &filename, QByteArray &ba);
@@ -18,4 +18,8 @@ void GENLIB_EXPORT checkNGzip(QFile *logFile);
 bool GENLIB_EXPORT rotateGzipLogs(const QString &path);
 void GENLIB_EXPORT makePath(const QFile &path);
 
+/// \brief Saves bytearray to temporary file
+/// \param src - buffer to write
+/// \return name of the file
+const QString GENLIB_EXPORT SaveToTempFile(const QByteArray &src);
 } // namespace Files
