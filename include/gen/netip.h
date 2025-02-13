@@ -10,6 +10,8 @@ class IP
 {
 public:
     explicit IP();
+    explicit IP(const QString &str);
+    explicit IP(const QStringList &sl);
     const QString toString();
     const QStringList toStringList();
 
