@@ -135,20 +135,20 @@ void HttpEngine::HttpError(QNetworkReply::NetworkError code)
     CancelDownload();
 }
 
-QJsonDocument HttpEngine::GetQuery(IP ip, int port, const QString &query, const QStringList &args, bool isSSL)
+QJsonDocument HttpEngine::GetQuery(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
 {
     return QJsonDocument::fromJson(GetQueryInBA(ip, port, query, args, isSSL));
 }
 
-QString HttpEngine::GetFile(IP ip, int port, const QString &query, const QStringList &args, bool isSSL)
+QString HttpEngine::GetFile(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
 {
     return Files::SaveToTempFile(GetQueryInBA(ip, port, query, args, isSSL));
 }
 
-QByteArray HttpEngine::GetQueryInBA(IP ip, int port, const QString &query, const QStringList &args, bool isSSL)
+QByteArray HttpEngine::GetQueryInBA(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
 {
     QString url = (isSSL) ? "https://" : "http://";
-    url += ip.toString() + ":" + QString::number(port) + "/" + query + "?";
+    url += IP::toString(ip) + ":" + QString::number(port) + "/" + query + "?";
     for (QString arg : args)
         url += arg + "&";
     url.chop(1);

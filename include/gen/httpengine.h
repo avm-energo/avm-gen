@@ -24,7 +24,7 @@ public:
     /// \param isSSL - флаг, означающий запрос https (isSSL=true) или http (isSSL=false)
     /// \return массив данных (QByteArray)
     QByteArray GetQueryInBA(
-        IP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
+        NetIP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
     /// \brief Получить результаты запроса
     /// \details Отправить GET-запрос на HTTP-сервер и получить результаты в JSON массиве
     /// \param ip - ip-адрес сервера
@@ -34,7 +34,7 @@ public:
     /// \param isSSL - флаг, означающий запрос https (isSSL=true) или http (isSSL=false)
     /// \return JSON документ
     QJsonDocument GetQuery(
-        IP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
+        NetIP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
     /// \brief Получить файл
     /// \details Отправить GET-запрос на HTTP-сервер и получить результат в виде файла
     /// \param ip - ip-адрес сервера
@@ -44,7 +44,7 @@ public:
     /// \param isSSL - флаг, означающий запрос https (isSSL=true) или http (isSSL=false)
     /// \return имя временного файла, полученного от сервера
     QString GetFile(
-        IP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
+        NetIP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
 
 public slots:
     void CancelDownload();

@@ -1,3 +1,10 @@
+libavm-gen (1.9.4) unstable; urgency=low
+
+  [+] NetIP namespace
+  [+] HttpEngine class
+
+ -- AVM-Energo <support@avmenergo.ru>  Fri, 07 Mar 2025 13:08:46 +0300
+
 libavm-gen (1.9.0) unstable; urgency=low
 
   * deb11 support added

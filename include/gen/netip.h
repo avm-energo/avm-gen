@@ -6,18 +6,11 @@
 static constexpr auto NET_IP_SIZE = 4; ///< число октетов IP адресе
 using NetIP = std::array<quint8, NET_IP_SIZE>;
 
-class IP
+namespace IP
 {
-public:
-    explicit IP();
-    explicit IP(const QString &str);
-    explicit IP(const QStringList &sl);
-    const QString toString();
-    const QStringList toStringList();
-
-    static const QString toString(const NetIP &ip);
-    static const QStringList toStringList(const NetIP &ip);
-
-private:
-    NetIP m_ip;
+const NetIP DefIP();
+const NetIP fromString(const QString &str);
+const NetIP fromStringList(const QStringList &sl);
+const QString toString(const NetIP &ip);
+const QStringList toStringList(const NetIP &ip);
 };

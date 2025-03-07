@@ -1,38 +1,30 @@
 #include <gen/netip.h>
 
-IP::IP()
+const NetIP IP::DefIP()
 {
-    m_ip = { 0, 0, 0, 0 };
+    return { 0, 0, 0, 0 };
 }
 
-IP::IP(const QString &str)
+const NetIP IP::fromString(const QString &str)
 {
-    IP(str.split("."));
+    return fromStringList(str.split("."));
 }
 
-IP::IP(const QStringList &sl)
+const NetIP IP::fromStringList(const QStringList &sl)
 {
+    NetIP ip;
     if (sl.size() < 4)
-        IP();
+        return DefIP();
     else
     {
         for (int i = 0; i < 4; ++i)
         {
             bool ok;
             int ipOctet = sl.at(i).toUInt(&ok);
-            m_ip.at(i) = (ok && (ipOctet < 255)) ? ipOctet : 0;
+            ip.at(i) = (ok && (ipOctet < 255)) ? ipOctet : 0;
         }
     }
-}
-
-const QString IP::toString()
-{
-    return toString(m_ip);
-}
-
-const QStringList IP::toStringList()
-{
-    return toStringList(m_ip);
+    return ip;
 }
 
 const QString IP::toString(const NetIP &ip)
