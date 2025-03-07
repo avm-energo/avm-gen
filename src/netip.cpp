@@ -27,8 +27,18 @@ IP::IP(const QStringList &sl)
 
 const QString IP::toString()
 {
+    return toString(m_ip);
+}
+
+const QStringList IP::toStringList()
+{
+    return toStringList(m_ip);
+}
+
+const QString IP::toString(const NetIP &ip)
+{
     QString outs = "";
-    for (quint8 octet : m_ip)
+    for (quint8 octet : ip)
     {
         outs += QString::number(octet);
         outs += ".";
@@ -37,10 +47,10 @@ const QString IP::toString()
     return outs;
 }
 
-const QStringList IP::toStringList()
+const QStringList IP::toStringList(const NetIP &ip)
 {
     QStringList outsl;
-    for (quint8 octet : m_ip)
+    for (quint8 octet : ip)
         outsl += QString::number(octet);
     return outsl;
 }

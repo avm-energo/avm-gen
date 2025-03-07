@@ -15,6 +15,9 @@ public:
     const QString toString();
     const QStringList toStringList();
 
+    static const QString toString(const NetIP &ip);
+    static const QStringList toStringList(const NetIP &ip);
+
 private:
     NetIP m_ip;
 };
