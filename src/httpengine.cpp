@@ -149,8 +149,11 @@ QByteArray HttpEngine::GetQueryInBA(NetIP ip, int port, const QString &query, co
 {
     QString url = (isSSL) ? "https://" : "http://";
     url += IP::toString(ip) + ":" + QString::number(port) + "/" + query + "?";
-    for (QString arg : args)
-        url += arg + "&";
+    if (!args.isEmpty())
+    {
+        for (QString arg : args)
+            url += arg + "&";
+    }
     url.chop(1);
     const QString urlSpec = url.trimmed(); // removes whitespaces
     const QUrl newUrl = QUrl::fromUserInput(urlSpec);
