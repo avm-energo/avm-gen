@@ -1,3 +1,10 @@
+libavm-gen (1.9.5) unstable; urgency=low
+
+  [+] Files::rotateFiles
+  [+] Files::removeOlderThan
+
+ -- AVM-Energo <support@avmenergo.ru> Mon, 24 Mar 2025 13:07:41 +0300
+
 libavm-gen (1.9.4) unstable; urgency=low
 
   [+] NetIP namespace

@@ -109,7 +109,7 @@ void Files::checkNGzip(QFile *logFile)
     if (logFile->size() >= LOG_MAX_SIZE)
     {
         auto filename = logFile->fileName();
-        if (rotateGzipLogs(filename))
+        if (rotateFiles(filename))
         {
             QFile fileOut(filename + ".0.gz");
             if (fileOut.open(QIODevice::WriteOnly | QIODevice::Truncate))
@@ -132,13 +132,14 @@ void Files::checkNGzip(QFile *logFile)
     }
 }
 
-bool Files::rotateGzipLogs(const QString &path)
+bool Files::rotateFiles(const QString &path, const QString &extension, int count)
 {
+    const QString ext = "." + extension;
     // rotating
-    for (int i = 9; i > 0; --i)
+    for (int i = count; i > 0; --i)
     {
-        auto tempNew = path + "." + QString::number(i) + ".gz";
-        auto tempOld = path + "." + QString::number(i - 1) + ".gz";
+        auto tempNew = path + "." + QString::number(i) + ext;
+        auto tempOld = path + "." + QString::number(i - 1) + ext;
         QFile fn(tempNew);
         if (fn.exists())
             fn.remove();
@@ -169,4 +170,17 @@ const QString Files::SaveToTempFile(const QByteArray &src)
     file.write(src);
     file.close();
     return file.fileName();
+}
+
+void Files::removeOlderThan(const QString &dir, const QString &filenameMask, const QDateTime &datetime)
+{
+    QDir dirToCheck(dir);
+    dirToCheck.setNameFilters(QStringList(filenameMask));
+    dirToCheck.setSorting(QDir::Time | QDir::Reversed);
+    QFileInfoList flist = dirToCheck.entryInfoList();
+    for (QFileInfo fi : flist)
+    {
+        if (fi.lastModified().secsTo(datetime) > 0) // time of file is lower
+            QFile::remove(fi.fileName());
+    }
 }
