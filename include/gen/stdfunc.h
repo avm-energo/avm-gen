@@ -47,18 +47,18 @@ constexpr auto resourceDirectory = ":/module";
 class GENLIB_EXPORT StdFunc
 {
 private:
-    static QString HomeDir;        ///< \private Рабочий каталог программы
-    static QString SystemHomeDir;  ///< \private Системный каталог программы
-    static int m_tuneRequestCount; ///< \private Степень усреднения для регулировки
+    static QString s_homeDir;       ///< \private Рабочий каталог программы
+    static QString s_systemHomeDir; ///< \private Системный каталог программы
+    static int m_tuneRequestCount;  ///< \private Степень усреднения для регулировки
 
 public:
-    static QString DeviceIP;             ///< Device's IP address
+    static QString s_deviceIP;           ///< Device's IP address
     static QString s_OrganizationString; ///< Name of organization
     static struct
     {
         bool cancelled = false;
         bool cancelEnabled = true;
-    } state;
+    } s_state;
 
     StdFunc() = default;
 
@@ -68,16 +68,18 @@ public:
     static bool FloatIsWithinLimits(double var, double base, double tolerance);
     static float ToFloat(const QString &text, bool *ok = nullptr);
     static QString toString(float value, int precision = 5, bool exp = false);
-    static void SetHomeDir(const QString &dir);
-    static QString GetHomeDir();
-    static QString GetSystemHomeDir();
+    [[deprecated]] static void SetHomeDir(const QString &dir);
+    [[deprecated]] static QString GetHomeDir();
+    [[deprecated]] static QString GetSystemHomeDir();
+    static QString configDir();
+    static QString dataDir();
     static QString WhoAmI();
-    static void SetDeviceIP(const QString &ip);
-    static QString ForDeviceIP();
-    static void SetOrganizationString(const QString &str);
-    static QString OrganizationString();
-    static void SetTuneRequestCount(int n);
-    static int TuneRequestCount();
+    [[deprecated]] static void SetDeviceIP(const QString &ip);
+    [[deprecated]] static QString ForDeviceIP();
+    [[deprecated]] static void SetOrganizationString(const QString &str);
+    [[deprecated]] static QString OrganizationString();
+    [[deprecated]] static void SetTuneRequestCount(int n);
+    [[deprecated]] static int TuneRequestCount();
     static void Cancel();
     static void ClearCancel();
     static bool IsCancelled();

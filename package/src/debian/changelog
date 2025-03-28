@@ -1,3 +1,11 @@
+libavm-gen (1.9.6) unstable; urgency=low
+
+  [+] Logger::logLevelsList to fill in ComboBoxes in settings dialogs
+  [+] HttpEngine - debug output of the query string
+  [*] StdFunc - getHomeDir & getSystemHomeDir are made deprecated, use dataDir & configDir respectively
+
+ -- AVM-Energo <support@avmenergo.ru> Fri, 28 Mar 2025 09:44:39 +0300
+
 libavm-gen (1.9.5) unstable; urgency=low
 
   [+] Files::rotateFiles

@@ -17,11 +17,11 @@
 #include <gen/error.h>
 #include <gen/pch.h>
 
-QString StdFunc::HomeDir = "";       // Рабочий каталог программы
-QString StdFunc::SystemHomeDir = ""; // Системный каталог программы
-decltype(StdFunc::state) StdFunc::state {};
+QString StdFunc::s_homeDir = "";       // Рабочий каталог программы
+QString StdFunc::s_systemHomeDir = ""; // Системный каталог программы
+decltype(StdFunc::s_state) StdFunc::s_state {};
 
-QString StdFunc::DeviceIP = "";
+QString StdFunc::s_deviceIP = "";
 QString StdFunc::s_OrganizationString = "";
 int StdFunc::m_tuneRequestCount = 0;
 
@@ -30,17 +30,17 @@ int StdFunc::m_tuneRequestCount = 0;
  */
 void StdFunc::Init()
 {
-    SystemHomeDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/"
+    s_systemHomeDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/"
         + QCoreApplication::applicationName() + "/";
-    if ((!SystemHomeDir.contains("/root")) && SystemHomeDir.startsWith("//"))
+    if ((!s_systemHomeDir.contains("/root")) && s_systemHomeDir.startsWith("//"))
     {
-        if (SystemHomeDir.front() == '/')
-            SystemHomeDir.replace(0, 1, "/root");
+        if (s_systemHomeDir.front() == '/')
+            s_systemHomeDir.replace(0, 1, "/root");
     }
 
-    QDir dir(SystemHomeDir);
+    QDir dir(s_systemHomeDir);
     if (!dir.exists())
-        dir.mkdir(SystemHomeDir);
+        dir.mkdir(s_systemHomeDir);
     auto sets = std::unique_ptr<QSettings>(new QSettings);
     SetOrganizationString(sets->value("OrganizationString", "Р&К").toString());
     SetDeviceIP(sets->value("DeviceIP", "172.16.11.12").toString());
@@ -111,19 +111,29 @@ bool StdFunc::FloatIsWithinLimits(double var, double base, double tolerance)
 /// \brief Sets new path for home directory field.
 void StdFunc::SetHomeDir(const QString &dir)
 {
-    HomeDir = dir;
+    s_homeDir = dir;
 }
 
 /// \brief Returns path for home directory.
 QString StdFunc::GetHomeDir()
 {
-    return HomeDir;
+    return s_homeDir;
 }
 
 /// \brief Returns path for system home directory.
 QString StdFunc::GetSystemHomeDir()
 {
-    return SystemHomeDir;
+    return s_systemHomeDir;
+}
+
+QString StdFunc::configDir()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+}
+
+QString StdFunc::dataDir()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 }
 
 QString StdFunc::WhoAmI()
@@ -145,7 +155,7 @@ QString StdFunc::WhoAmI()
  */
 void StdFunc::SetDeviceIP(const QString &ip)
 {
-    DeviceIP = ip;
+    s_deviceIP = ip;
     auto sets = std::unique_ptr<QSettings>(new QSettings);
     sets->setValue("DeviceIP", ip);
 }
@@ -153,7 +163,7 @@ void StdFunc::SetDeviceIP(const QString &ip)
 /// \brief Returns device's IP.
 QString StdFunc::ForDeviceIP()
 {
-    return DeviceIP;
+    return s_deviceIP;
 }
 
 /*! \brief Sets new organization name.
@@ -184,35 +194,35 @@ int StdFunc::TuneRequestCount()
     return m_tuneRequestCount;
 }
 
-/// \brief Sets cancel state when enabled.
+/// \brief Sets cancel s_state when enabled.
 void StdFunc::Cancel()
 {
-    if (state.cancelEnabled)
-        state.cancelled = true;
+    if (s_state.cancelEnabled)
+        s_state.cancelled = true;
 }
 
-/// \brief Turns off cancel state.
+/// \brief Turns off cancel s_state.
 void StdFunc::ClearCancel()
 {
-    state.cancelled = false;
+    s_state.cancelled = false;
 }
 
-/// \brief Returns cancel state.
+/// \brief Returns cancel s_state.
 bool StdFunc::IsCancelled()
 {
-    return state.cancelled;
+    return s_state.cancelled;
 }
 
-/// \brief Disallows to set cancel state.
+/// \brief Disallows to set cancel s_state.
 void StdFunc::SetCancelDisabled()
 {
-    state.cancelEnabled = false;
+    s_state.cancelEnabled = false;
 }
 
-/// \brief Allows to set cancel state.
+/// \brief Allows to set cancel s_state.
 void StdFunc::SetCancelEnabled()
 {
-    state.cancelEnabled = true;
+    s_state.cancelEnabled = true;
 }
 
 /*! \brief Returns the position of first bit set.

@@ -3,7 +3,6 @@
 #include <gen/errorqueue.h>
 #include <gen/files.h>
 #include <gen/stdfunc.h>
-#include <iostream>
 
 struct MsgDescr
 {
@@ -24,7 +23,7 @@ const static QMap<QtMsgType, Logger::MessageTypes> _msgTypesTranslateMap { { QtD
     { QtInfoMsg, Logger::Info }, { QtWarningMsg, Logger::Warning }, { QtCriticalMsg, Logger::Critical },
     { QtFatalMsg, Logger::Fatal } };
 
-const QMap<QString, Logger::LogLevels> _logLevelsMap = { { "Debug", Logger::LogLevels::LOGLEVEL_DEBUG },
+static const QMap<QString, Logger::LogLevels> _logLevelsMap = { { "Debug", Logger::LogLevels::LOGLEVEL_DEBUG },
     { "Info", Logger::LogLevels::LOGLEVEL_INFO }, { "Fatal", Logger::LogLevels::LOGLEVEL_FATAL },
     { "Warn", Logger::LogLevels::LOGLEVEL_WARN }, { "Error", Logger::LogLevels::LOGLEVEL_CRIT } };
 
@@ -107,6 +106,11 @@ void Logger::setLogLevel(LogLevels level)
 void Logger::setLogLevel(const QString &level)
 {
     _logLevel = _logLevelsMap.value(level);
+}
+
+QStringList Logger::logLevelsList()
+{
+    return _logLevelsMap.keys();
 }
 
 /// Категории мы сейчас не используем, задел на будущее

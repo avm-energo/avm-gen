@@ -157,6 +157,7 @@ QByteArray HttpEngine::GetQueryInBA(NetIP ip, int port, const QString &query, co
     url.chop(1);
     const QString urlSpec = url.trimmed(); // removes whitespaces
     const QUrl newUrl = QUrl::fromUserInput(urlSpec);
+    qDebug() << "Get query: " << urlSpec;
     if (!newUrl.isValid())
     {
         qWarning() << "Invalid url";

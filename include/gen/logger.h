@@ -32,12 +32,15 @@ public:
         All
     };
 
+    // static const QMap<QString, Logger::LogLevels> _logLevelsMap;
+
     void static messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     void static messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     void static writeLog(MessageTypes type, const QString &msg);
     void static writeStart(const QString &filename);
     void static setLogLevel(LogLevels level);
     void static setLogLevel(const QString &level);
+    QStringList static logLevelsList();
 
 protected:
     Logger() = delete;
