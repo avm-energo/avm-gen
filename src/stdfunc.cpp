@@ -125,7 +125,7 @@ QString StdFunc::GetSystemHomeDir()
 
 QString StdFunc::configDir()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+    return QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
 }
 
 QString StdFunc::dataDir()
