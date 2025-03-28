@@ -20,7 +20,7 @@ QString Files::ChooseFileForSave(const QString &res, const QString &filenamestr)
 
 bool Files::isFileExist(const QString &filename)
 {
-    auto dir = QDir(StdFunc::GetSystemHomeDir());
+    auto dir = QDir(StdFunc::configDir());
     return QFile::exists(dir.filePath(filename));
 }
 

@@ -21,7 +21,7 @@ LogClass::~LogClass() noexcept
 void LogClass::init(const QString &filename)
 {
     // тестовая проверка открытия файла на запись
-    m_file.setFileName(StdFunc::GetSystemHomeDir() + filename);
+    m_file.setFileName(StdFunc::dataDir() + filename);
     if (!m_file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Append))
     {
         m_canLog = false;

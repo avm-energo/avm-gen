@@ -15,7 +15,7 @@ bool XmlBase::getXMLFromByteArray(const QByteArray &ba, QDomElement &element)
 #if QT_VERSION < QT_VERSION_CHECK(6, 5, 0)
     QString errstr;
     int errline, errcolumn;
-    if(!(s_xmlDocument.setContent(ba, &errstr, &errline, &errcolumn)))
+    if (!(s_xmlDocument.setContent(ba, &errstr, &errline, &errcolumn)))
     {
         qDebug() << "Error while parsing bytearray, line: " << errline << ", column: " << errcolumn
                  << "\nError message is: " << errstr;
@@ -47,7 +47,7 @@ QDomElement XmlBase::getXMLFirstElementFromFile(const QString &filename, const Q
 {
     QDomDocument doc;
     QDomElement element;
-    QDir dir(StdFunc::GetSystemHomeDir());
+    QDir dir(StdFunc::configDir());
     QFile file(dir.filePath(filename));
     if (file.exists())
     {

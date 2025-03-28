@@ -42,9 +42,6 @@ void StdFunc::Init()
     if (!dir.exists())
         dir.mkdir(s_systemHomeDir);
     auto sets = std::unique_ptr<QSettings>(new QSettings);
-    SetOrganizationString(sets->value("OrganizationString", "Р&К").toString());
-    SetDeviceIP(sets->value("DeviceIP", "172.16.11.12").toString());
-    SetTuneRequestCount(sets->value("TuneRequestCount", "20").toInt());
 }
 
 /// \brief Converts a version from quint32 datatype to string view.

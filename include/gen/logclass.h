@@ -13,7 +13,7 @@ constexpr char logStart[] = "=== Log started ===";
 constexpr char logExt[] = "log";
 }
 
-enum class LogLevel : std::uint8_t
+enum class [[deprecated]] LogLevel : std::uint8_t
 {
     Info = 0,
     Warning,
@@ -22,7 +22,7 @@ enum class LogLevel : std::uint8_t
     Undefined = std::numeric_limits<std::uint8_t>::max()
 };
 
-class GENLIB_EXPORT LogClass
+class GENLIB_EXPORT [[deprecated]] LogClass
 {
 private:
     bool m_canLog;
