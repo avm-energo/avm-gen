@@ -7,7 +7,7 @@
 #include <gen/error.h>
 #include <gen/netip.h>
 
-class HttpEngine : public QObject
+class GENLIB_EXPORT HttpEngine : public QObject
 {
     Q_OBJECT
 
