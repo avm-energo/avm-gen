@@ -23,7 +23,11 @@ bool TimeFunc::WaitFor(bool &flag, int timeoutms)
 int TimeFunc::curTimeZone()
 {
     QDateTime datetime = QDateTime::currentDateTime();
+#if QT_VERSION < QT_VERSION_CHECK(6, 8, 2)
     datetime.setTimeSpec(Qt::LocalTime);
+#else
+    datetime.setTimeZone(QTimeZone::LocalTime);
+#endif
     return (datetime.offsetFromUtc() / 3600);
 }
 
