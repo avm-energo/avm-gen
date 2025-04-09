@@ -44,13 +44,13 @@ find_package(Qt${QT_VERSION_MAJOR}
   COMPONENTS Core Network Xml REQUIRED
 )
 
-find_package(LibLZMA QUIET)
-if (${LibLZMA_FOUND})
-    message(STATUS "Using installed liblzma")
-else()
+#find_package(LibLZMA QUIET)
+#if (${LibLZMA_FOUND})
+#    message(STATUS "Using installed liblzma")
+#else()
     message(STATUS "Using external xz-utils")
     include(lzma)
-endif()
+#endif()
 
 #------------------------------------------------------------------------------#
 ############################## Target definition ###############################
@@ -103,17 +103,17 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Xml
 )
 # Linking Qt core libraries for using in gen library
-if (${LibLZMA_FOUND})
-    target_link_libraries(
-        ${PROJECT_NAME} PUBLIC
-        LibLZMA::LibLZMA
-    )
-else()
+#if (${LibLZMA_FOUND})
+#    target_link_libraries(
+#        ${PROJECT_NAME} PUBLIC
+#        LibLZMA::LibLZMA
+#    )
+#else()
     target_link_libraries(
         ${PROJECT_NAME} PUBLIC
         liblzma
     )
-endif()
+#endif()
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
 
 # Using compile warnings to detect bugs and mistakes
@@ -161,11 +161,6 @@ install(EXPORT ${PROJECT_NAME}_Targets
 install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
         "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
-
-# if (NOT ${LibLZMA_FOUND})
-#     install(FILES "${liblzma_BINARY_DIR}/liblzma.dll" DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
-#     install(FILES "${liblzma_BINARY_DIR}/lzma.lib" DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME})
-# endif()
 
 set(VERSION_IN ${CMAKE_CURRENT_SOURCE_DIR}/VERSION.in)
 set(VERSION_OUT ${CMAKE_CURRENT_SOURCE_DIR}/package/src/VERSION)
