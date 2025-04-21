@@ -1,3 +1,16 @@
+libavm-gen (1.9.9) unstable; urgency=low
+
+  [+] FtpEngine
+
+ -- AVM-Energo <support@avmenergo.ru>  Mon, 21 Apr 2025 18:51:16 +0300
+
+libavm-gen (1.9.8) unstable; urgency=low
+
+  [-] Logclass deprecated
+  [*] LibLZMA must be being built each time with libavm-gen building (ms)
+
+ -- AVM-Energo <support@avmenergo.ru>  Wed, 09 Apr 2025 09:44:39 +0300
+
 libavm-gen (1.9.6) unstable; urgency=low
 
   [+] Logger::logLevelsList to fill in ComboBoxes in settings dialogs
