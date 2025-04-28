@@ -40,6 +40,7 @@ enum SignalTypes
 #ifdef __linux
     Timespec,
 #endif
+    Command,
     GeneralResponse
 };
 

@@ -1,3 +1,9 @@
+libavm-gen (1.9.10) unstable; urgency=low
+
+  [+] DataTypes Command added to enum
+
+ -- AVM-Energo <support@avmenergo.ru>  Mon, 28 Apr 2025 17:50:33 +0300
+
 libavm-gen (1.9.9) unstable; urgency=low
 
   [+] FtpEngine
