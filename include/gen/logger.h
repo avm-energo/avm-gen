@@ -34,6 +34,7 @@ public:
 
     // static const QMap<QString, Logger::LogLevels> _logLevelsMap;
 
+    Logger() { };
     void static messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     void static messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     void static writeLog(MessageTypes type, const QString &msg);
@@ -43,8 +44,6 @@ public:
     QStringList static logLevelsList();
 
 protected:
-    Logger() = delete;
-
 private:
     static LogLevels _logLevel;
     static QMutex _mutex;
