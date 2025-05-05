@@ -98,12 +98,6 @@ QString StdFunc::configDir()
     QString configDir;
 #ifdef Q_OS_WINDOWS
     configDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QString orgName = QCoreApplication::organizationName();
-    if (!orgName.isEmpty())
-    {
-        configDir.remove(QCoreApplication::applicationName());
-        configDir += QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + "/";
-    }
 #else
 #ifdef Q_OS_LINUX
     configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
@@ -116,14 +110,6 @@ QString StdFunc::dataDir()
 {
     QString dataDir;
     dataDir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-#ifdef Q_OS_WINDOWS
-    QString orgName = QCoreApplication::organizationName();
-    if (!orgName.isEmpty())
-    {
-        dataDir.remove(QCoreApplication::applicationName());
-        dataDir += QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + "/";
-    }
-#endif
     return dataDir;
 }
 
