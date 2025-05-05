@@ -95,33 +95,35 @@ bool StdFunc::FloatIsWithinLimits(double var, double base, double tolerance)
 
 QString StdFunc::configDir()
 {
-    QString configDir, orgName;
+    QString configDir;
 #ifdef Q_OS_WINDOWS
     configDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-#else
-#ifdef Q_OS_LINUX
-    configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
-#endif
-#endif
-    orgName = QCoreApplication::organizationName();
+    QString orgName = QCoreApplication::organizationName();
     if (!orgName.isEmpty())
     {
         configDir.remove(QCoreApplication::applicationName());
         configDir += QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + "/";
     }
+#else
+#ifdef Q_OS_LINUX
+    configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+#endif
+#endif
     return configDir;
 }
 
 QString StdFunc::dataDir()
 {
-    QString dataDir, orgName;
+    QString dataDir;
     dataDir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-    orgName = QCoreApplication::organizationName();
+#ifdef Q_OS_WINDOWS
+    QString orgName = QCoreApplication::organizationName();
     if (!orgName.isEmpty())
     {
         dataDir.remove(QCoreApplication::applicationName());
         dataDir += QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + "/";
     }
+#endif
     return dataDir;
 }
 
