@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(avm-gen
   DESCRIPTION "General library for AVM-Energo C++ projects"
-  VERSION 1.9.10)
+  VERSION 1.9.12)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -44,13 +44,8 @@ find_package(Qt${QT_VERSION_MAJOR}
   COMPONENTS Core Network Xml REQUIRED
 )
 
-#find_package(LibLZMA QUIET)
-#if (${LibLZMA_FOUND})
-#    message(STATUS "Using installed liblzma")
-#else()
-    message(STATUS "Using external xz-utils")
-    include(lzma)
-#endif()
+message(STATUS "Using external xz-utils")
+include(lzma)
 
 #------------------------------------------------------------------------------#
 ############################## Target definition ###############################
@@ -102,18 +97,12 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Xml
 )
-# Linking Qt core libraries for using in gen library
-#if (${LibLZMA_FOUND})
-#    target_link_libraries(
-#        ${PROJECT_NAME} PUBLIC
-#        LibLZMA::LibLZMA
-#    )
-#else()
-    target_link_libraries(
-        ${PROJECT_NAME} PUBLIC
-        liblzma
-    )
-#endif()
+
+target_link_libraries(
+  ${PROJECT_NAME} PUBLIC
+  liblzma
+)
+
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
 
 # Using compile warnings to detect bugs and mistakes

@@ -17,31 +17,19 @@
 #include <gen/error.h>
 #include <gen/pch.h>
 
-QString StdFunc::s_homeDir = "";       // Рабочий каталог программы
-QString StdFunc::s_systemHomeDir = ""; // Системный каталог программы
 decltype(StdFunc::s_state) StdFunc::s_state {};
-
-QString StdFunc::s_deviceIP = "";
-QString StdFunc::s_OrganizationString = "";
-int StdFunc::m_tuneRequestCount = 0;
 
 /*! \brief Initialization function for static class fields.
  *  \details Initialize next fields by values: system home directory, organization, device IP, etc...
  */
 void StdFunc::Init()
 {
-    s_systemHomeDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/"
-        + QCoreApplication::applicationName() + "/";
-    if ((!s_systemHomeDir.contains("/root")) && s_systemHomeDir.startsWith("//"))
+    for (QString dirstr : { configDir(), dataDir() })
     {
-        if (s_systemHomeDir.front() == '/')
-            s_systemHomeDir.replace(0, 1, "/root");
+        QDir dir(dirstr);
+        if (!dir.exists())
+            dir.mkdir(dirstr);
     }
-
-    QDir dir(s_systemHomeDir);
-    if (!dir.exists())
-        dir.mkdir(s_systemHomeDir);
-    auto sets = std::unique_ptr<QSettings>(new QSettings);
 }
 
 /// \brief Converts a version from quint32 datatype to string view.
@@ -105,32 +93,36 @@ bool StdFunc::FloatIsWithinLimits(double var, double base, double tolerance)
     return (tmpf < fabs(tolerance));
 }
 
-/// \brief Sets new path for home directory field.
-void StdFunc::SetHomeDir(const QString &dir)
-{
-    s_homeDir = dir;
-}
-
-/// \brief Returns path for home directory.
-QString StdFunc::GetHomeDir()
-{
-    return s_homeDir;
-}
-
-/// \brief Returns path for system home directory.
-QString StdFunc::GetSystemHomeDir()
-{
-    return s_systemHomeDir;
-}
-
 QString StdFunc::configDir()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    QString configDir, orgName;
+#ifdef Q_OS_WINDOWS
+    configDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+#else
+#ifdef Q_OS_LINUX
+    configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+#endif
+#endif
+    orgName = QCoreApplication::organizationName();
+    if (!orgName.isEmpty())
+    {
+        configDir.remove(QCoreApplication::applicationName());
+        configDir += QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + "/";
+    }
+    return configDir;
 }
 
 QString StdFunc::dataDir()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString dataDir, orgName;
+    dataDir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    orgName = QCoreApplication::organizationName();
+    if (!orgName.isEmpty())
+    {
+        dataDir.remove(QCoreApplication::applicationName());
+        dataDir += QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + "/";
+    }
+    return dataDir;
 }
 
 QString StdFunc::WhoAmI()
@@ -145,50 +137,6 @@ QString StdFunc::WhoAmI()
         qApp->processEvents();
 
     return process.readAll();
-}
-
-/*! \brief Sets new device's IP.
- *  \param ip String that contains new IP address.
- */
-void StdFunc::SetDeviceIP(const QString &ip)
-{
-    s_deviceIP = ip;
-    auto sets = std::unique_ptr<QSettings>(new QSettings);
-    sets->setValue("DeviceIP", ip);
-}
-
-/// \brief Returns device's IP.
-QString StdFunc::ForDeviceIP()
-{
-    return s_deviceIP;
-}
-
-/*! \brief Sets new organization name.
- *  \param str New organization name in string view.
- */
-void StdFunc::SetOrganizationString(const QString &str)
-{
-    s_OrganizationString = str;
-    auto sets = std::unique_ptr<QSettings>(new QSettings);
-    sets->setValue("OrganizationString", str);
-}
-
-/// \brief Returns organization name.
-QString StdFunc::OrganizationString()
-{
-    return s_OrganizationString;
-}
-
-/// \brief Sets new tune request count.
-void StdFunc::SetTuneRequestCount(int n)
-{
-    m_tuneRequestCount = n;
-}
-
-/// \brief Returns tune request count.
-int StdFunc::TuneRequestCount()
-{
-    return m_tuneRequestCount;
 }
 
 /// \brief Sets cancel s_state when enabled.

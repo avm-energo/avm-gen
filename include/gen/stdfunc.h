@@ -32,14 +32,13 @@ template <typename T> using SharedPointer = std::shared_ptr<T>;
 
 template <typename T> using UniquePointer = std::unique_ptr<T, QtHelper::deleteLaterDeletor>;
 
-/// \brief Декларация для определния простых (POD) типов.
+/// \brief Декларация для определения простых (POD) типов.
 /// \see https://en.cppreference.com/w/cpp/types/is_pod
 template <typename T> //
 constexpr static auto is_simple_v = std::is_standard_layout_v<T> && std::is_trivial_v<T>;
 
 constexpr int defaultRatio = 3;
 constexpr int maxRatio = 5;
-constexpr auto resourceDirectory = ":/module";
 
 /*! \brief Class contains most frequently used general purpose functions
  *  \details That class contains static general purpose functions
@@ -47,13 +46,7 @@ constexpr auto resourceDirectory = ":/module";
 class GENLIB_EXPORT StdFunc
 {
 private:
-    static QString s_homeDir;       ///< \private Рабочий каталог программы
-    static QString s_systemHomeDir; ///< \private Системный каталог программы
-    static int m_tuneRequestCount;  ///< \private Степень усреднения для регулировки
-
 public:
-    static QString s_deviceIP;           ///< Device's IP address
-    static QString s_OrganizationString; ///< Name of organization
     static struct
     {
         bool cancelled = false;
@@ -68,18 +61,21 @@ public:
     static bool FloatIsWithinLimits(double var, double base, double tolerance);
     static float ToFloat(const QString &text, bool *ok = nullptr);
     static QString toString(float value, int precision = 5, bool exp = false);
-    [[deprecated]] static void SetHomeDir(const QString &dir);
-    [[deprecated]] static QString GetHomeDir();
-    [[deprecated]] static QString GetSystemHomeDir();
+
+    /// \brief Get config dir
+    /// \details Get config dir:
+    /// under Windows it is C:/Users/<USER>/AppData/Roaming/<ORGNAME>/<APPNAME>
+    /// under Linux it is ~/.config/<ORGNAME>/<APPNAME>
+    /// \returns QString directory string
     static QString configDir();
+
+    /// \brief Get data dir
+    /// \details Get data dir:
+    /// under Windows it is C:/Users/<USER>/AppData/Local/<ORGNAME>/<APPNAME>
+    /// under Linux it is ~/.local/share/<ORGNAME>/<APPNAME>
+    /// \returns QString directory string
     static QString dataDir();
     static QString WhoAmI();
-    [[deprecated]] static void SetDeviceIP(const QString &ip);
-    [[deprecated]] static QString ForDeviceIP();
-    [[deprecated]] static void SetOrganizationString(const QString &str);
-    [[deprecated]] static QString OrganizationString();
-    [[deprecated]] static void SetTuneRequestCount(int n);
-    [[deprecated]] static int TuneRequestCount();
     static void Cancel();
     static void ClearCancel();
     static bool IsCancelled();

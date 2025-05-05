@@ -3,6 +3,7 @@ include(FetchContent)
 find_package(Git REQUIRED)
 
 set(XZ_DOC OFF)
+set(XZ_NLS OFF)
 set(XZ_TOOL_LZMADEC OFF)
 set(XZ_TOOL_LZMAINFO OFF)
 set(XZ_TOOL_XZ OFF)

@@ -1,3 +1,16 @@
+libavm-gen (1.9.12) unstable; urgency=low
+
+  [*] removed deprecated
+  [+] StdFunc configDir and dataDir instead of systemHomeDir and homeDir
+
+ -- AVM-Energo <support@avmenergo.ru>  Mon, 05 May 2025 15:08:34 +0300
+
+libavm-gen (1.9.11) unstable; urgency=low
+
+  [+] ThreadPool
+
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 29 Apr 2025 13:54:33 +0300
+
 libavm-gen (1.9.10) unstable; urgency=low
 
   [+] DataTypes Command added to enum
