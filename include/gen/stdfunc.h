@@ -62,19 +62,6 @@ public:
     static float ToFloat(const QString &text, bool *ok = nullptr);
     static QString toString(float value, int precision = 5, bool exp = false);
 
-    /// \brief Get config dir
-    /// \details Get config dir:
-    /// under Windows it is C:/Users/<USER>/AppData/Roaming/<ORGNAME>/<APPNAME>
-    /// under Linux it is ~/.config/<ORGNAME>/<APPNAME>
-    /// \returns QString directory string
-    static QString configDir();
-
-    /// \brief Get data dir
-    /// \details Get data dir:
-    /// under Windows it is C:/Users/<USER>/AppData/Local/<ORGNAME>/<APPNAME>
-    /// under Linux it is ~/.local/share/<ORGNAME>/<APPNAME>
-    /// \returns QString directory string
-    static QString dataDir();
     static QString WhoAmI();
     static void Cancel();
     static void ClearCancel();

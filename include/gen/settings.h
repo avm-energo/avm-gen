@@ -9,7 +9,7 @@ class Settings
 public:
     explicit Settings();
 
-    static QVariant value(const QString &key, const QVariant &defValue);
+    static QVariant value(const QString &key, const QVariant &defValue = QVariant());
     static void setValue(const QString &key, const QVariant &value);
 
     /// \brief Get config dir
@@ -26,7 +26,16 @@ public:
     /// \returns QString directory string
     static QString dataDir();
 
+    /// \brief Get work dir, user modifyable
+    /// \details Get work dir:
+    /// under Windows it is C:/Users/<USER>/AppData/Local/<ORGNAME>/<APPNAME>
+    /// under Linux it is ~/.local/share/<ORGNAME>/<APPNAME>
+    /// \returns QString directory string
     static QString workDir();
+
+    /// \brief Modify work dir
+    /// \details Set work dir:
+    /// \param QString dir - path to change workdir to
     static void setWorkDir(const QString &dir);
 
 private:

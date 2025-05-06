@@ -1,3 +1,10 @@
+libavm-gen (1.9.13) unstable; urgency=low
+
+  [-] removed ComaException
+  [+] Settings class with configDir, dataDir & workDir with setWorkDir, value & setValue
+
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 06 May 2025 16:19:57 +0300
+
 libavm-gen (1.9.12) unstable; urgency=low
 
   [*] removed deprecated

@@ -1,7 +1,7 @@
 #include <QDir>
 #include <QFile>
 #include <QtDebug>
-#include <gen/stdfunc.h>
+#include <gen/settings.h>
 #include <gen/xml/xmlbase.h>
 
 QDomDocument XmlBase::s_xmlDocument = QDomDocument();
@@ -47,7 +47,7 @@ QDomElement XmlBase::getXMLFirstElementFromFile(const QString &filename, const Q
 {
     QDomDocument doc;
     QDomElement element;
-    QDir dir(StdFunc::configDir());
+    QDir dir((Settings::configDir()));
     QFile file(dir.filePath(filename));
     if (file.exists())
     {

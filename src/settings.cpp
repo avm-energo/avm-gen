@@ -12,6 +12,7 @@ Settings::Settings()
         if (!dir.exists())
             dir.mkdir(dirstr);
     }
+    m_workDir = value("workDir", dataDir()).toString();
 }
 
 QVariant Settings::value(const QString &key, const QVariant &defValue)
@@ -54,4 +55,5 @@ QString Settings::workDir()
 void Settings::setWorkDir(const QString &dir)
 {
     m_workDir = dir;
+    setValue("workDir", dir);
 }
