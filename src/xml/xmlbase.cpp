@@ -70,7 +70,7 @@ QDomElement XmlBase::getXMLFirstElementFromFile(const QString &filename, const Q
                     return element;
                 }
                 else
-                    qDebug() << "File is empty: " << filename;
+                    qDebug() << "File is empty: " << dir.filePath(filename);
             }
             else
             {
@@ -79,15 +79,15 @@ QDomElement XmlBase::getXMLFirstElementFromFile(const QString &filename, const Q
                 qDebug() << "Error while parsing bytearray, line: " << errline << ", column: " << errcolumn
                          << "\nError message is: " << errstr;
 #else
-                qDebug() << "File: " << filename << " Error: " + res.errorMessage << //
+                qDebug() << "File: " << dir.filePath(filename) << " Error: " + res.errorMessage << //
                     " Line: " << res.errorLine << " Column: " << res.errorColumn;
 #endif
             }
         }
         else
-            qDebug() << "File open error: " << filename;
+            qDebug() << "File open error: " << dir.filePath(filename);
     }
     else
-        qDebug() << "File not found: " << filename;
+        qDebug() << "File not found: " << dir.filePath(filename);
     return QDomElement();
 }
