@@ -38,6 +38,8 @@ public:
     /// \param QString dir - path to change workdir to
     static void setWorkDir(const QString &dir);
 
+    static QString logDir();
+
 private:
     static QString m_workDir;
 };

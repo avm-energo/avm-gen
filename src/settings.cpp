@@ -57,3 +57,8 @@ void Settings::setWorkDir(const QString &dir)
     m_workDir = dir;
     setValue("workDir", dir);
 }
+
+QString Settings::logDir()
+{
+    return dataDir() + "logs/";
+}
