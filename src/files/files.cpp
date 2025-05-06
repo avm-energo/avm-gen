@@ -6,6 +6,7 @@
 #include <QtDebug>
 #include <gen/files.h>
 #include <gen/files/lzma_util.h>
+#include <gen/settings.h>
 #include <gen/stdfunc.h>
 
 constexpr auto LOG_MAX_SIZE = 1048576;
@@ -20,7 +21,7 @@ QString Files::ChooseFileForSave(const QString &res, const QString &filenamestr)
 
 bool Files::isFileExist(const QString &filename)
 {
-    auto dir = QDir(StdFunc::configDir());
+    auto dir = QDir(Settings::configDir());
     return QFile::exists(dir.filePath(filename));
 }
 

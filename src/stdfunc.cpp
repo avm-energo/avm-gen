@@ -24,12 +24,6 @@ decltype(StdFunc::s_state) StdFunc::s_state {};
  */
 void StdFunc::Init()
 {
-    for (QString dirstr : { configDir(), dataDir() })
-    {
-        QDir dir(dirstr);
-        if (!dir.exists())
-            dir.mkdir(dirstr);
-    }
 }
 
 /// \brief Converts a version from quint32 datatype to string view.
@@ -91,26 +85,6 @@ bool StdFunc::FloatIsWithinLimits(double var, double base, double tolerance)
 {
     auto tmpf = fabs(var - base);
     return (tmpf < fabs(tolerance));
-}
-
-QString StdFunc::configDir()
-{
-    QString configDir;
-#ifdef Q_OS_WINDOWS
-    configDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-#else
-#ifdef Q_OS_LINUX
-    configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
-#endif
-#endif
-    return configDir;
-}
-
-QString StdFunc::dataDir()
-{
-    QString dataDir;
-    dataDir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-    return dataDir;
 }
 
 QString StdFunc::WhoAmI()

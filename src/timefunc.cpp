@@ -1,9 +1,7 @@
 #include "gen/timefunc.h"
 
 #include <QDateTime>
-#include <QSettings>
 #include <gen/settings.h>
-#include <memory>
 
 TimeFunc::TimeFunc()
 {
@@ -82,10 +80,8 @@ quint64 TimeFunc::InvStringToUnixTime32(QString utime, QTimeZone tz)
 
 QTimeZone TimeFunc::userTimeZone()
 {
-    using namespace settings;
-    auto sets = std::make_unique<QSettings>();
     QString timezone = QTimeZone::systemTimeZone().displayName(QTimeZone::StandardTime, QTimeZone::OffsetName);
-    timezone = sets->value(regMap[timezoneKey].name, timezone).toString();
+    timezone = Settings::value("timeZone", timezone).toString();
     if (!timezone.isEmpty())
         return QTimeZone(timezone.toUtf8());
     return QTimeZone::systemTimeZone();

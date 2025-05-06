@@ -1,37 +1,34 @@
 #pragma once
 
-#include <gen/datatypes.h>
+#include <QMap>
+#include <QSettings>
+#include <QString>
 
-namespace settings
+class Settings
 {
-struct RegValues
-{
-    QString name;
-    QString defValue;
-};
+public:
+    explicit Settings();
 
-enum SettingsKeys
-{
-    logKey,
-    logWidget,
-    tuneCountKey,
-    tuneCountWidget,
-    hidTimeout,
-    timezoneKey,
-    timezoneWidget,
-    MIPIP,
-    MIPAddress
-};
+    static QVariant value(const QString &key, const QVariant &defValue);
+    static void setValue(const QString &key, const QVariant &value);
 
-const QMap<int, settings::RegValues> regMap {
-    { logKey, { "WriteLog", "0" } },                //
-    { logWidget, { "writelogchb", "" } },           //
-    { tuneCountKey, { "TuneRequestCount", "20" } }, //
-    { tuneCountWidget, { "reqcount", "" } },        //
-    { hidTimeout, { "hidTimeout", "50" } },         //
-    { timezoneKey, { "Timezone", "0" } },           //
-    { timezoneWidget, { "timezoneCB", "" } },       //
-    { MIPIP, { "mipIP", "172.16.11.12" } },         //
-    { MIPAddress, { "mipAddress", "205" } }         //
+    /// \brief Get config dir
+    /// \details Get config dir:
+    /// under Windows it is C:/Users/<USER>/AppData/Roaming/<ORGNAME>/<APPNAME>
+    /// under Linux it is ~/.config/<ORGNAME>/<APPNAME>
+    /// \returns QString directory string
+    static QString configDir();
+
+    /// \brief Get data dir
+    /// \details Get data dir:
+    /// under Windows it is C:/Users/<USER>/AppData/Local/<ORGNAME>/<APPNAME>
+    /// under Linux it is ~/.local/share/<ORGNAME>/<APPNAME>
+    /// \returns QString directory string
+    static QString dataDir();
+
+    static QString workDir();
+    static void setWorkDir(const QString &dir);
+
+private:
+    static QString m_workDir;
 };
-}
