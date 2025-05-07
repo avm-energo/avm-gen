@@ -6,4 +6,4 @@ Section: misc
 Package: libavm-gen
 Description: General lib for AVM-Energo projects
 Architecture: amd64
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, liblzma5 (>= 5.2.5)
