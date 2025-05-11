@@ -38,6 +38,8 @@ public:
     /// \brief Implicit type conversion to string value.
     operator QString() const noexcept;
 
+    operator QByteArray() const noexcept;
+
     operator std::int16_t() const noexcept;
     operator std::uint16_t() const noexcept;
     operator std::int32_t() const noexcept;

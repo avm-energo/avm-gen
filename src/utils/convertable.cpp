@@ -51,6 +51,11 @@ Convertable::operator QString() const noexcept
     return m_data.toString();
 }
 
+Convertable::operator QByteArray() const noexcept
+{
+    return m_data.toByteArray();
+}
+
 Convertable::operator std::int16_t() const noexcept
 {
     return static_cast<std::int16_t>(m_data.toInt());
