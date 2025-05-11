@@ -6,7 +6,7 @@ QString Settings::m_workDir = "";
 
 Settings::Settings()
 {
-    for (QString dirstr : { configDir(), dataDir() })
+    for (QString dirstr : { configDir(), dataDir(), logDir() })
     {
         QDir dir(dirstr);
         if (!dir.exists())

@@ -1,3 +1,9 @@
+libavm-gen (1.9.14) unstable; urgency=low
+
+  [+] Convertable::QByteArray
+
+ -- AVM-Energo <support@avmenergo.ru>  Sun, 11 May 2025 22:15:18 +0300
+
 libavm-gen (1.9.13) unstable; urgency=low
 
   [-] removed ComaException
