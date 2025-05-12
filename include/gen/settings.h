@@ -9,8 +9,18 @@ class Settings
 public:
     explicit Settings();
 
+    /// \brief Store current group into s_oldGroup and set new group to newGroup
+    static void pushGroup(const QString &newGroup);
+
+    /// \brief Restore old group from s_oldGroup and set current group to it
+    static void popGroup();
+
     static QVariant value(const QString &key, const QVariant &defValue = QVariant());
     static void setValue(const QString &key, const QVariant &value);
+
+    static QStringList childGroups();
+    static void remove(const QString &name);
+    static bool groupExist(const QString &name);
 
     /// \brief Get config dir
     /// \details Get config dir:
@@ -41,5 +51,7 @@ public:
     static QString logDir();
 
 private:
-    static QString m_workDir;
+    static QString s_workDir;
+    static QString s_oldGroup;
+    static QSettings s_settings;
 };
