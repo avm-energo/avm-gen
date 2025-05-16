@@ -14,7 +14,7 @@ Settings::Settings()
         if (!dir.exists())
             dir.mkdir(dirstr);
     }
-    s_workDir = value("workDir", dataDir()).toString();
+    s_workDir = QString(get("workDir", dataDir()));
 }
 
 void Settings::pushGroup(const QString &newGroup)
@@ -30,19 +30,25 @@ void Settings::popGroup()
     s_settings.beginGroup(s_oldGroup);
 }
 
-QVariant Settings::value(const QString &key, const QVariant &defValue)
+QStringList Settings::groups(const QString &key)
 {
-    return s_settings.value(key, defValue);
+    QStringList sl;
+    if (!key.isEmpty())
+        pushGroup(key);
+    sl.append(s_settings.childGroups());
+    if (!key.isEmpty())
+        popGroup();
+    return sl;
 }
 
-void Settings::setValue(const QString &key, const QVariant &value)
+utils::Convertable Settings::get(const QString &key, const QVariant &defValue)
+{
+    return utils::Convertable { s_settings.value(key, defValue) };
+}
+
+void Settings::set(const QString &key, const QVariant &value)
 {
     s_settings.setValue(key, value);
-}
-
-QStringList Settings::childGroups()
-{
-    return s_settings.childGroups();
 }
 
 void Settings::remove(const QString &name)
@@ -83,7 +89,7 @@ QString Settings::workDir()
 void Settings::setWorkDir(const QString &dir)
 {
     s_workDir = dir;
-    setValue("workDir", dir);
+    set("workDir", dir);
 }
 
 QString Settings::logDir()

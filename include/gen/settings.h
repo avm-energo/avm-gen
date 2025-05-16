@@ -3,6 +3,7 @@
 #include <QMap>
 #include <QSettings>
 #include <QString>
+#include <gen/utils/convertable.h>
 
 class Settings
 {
@@ -15,10 +16,10 @@ public:
     /// \brief Restore old group from s_oldGroup and set current group to it
     static void popGroup();
 
-    static QVariant value(const QString &key, const QVariant &defValue = QVariant());
-    static void setValue(const QString &key, const QVariant &value);
+    static QStringList groups(const QString &key = "");
+    static utils::Convertable get(const QString &key, const QVariant &defValue = QVariant());
+    static void set(const QString &key, const QVariant &value);
 
-    static QStringList childGroups();
     static void remove(const QString &name);
     static bool groupExist(const QString &name);
 
