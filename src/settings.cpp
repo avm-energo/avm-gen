@@ -5,7 +5,13 @@
 QString Settings::s_workDir = "";
 QString Settings::s_oldGroup = "";
 QSettings Settings::s_settings = QSettings();
-
+#ifdef Q_OS_WINDOWS
+constexpr char c_dirDelimiter[] = "\\";
+#else
+#ifdef Q_OS_LINUX
+constexpr char c_dirDelimiter[] = "/";
+#endif
+#endif
 Settings::Settings()
 {
     for (QString dirstr : { configDir(), dataDir(), logDir() })
@@ -65,10 +71,10 @@ QString Settings::configDir()
 {
     QString configDir;
 #ifdef Q_OS_WINDOWS
-    configDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    configDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + c_dirDelimiter;
 #else
 #ifdef Q_OS_LINUX
-    configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    configDir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + c_dirDelimiter;
 #endif
 #endif
     return configDir;
@@ -77,7 +83,7 @@ QString Settings::configDir()
 QString Settings::dataDir()
 {
     QString dataDir;
-    dataDir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    dataDir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + c_dirDelimiter;
     return dataDir;
 }
 
@@ -89,7 +95,9 @@ QString Settings::workDir()
 void Settings::setWorkDir(const QString &dir)
 {
     s_workDir = dir;
-    set("workDir", dir);
+    if (!s_workDir.endsWith(c_dirDelimiter))
+        s_workDir += c_dirDelimiter;
+    set("workDir", s_workDir);
 }
 
 QString Settings::logDir()
