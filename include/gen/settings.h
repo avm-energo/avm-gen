@@ -5,7 +5,7 @@
 #include <QString>
 #include <gen/utils/convertable.h>
 
-class Settings
+class GENLIB_EXPORT Settings
 {
 public:
     explicit Settings();

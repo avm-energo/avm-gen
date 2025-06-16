@@ -77,7 +77,7 @@ public:
         connect(thr.thread, &QThread::started, receiver, runMethod);
         m_threadMap[id] = thr;
         return id;
-    };
+    }
     void start(int id);
     void finish(int id);
     ThreadStatus status(int id);
