@@ -18,59 +18,46 @@ using bool_or = std::integral_constant<bool, !bool_and<!Bs...>::value>;
 
 namespace std_ext
 {
-template <typename R, bool... Bs> // note: R first, no default :(
-using enable_if_any = std::enable_if<bool_or<Bs...>::value, R>;
-
-template <typename R, bool... Bs> // note: R first, no default :(
-using enable_if_all = std::enable_if<bool_and<Bs...>::value, R>;
-
-template <typename T, typename... Ts> //
-using are_same = bool_and<std::is_same<T, Ts>::value...>;
-
 template <typename Enum> //
 constexpr std::underlying_type_t<Enum> to_underlying(Enum value) noexcept
 {
     return static_cast<std::underlying_type_t<Enum>>(value);
 }
 
-template <typename...> //
-using to_void = void;  // maps everything to void, used in non-evaluated contexts
-
 template <typename T, typename = void> //
 struct is_container : std::false_type
 {
 };
 
-namespace detail
-{
-    template <typename... Ts> struct is_container_helper
-    {
-    };
-}
+template<typename... Ts>
+struct is_container_helper
+{};
 
-template <typename T>
+template<typename T>
 struct is_container<T,
-    std::conditional_t<false,
-        detail::is_container_helper<typename T::value_type, typename T::size_type, typename T::iterator,
-            typename T::const_iterator, decltype(std::declval<T>().size()), decltype(std::declval<T>().begin()),
-            decltype(std::declval<T>().end()), decltype(std::declval<T>().cbegin()),
-            decltype(std::declval<T>().cend())>,
-        void>> : public std::true_type
-{
-};
+                    std::conditional_t<false,
+                                       is_container_helper<typename T::value_type,
+                                                           typename T::size_type,
+                                                           typename T::iterator,
+                                                           typename T::const_iterator,
+                                                           decltype(std::declval<T>().size()),
+                                                           decltype(std::declval<T>().begin()),
+                                                           decltype(std::declval<T>().end()),
+                                                           decltype(std::declval<T>().cbegin()),
+                                                           decltype(std::declval<T>().cend())>,
+                                       void>> : public std::true_type
+{};
 
-template <typename T, typename Variant, std::size_t I = std::variant_size<Variant>::value>
+template<typename T, typename Variant, std::size_t I = std::variant_size<Variant>::value>
 static constexpr bool is_variant_alternative()
 {
-    if constexpr (I > 0)
-    {
+    if constexpr (I > 0) {
         constexpr auto index = I - 1;
         if constexpr (std::is_same_v<T, std::variant_alternative_t<index, Variant>>)
             return true;
         else
             return is_variant_alternative<T, Variant, I - 1>();
-    }
-    else
+    } else
         return false;
 }
 
