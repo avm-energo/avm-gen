@@ -1,3 +1,17 @@
+libavm-gen (1.9.16) unstable; urgency=low
+
+  [*] Delimiters in filesystem depends on OS
+  [*] Settings is now exported
+  [-] std_ext enable_if_any, enable_if_all, are_same, to_void, detail removed
+
+ -- AVM-Energo <support@avmenergo.ru>  Sun, 11 May 2025 22:15:18 +0300
+
+libavm-gen (1.9.15) unstable; urgency=low
+
+  [*] Settings refactoring: get & set instead of value & setvalue
+
+ -- AVM-Energo <support@avmenergo.ru>  Fri, 16 May 2025 22:15:18 +0300
+
 libavm-gen (1.9.14) unstable; urgency=low
 
   [+] Convertable::QByteArray
