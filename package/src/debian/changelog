@@ -1,3 +1,9 @@
+libavm-gen (1.9.17) unstable; urgency=low
+
+  [*] Settings are now singletone
+
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 24 Jun 2025 09:51:54 +0300
+
 libavm-gen (1.9.16) unstable; urgency=low
 
   [*] Delimiters in filesystem depends on OS
