@@ -4,7 +4,6 @@
 
 QString Settings::s_workDir = "";
 QString Settings::s_oldGroup = "";
-QSettings Settings::s_settings = QSettings();
 #ifdef Q_OS_WINDOWS
 constexpr char c_dirDelimiter[] = "\\";
 #else
@@ -14,8 +13,7 @@ constexpr char c_dirDelimiter[] = "/";
 #endif
 Settings::Settings()
 {
-    for (QString dirstr : { configDir(), dataDir(), logDir() })
-    {
+    for (const QString &dirstr : {configDir(), dataDir(), logDir()}) {
         QDir dir(dirstr);
         if (!dir.exists())
             dir.mkdir(dirstr);
@@ -25,15 +23,15 @@ Settings::Settings()
 
 void Settings::pushGroup(const QString &newGroup)
 {
-    s_oldGroup = s_settings.group();
-    s_settings.endGroup();
-    s_settings.beginGroup(newGroup);
+    s_oldGroup = instance().conf.group();
+    instance().conf.endGroup();
+    instance().conf.beginGroup(newGroup);
 }
 
 void Settings::popGroup()
 {
-    s_settings.endGroup();
-    s_settings.beginGroup(s_oldGroup);
+    instance().conf.endGroup();
+    instance().conf.beginGroup(s_oldGroup);
 }
 
 QStringList Settings::groups(const QString &key)
@@ -41,7 +39,7 @@ QStringList Settings::groups(const QString &key)
     QStringList sl;
     if (!key.isEmpty())
         pushGroup(key);
-    sl.append(s_settings.childGroups());
+    sl.append(instance().conf.childGroups());
     if (!key.isEmpty())
         popGroup();
     return sl;
@@ -49,22 +47,22 @@ QStringList Settings::groups(const QString &key)
 
 utils::Convertable Settings::get(const QString &key, const QVariant &defValue)
 {
-    return utils::Convertable { s_settings.value(key, defValue) };
+    return utils::Convertable{instance().conf.value(key, defValue)};
 }
 
 void Settings::set(const QString &key, const QVariant &value)
 {
-    s_settings.setValue(key, value);
+    instance().conf.setValue(key, value);
 }
 
 void Settings::remove(const QString &name)
 {
-    s_settings.remove(name);
+    instance().conf.remove(name);
 }
 
 bool Settings::groupExist(const QString &name)
 {
-    return s_settings.contains(name);
+    return instance().conf.contains(name);
 }
 
 QString Settings::configDir()
@@ -103,4 +101,10 @@ void Settings::setWorkDir(const QString &dir)
 QString Settings::logDir()
 {
     return dataDir() + "logs/";
+}
+
+Settings &Settings::instance()
+{
+    static Settings singleton;
+    return singleton;
 }

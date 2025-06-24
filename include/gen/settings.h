@@ -52,7 +52,8 @@ public:
     static QString logDir();
 
 private:
+    static Settings &instance();
     static QString s_workDir;
     static QString s_oldGroup;
-    static QSettings s_settings;
+    QSettings conf;
 };
