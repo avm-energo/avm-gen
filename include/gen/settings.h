@@ -52,6 +52,7 @@ public:
     static QString logDir();
 
 private:
+    static bool s_uninitialized;
     static Settings &instance();
     static QString s_workDir;
     static QString s_oldGroup;

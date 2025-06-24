@@ -11,27 +11,35 @@ constexpr char c_dirDelimiter[] = "\\";
 constexpr char c_dirDelimiter[] = "/";
 #endif
 #endif
+
+bool Settings::s_uninitialized = false;
+
 Settings::Settings()
 {
-    for (const QString &dirstr : {configDir(), dataDir(), logDir()}) {
-        QDir dir(dirstr);
-        if (!dir.exists())
-            dir.mkdir(dirstr);
+    if (s_uninitialized)
+    {
+        s_uninitialized = true;
+        for (const QString &dirstr : { configDir(), dataDir(), logDir() })
+        {
+            QDir dir(dirstr);
+            if (!dir.exists())
+                dir.mkdir(dirstr);
+        }
+        s_workDir = QString(get("workDir", dataDir()));
     }
-    s_workDir = QString(get("workDir", dataDir()));
 }
 
 void Settings::pushGroup(const QString &newGroup)
 {
-    s_oldGroup = instance().conf.group();
-    instance().conf.endGroup();
+    // s_oldGroup = instance().conf.group();
+    // instance().conf.endGroup();
     instance().conf.beginGroup(newGroup);
 }
 
 void Settings::popGroup()
 {
     instance().conf.endGroup();
-    instance().conf.beginGroup(s_oldGroup);
+    // instance().conf.beginGroup(s_oldGroup);
 }
 
 QStringList Settings::groups(const QString &key)
@@ -47,7 +55,9 @@ QStringList Settings::groups(const QString &key)
 
 utils::Convertable Settings::get(const QString &key, const QVariant &defValue)
 {
-    return utils::Convertable{instance().conf.value(key, defValue)};
+    QString oldGroup = instance().conf.group();
+    utils::Convertable Value = utils::Convertable { instance().conf.value(key, defValue) };
+    return utils::Convertable { instance().conf.value(key, defValue) };
 }
 
 void Settings::set(const QString &key, const QVariant &value)
