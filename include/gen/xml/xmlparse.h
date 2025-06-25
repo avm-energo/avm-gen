@@ -45,13 +45,13 @@ public:
     }
 
     /// \brief Нахождение узла с указанным именем и парсинг его содержимого, возврат числа.
-    template <typename T> static T parseNumFromNode(const QDomNode &node, const QString &tagName)
+    template <typename T> static T parseNumFromNode(const QDomNode &node, const QString &tagName, T defaultValue = T(0))
     {
         auto numNode = node.firstChildElement(tagName);
         if (!numNode.isNull())
             return parseNum<T>(numNode);
         else
-            return T(0);
+            return defaultValue;
     }
 
     /// \brief Возвращает содержимое ноды tagName в QString.
