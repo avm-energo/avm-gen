@@ -11,3 +11,6 @@ using i8 = qint8;
 using i16 = qint16;
 using i32 = qint32;
 using i64 = qint64;
+
+constexpr u16 U16MAX = 0xFFFF;
+constexpr u32 U32MAX = 0xFFFFFFFF;
