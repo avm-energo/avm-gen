@@ -2,6 +2,7 @@
 
 #include <gen/errorqueue.h>
 #include <gen/files.h>
+#include <gen/settings.h>
 #include <gen/stdfunc.h>
 
 struct MsgDescr
@@ -84,7 +85,7 @@ void Logger::writeLog(Logger::MessageTypes type, const QString &msg)
 void Logger::writeStart(const QString &filename)
 {
     QMutexLocker locker(&_mutex);
-    s_logFilename = filename;
+    s_logFilename = Settings::logDir() + filename;
     QFile logFile(s_logFilename);
     Files::makePath(logFile);
     QTextStream out;
