@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(avm-gen
   DESCRIPTION "General library for AVM-Energo C++ projects"
-  VERSION 1.9.17)
+  VERSION 1.10.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,9 +23,19 @@ string(TOLOWER "${CMAKE_SYSTEM_NAME}" SYSTEM_NAME)
 if(SYSTEM_NAME STREQUAL "linux")
     message(STATUS "Compiling for linux")
     add_compile_definitions(SYSTEM_TYPE=0)
+    find_package(zlib 1.1 QUIET)
+    if(NOT zlib_FOUND)
+        include(zlib)
+    endif()
+    find_package(libzip 1.10 QUIET)
+    if(NOT libzip_FOUND)
+        include(libzip)
+    endif()
 elseif(SYSTEM_NAME STREQUAL "windows")
     message(STATUS "Compiling for windows")
     add_compile_definitions(SYSTEM_TYPE=1)
+    include(zlib)
+    include(libzip)
 else()
     message(STATUS "Compiling for unknown")
     add_compile_definitions(SYSTEM_TYPE=2)
@@ -43,9 +53,6 @@ find_package(QT NAMES Qt5 Qt6)
 find_package(Qt${QT_VERSION_MAJOR}
   COMPONENTS Core Network Xml REQUIRED
 )
-
-message(STATUS "Using external xz-utils")
-include(lzma)
 
 #------------------------------------------------------------------------------#
 ############################## Target definition ###############################
@@ -77,7 +84,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   PUBLIC_HEADER "${public_headers}"
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${liblzma_INCLUDE_DIRS} ${liblzma_SOURCE_DIR}/src/liblzma/api)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     option(GEN_USING_SANITIZERS "Using ASan and UBSan for gen and its tests" ON)
@@ -103,7 +109,7 @@ target_link_libraries(
 
 target_link_libraries(
   ${PROJECT_NAME} PUBLIC
-  liblzma
+  libzip::zip
 )
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)

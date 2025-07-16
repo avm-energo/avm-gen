@@ -5,7 +5,7 @@
 #include <QTemporaryFile>
 #include <QtDebug>
 #include <gen/files.h>
-#include <gen/files/lzma_util.h>
+#include <gen/files/ziputil.h>
 #include <gen/settings.h>
 #include <gen/stdfunc.h>
 
@@ -112,23 +112,8 @@ void Files::checkNGzip(QFile *logFile)
         auto filename = logFile->fileName();
         if (rotateFiles(filename))
         {
-            QFile fileOut(filename + ".0.gz");
-            if (fileOut.open(QIODevice::WriteOnly | QIODevice::Truncate))
-            {
-                auto &lzma = LzmaUtil::GetInstance();
-                logFile->seek(0);
-                auto bytes = logFile->readAll();
-                auto compressed = lzma.compress(bytes);
-                auto written = fileOut.write(compressed);
-                if (written == -1)
-                    qCritical("Writing gz file error");
-                logFile->resize(0);
-                logFile->flush();
-                fileOut.flush();
-                fileOut.close();
-            }
-            else
-                qWarning() << "Cannot open the file" << fileOut.fileName();
+            auto &zip = ZipUtil::getInstance();
+            zip.CompressFile(filename, filename + ".0.zip");
         }
     }
 }
