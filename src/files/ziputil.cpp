@@ -111,7 +111,7 @@ Error::Msg ZipUtil::DecompressFile(const QString &zipFileName, const QString &di
     {
         if (zip_stat_index(za, i, 0, &sb) == 0)
         {
-            int len = strlen(sb.name);
+            size_t len = strlen(sb.name);
             if (sb.name[len - 1] == '/')
             {
                 QDir dir(sb.name);
