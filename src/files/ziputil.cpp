@@ -152,7 +152,7 @@ Error::Msg ZipUtil::DecompressFile(const QString &zipFileName, const QString &di
             }
         }
         else
-            qFatal() << "Zip_stat_index error";
+            qFatal("Zip_stat_index error");
     }
 
     if ((zip_close(za)) < 0)
