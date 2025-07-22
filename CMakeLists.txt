@@ -23,23 +23,15 @@ string(TOLOWER "${CMAKE_SYSTEM_NAME}" SYSTEM_NAME)
 if(SYSTEM_NAME STREQUAL "linux")
     message(STATUS "Compiling for linux")
     add_compile_definitions(SYSTEM_TYPE=0)
-    find_package(zlib 1.1 QUIET)
-    if(NOT zlib_FOUND)
-        include(zlib)
-    endif()
-    find_package(libzip 1.10 QUIET)
-    if(NOT libzip_FOUND)
-        include(libzip)
-    endif()
 elseif(SYSTEM_NAME STREQUAL "windows")
     message(STATUS "Compiling for windows")
     add_compile_definitions(SYSTEM_TYPE=1)
-    include(zlib)
-    include(libzip)
 else()
     message(STATUS "Compiling for unknown")
     add_compile_definitions(SYSTEM_TYPE=2)
 endif()
+
+include(libzip)
 
 # Setup build type if it's not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -109,7 +101,7 @@ target_link_libraries(
 
 target_link_libraries(
   ${PROJECT_NAME} PUBLIC
-  libzip::zip
+  avm-libzip
 )
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
