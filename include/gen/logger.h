@@ -32,19 +32,36 @@ public:
         All
     };
 
-    // static const QMap<QString, Logger::LogLevels> _logLevelsMap;
+    struct MsgDescr
+    {
+        Logger::LogLevels loglevel;
+        const char *prefix;
+    };
 
-    Logger() { };
-    void static messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
-    void static messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg);
-    void static writeLog(MessageTypes type, const QString &msg);
-    void static writeStart(const QString &filename);
-    void static setLogLevel(LogLevels level);
-    void static setLogLevel(const QString &level);
-    QStringList static logLevelsList();
+    const QMap<Logger::MessageTypes, MsgDescr> c_msgTypes {
+        { Logger::Debug, { Logger::LogLevels::LOGLEVEL_DEBUG, "[DEBUG]" } },      //
+        { Logger::Info, { Logger::LogLevels::LOGLEVEL_INFO, "[INFO]" } },         //
+        { Logger::Warning, { Logger::LogLevels::LOGLEVEL_WARN, "[WARNING]" } },   //
+        { Logger::Critical, { Logger::LogLevels::LOGLEVEL_CRIT, "[CRITICAL]" } }, //
+        { Logger::Fatal, { Logger::LogLevels::LOGLEVEL_FATAL, "[FATAL]" } },      //
+        { Logger::All, { Logger::LogLevels::LOGLEVEL_FATAL, "" } }                //
+    };
+
+    const QMap<QString, Logger::LogLevels> c_logLevelsMap = { { "Debug", Logger::LogLevels::LOGLEVEL_DEBUG },
+        { "Info", Logger::LogLevels::LOGLEVEL_INFO }, { "Fatal", Logger::LogLevels::LOGLEVEL_FATAL },
+        { "Warn", Logger::LogLevels::LOGLEVEL_WARN }, { "Error", Logger::LogLevels::LOGLEVEL_CRIT } };
+
+    Logger();
+
+    void writeLog(MessageTypes type, const QString &msg);
+    void writeStart(const QString &filename);
+    void setLogLevel(LogLevels level);
+    void setLogLevel(const QString &level);
+    QStringList logLevelsList();
 
 protected:
 private:
-    static LogLevels _logLevel;
-    static QMutex _mutex;
+    LogLevels m_logLevel;
+    QString m_logFilename;
+    QMutex m_mutex;
 };
