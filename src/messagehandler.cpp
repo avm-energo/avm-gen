@@ -7,6 +7,7 @@ const QMap<QtMsgType, Logger::MessageTypes> c_msgTypesTranslateMap { { QtDebugMs
     { QtFatalMsg, Logger::Fatal } };
 
 QMutex MessageHandler::m_mutex = QMutex();
+Logger MessageHandler::s_log;
 
 void MessageHandler::messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
