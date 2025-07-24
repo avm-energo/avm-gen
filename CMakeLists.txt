@@ -108,7 +108,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
 
 # Using compile warnings to detect bugs and mistakes
 if(SYSTEM_NAME STREQUAL "windows")
-  target_compile_options(${PROJECT_NAME} PRIVATE /W4)
+  target_compile_options(${PROJECT_NAME} PRIVATE)
 else() # # GCC or Clang
   target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
