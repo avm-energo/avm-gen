@@ -47,17 +47,15 @@ public:
         { Logger::All, { Logger::LogLevels::LOGLEVEL_FATAL, "" } }                //
     };
 
-    const QMap<QString, Logger::LogLevels> c_logLevelsMap = { { "Debug", Logger::LogLevels::LOGLEVEL_DEBUG },
-        { "Info", Logger::LogLevels::LOGLEVEL_INFO }, { "Fatal", Logger::LogLevels::LOGLEVEL_FATAL },
-        { "Warn", Logger::LogLevels::LOGLEVEL_WARN }, { "Error", Logger::LogLevels::LOGLEVEL_CRIT } };
-
     Logger();
 
     void writeLog(MessageTypes type, const QString &msg);
     void writeStart(const QString &filename);
     void setLogLevel(LogLevels level);
     void setLogLevel(const QString &level);
-    QStringList logLevelsList();
+    static QStringList logLevelsList();
+
+    static const QMap<QString, Logger::LogLevels> s_logLevelsMap;
 
 protected:
 private:

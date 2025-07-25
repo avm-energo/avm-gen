@@ -6,6 +6,10 @@
 
 static QString s_messageHandlerLogFileName = "logger.log";
 
+const QMap<QString, Logger::LogLevels> Logger::s_logLevelsMap = { { "Debug", Logger::LogLevels::LOGLEVEL_DEBUG },
+    { "Info", Logger::LogLevels::LOGLEVEL_INFO }, { "Fatal", Logger::LogLevels::LOGLEVEL_FATAL },
+    { "Warn", Logger::LogLevels::LOGLEVEL_WARN }, { "Error", Logger::LogLevels::LOGLEVEL_CRIT } };
+
 Logger::Logger()
 {
     m_logLevel = Logger::LogLevels::LOGLEVEL_WARN;
@@ -56,12 +60,12 @@ void Logger::setLogLevel(LogLevels level)
 
 void Logger::setLogLevel(const QString &level)
 {
-    m_logLevel = c_logLevelsMap.value(level);
+    m_logLevel = s_logLevelsMap.value(level);
 }
 
 QStringList Logger::logLevelsList()
 {
-    return c_logLevelsMap.keys();
+    return s_logLevelsMap.keys();
 }
 
 /// Категории мы сейчас не используем, задел на будущее

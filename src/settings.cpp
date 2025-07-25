@@ -12,21 +12,8 @@ constexpr char c_dirDelimiter[] = "/";
 #endif
 #endif
 
-bool Settings::s_uninitialized = false;
-
 Settings::Settings()
 {
-    if (s_uninitialized)
-    {
-        s_uninitialized = true;
-        for (const QString &dirstr : { configDir(), dataDir(), logDir() })
-        {
-            QDir dir(dirstr);
-            if (!dir.exists())
-                dir.mkdir(dirstr);
-        }
-        s_workDir = QString(get("workDir", dataDir()));
-    }
 }
 
 void Settings::pushGroup(const QString &newGroup)
@@ -111,6 +98,17 @@ void Settings::setWorkDir(const QString &dir)
 QString Settings::logDir()
 {
     return dataDir() + "logs/";
+}
+
+void Settings::initialize()
+{
+    for (const QString &dirstr : { configDir(), dataDir(), logDir() })
+    {
+        QDir dir(dirstr);
+        if (!dir.exists())
+            dir.mkdir(dirstr);
+    }
+    s_workDir = QString(get("workDir", dataDir()));
 }
 
 Settings &Settings::instance()
