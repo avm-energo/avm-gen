@@ -1,9 +1,10 @@
 #pragma once
 
 #include <QObject>
+#include <gen/gen_export.h>
 #include <gen/logger.h>
 
-class MessageHandler
+class GENLIB_EXPORT MessageHandler
 {
 public:
     MessageHandler() { };
