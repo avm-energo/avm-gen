@@ -16,7 +16,7 @@ QStringList GENLIB_EXPORT Drives();
 QStringList GENLIB_EXPORT SearchForFile(QStringList &di, const QString &filename, bool subdirs = false);
 QString GENLIB_EXPORT GetFirstDriveWithLabel(QStringList &filepaths, const QString &label);
 void GENLIB_EXPORT checkNGzip(QFile *logFile);
-bool GENLIB_EXPORT rotateFiles(const QString &path, const QString &extension = "gz", int count = 9);
+bool GENLIB_EXPORT rotateFiles(const QString &path, const QString &extension = "zip", int count = 9);
 void GENLIB_EXPORT makePath(const QFile &path);
 
 /// \brief Saves bytearray to temporary file
