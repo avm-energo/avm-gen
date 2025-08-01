@@ -36,6 +36,11 @@ void MessageHandler::setMessageHandlerFilename(const QString &filename)
     s_log.writeStart(filename);
 }
 
+void MessageHandler::setLogLevel(Logger::LogLevels level)
+{
+    s_log.setLogLevel(level);
+}
+
 void MessageHandler::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     Q_UNUSED(context)
