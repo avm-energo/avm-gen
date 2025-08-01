@@ -53,5 +53,5 @@ protected:
 private:
     LogLevels m_logLevel;
     QString m_logFilename;
-    QMutex m_mutex;
+    QMutex *m_mutex;
 };

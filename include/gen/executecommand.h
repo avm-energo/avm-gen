@@ -1,8 +1,9 @@
 #pragma once
 
 #include <QObject>
+#include <gen/gen_export.h>
 
-class ExecuteCommandAsync : public QObject
+class GENLIB_EXPORT ExecuteCommandAsync : public QObject
 {
     Q_OBJECT
 public:

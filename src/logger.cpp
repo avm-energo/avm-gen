@@ -23,6 +23,7 @@ Logger::Logger()
 {
     m_logLevel = Logger::LogLevels::LOGLEVEL_WARN;
     m_logFilename = "logger.log";
+    m_mutex = new QMutex;
 }
 
 void Logger::writeLog(Logger::MessageTypes type, const QString &msg)
@@ -30,7 +31,7 @@ void Logger::writeLog(Logger::MessageTypes type, const QString &msg)
     QFile logFile;
     QTextStream out;
 
-    QMutexLocker locker(&m_mutex);
+    QMutexLocker locker(m_mutex);
     if (m_logLevel < c_msgTypes.value(type).loglevel)
         return;
     logFile.setFileName(m_logFilename);
@@ -47,7 +48,7 @@ void Logger::writeLog(Logger::MessageTypes type, const QString &msg)
 
 void Logger::writeStart(const QString &filename)
 {
-    QMutexLocker locker(&m_mutex);
+    QMutexLocker locker(m_mutex);
     m_logFilename = Settings::logDir() + filename;
     QFile logFile(m_logFilename);
     Files::makePath(logFile);
