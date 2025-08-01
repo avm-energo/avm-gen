@@ -10,6 +10,15 @@ const QMap<QString, Logger::LogLevels> Logger::s_logLevelsMap = { { "Debug", Log
     { "Info", Logger::LogLevels::LOGLEVEL_INFO }, { "Fatal", Logger::LogLevels::LOGLEVEL_FATAL },
     { "Warn", Logger::LogLevels::LOGLEVEL_WARN }, { "Error", Logger::LogLevels::LOGLEVEL_CRIT } };
 
+const QMap<Logger::MessageTypes, Logger::MsgDescr> c_msgTypes {
+    { Logger::Debug, { Logger::LogLevels::LOGLEVEL_DEBUG, "[DEBUG]" } },      //
+    { Logger::Info, { Logger::LogLevels::LOGLEVEL_INFO, "[INFO]" } },         //
+    { Logger::Warning, { Logger::LogLevels::LOGLEVEL_WARN, "[WARNING]" } },   //
+    { Logger::Critical, { Logger::LogLevels::LOGLEVEL_CRIT, "[CRITICAL]" } }, //
+    { Logger::Fatal, { Logger::LogLevels::LOGLEVEL_FATAL, "[FATAL]" } },      //
+    { Logger::All, { Logger::LogLevels::LOGLEVEL_FATAL, "" } }                //
+};
+
 Logger::Logger()
 {
     m_logLevel = Logger::LogLevels::LOGLEVEL_WARN;

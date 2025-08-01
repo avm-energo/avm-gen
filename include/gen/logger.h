@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QLoggingCategory>
+#include <QMutex>
 #include <QtCore>
 #include <gen/gen_export.h>
 
@@ -36,15 +37,6 @@ public:
     {
         Logger::LogLevels loglevel;
         const char *prefix;
-    };
-
-    const QMap<Logger::MessageTypes, MsgDescr> c_msgTypes {
-        { Logger::Debug, { Logger::LogLevels::LOGLEVEL_DEBUG, "[DEBUG]" } },      //
-        { Logger::Info, { Logger::LogLevels::LOGLEVEL_INFO, "[INFO]" } },         //
-        { Logger::Warning, { Logger::LogLevels::LOGLEVEL_WARN, "[WARNING]" } },   //
-        { Logger::Critical, { Logger::LogLevels::LOGLEVEL_CRIT, "[CRITICAL]" } }, //
-        { Logger::Fatal, { Logger::LogLevels::LOGLEVEL_FATAL, "[FATAL]" } },      //
-        { Logger::All, { Logger::LogLevels::LOGLEVEL_FATAL, "" } }                //
     };
 
     Logger();
