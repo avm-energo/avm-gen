@@ -2,9 +2,7 @@
 
 #include <QObject>
 #include <gen/gen_export.h>
-#if (SYSTEM_TYPE == 1) // windows
 #include <QProcess>
-#endif
 
 class GENLIB_EXPORT ExecuteCommandAsync : public QObject
 {
