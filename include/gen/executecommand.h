@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QObject>
-#include <gen/gen_export.h>
 #include <QProcess>
+#include <gen/gen_export.h>
 
 class GENLIB_EXPORT ExecuteCommandAsync : public QObject
 {
@@ -10,7 +10,6 @@ class GENLIB_EXPORT ExecuteCommandAsync : public QObject
 public:
     ExecuteCommandAsync(QObject *parent = nullptr);
 
-    void setTimeout(quint32 timeout);
     void execute(const QString &command, const QStringList &args = {}, quint32 timeout = 30000);
 
 private slots:
