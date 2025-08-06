@@ -7,14 +7,22 @@ ExecuteCommandAsync::ExecuteCommandAsync(QObject *parent) : QObject(parent)
 {
 }
 
-void ExecuteCommandAsync::execute(const QString &command)
+void ExecuteCommandAsync::setTimeout(quint32 timeout) {}
+
+void ExecuteCommandAsync::execute(const QString &command, const QStringList &args, quint32 timeout)
 {
     ExecuteCommandThread *threadObj = new ExecuteCommandThread;
-    threadObj->setCommand(command);
+    threadObj->setCommand(command, args);
+    threadObj->setTimeout(timeout);
     auto execThread = new QThread;
     QObject::connect(execThread, &QThread::started, threadObj, &ExecuteCommandThread::run);
     QObject::connect(threadObj, &ExecuteCommandThread::resultAcquired, this, &ExecuteCommandAsync::resultAcquired);
-    QObject::connect(threadObj, &ExecuteCommandThread::finished, this, &ExecuteCommandAsync::finished);
+    QObject::connect(threadObj,
+                     &ExecuteCommandThread::outputReady,
+                     this,
+                     &ExecuteCommandAsync::outputReady);
+    QObject::
+        connect(threadObj, &ExecuteCommandThread::finished, this, &ExecuteCommandAsync::finished);
     QObject::connect(threadObj, &ExecuteCommandThread::finished, execThread, &QThread::exit);
     QObject::connect(execThread, &QThread::finished, &QObject::deleteLater);
     QObject::connect(execThread, &QThread::finished, threadObj, &QObject::deleteLater);
@@ -26,9 +34,15 @@ ExecuteCommandThread::ExecuteCommandThread(QObject *parent) : QObject(parent)
 {
 }
 
-void ExecuteCommandThread::setCommand(const QString &cmd)
+void ExecuteCommandThread::setCommand(const QString &cmd, const QStringList &args)
 {
-    command = cmd;
+    m_command = cmd;
+    m_args = args;
+}
+
+void ExecuteCommandThread::setTimeout(quint32 timeout)
+{
+    m_timeout = timeout;
 }
 
 void ExecuteCommandThread::run()
@@ -59,9 +73,23 @@ void ExecuteCommandThread::run()
     //    qDebug() << "result is: " << result.c_str();
     emit finished(pclose(pipe));
 #elif(SYSTEM_TYPE==1) // windows
-// to be developed: https://learn.microsoft.com/en-us/windows/win32/procthread/creating-a-child-process-with-redirected-input-and-output?redirectedfrom=MSDN
-
+    m_process = new QProcess(this);
+    QMetaObject::Connection conn = connect(m_process,
+                                           &QProcess::readyReadStandardOutput,
+                                           this,
+                                           &ExecuteCommandThread::readyRead);
+    m_process->start(m_command, m_args);
+    m_process->waitForFinished(m_timeout);
+    disconnect(conn);
+    delete m_process;
+    result = "OK";
 #else
 #endif
     emit resultAcquired(result.c_str());
+}
+
+void ExecuteCommandThread::readyRead()
+{
+    if (m_process != nullptr)
+        emit outputReady(m_process->readAllStandardOutput());
 }

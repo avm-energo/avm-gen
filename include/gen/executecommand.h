@@ -2,6 +2,9 @@
 
 #include <QObject>
 #include <gen/gen_export.h>
+#if (SYSTEM_TYPE == 1) // windows
+#include <QProcess>
+#endif
 
 class GENLIB_EXPORT ExecuteCommandAsync : public QObject
 {
@@ -9,11 +12,13 @@ class GENLIB_EXPORT ExecuteCommandAsync : public QObject
 public:
     ExecuteCommandAsync(QObject *parent = nullptr);
 
-    void execute(const QString &command);
+    void setTimeout(quint32 timeout);
+    void execute(const QString &command, const QStringList &args = {}, quint32 timeout = 30000);
 
 private slots:
 
 signals:
+    void outputReady(const QString &output);
     void resultAcquired(const QString &str);
     void finished(int result);
 };
@@ -23,15 +28,23 @@ class ExecuteCommandThread : public QObject
     Q_OBJECT
 public:
     ExecuteCommandThread(QObject *parent = nullptr);
-    void setCommand(const QString &cmd);
+    void setCommand(const QString &cmd, const QStringList &args = {});
+    void setTimeout(quint32 timeout);
 
 private:
-    QString command;
+    QString m_command;
+    QStringList m_args;
+    QProcess *m_process;
+    quint32 m_timeout;
 
 public slots:
     void run();
 
 signals:
+    void outputReady(const QString &output);
     void resultAcquired(const QString &str);
     void finished(int result);
+
+private slots:
+    void readyRead();
 };
