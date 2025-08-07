@@ -7,8 +7,6 @@ ExecuteCommandAsync::ExecuteCommandAsync(QObject *parent) : QObject(parent)
 {
 }
 
-void ExecuteCommandAsync::setTimeout(quint32 timeout) {}
-
 void ExecuteCommandAsync::execute(const QString &command, const QStringList &args, quint32 timeout)
 {
     ExecuteCommandThread *threadObj = new ExecuteCommandThread;
@@ -17,12 +15,8 @@ void ExecuteCommandAsync::execute(const QString &command, const QStringList &arg
     auto execThread = new QThread;
     QObject::connect(execThread, &QThread::started, threadObj, &ExecuteCommandThread::run);
     QObject::connect(threadObj, &ExecuteCommandThread::resultAcquired, this, &ExecuteCommandAsync::resultAcquired);
-    QObject::connect(threadObj,
-                     &ExecuteCommandThread::outputReady,
-                     this,
-                     &ExecuteCommandAsync::outputReady);
-    QObject::
-        connect(threadObj, &ExecuteCommandThread::finished, this, &ExecuteCommandAsync::finished);
+    QObject::connect(threadObj, &ExecuteCommandThread::outputReady, this, &ExecuteCommandAsync::outputReady);
+    QObject::connect(threadObj, &ExecuteCommandThread::finished, this, &ExecuteCommandAsync::finished);
     QObject::connect(threadObj, &ExecuteCommandThread::finished, execThread, &QThread::exit);
     QObject::connect(execThread, &QThread::finished, &QObject::deleteLater);
     QObject::connect(execThread, &QThread::finished, threadObj, &QObject::deleteLater);
@@ -49,9 +43,9 @@ void ExecuteCommandThread::run()
 {
     std::string result = "";
 
-#if(SYSTEM_TYPE==0) // linux
+#if (SYSTEM_TYPE == 0) // linux
     char buffer[128];
-    FILE *pipe = popen(command.toLatin1(), "r");
+    FILE *pipe = popen(m_command.toLatin1(), "r");
     if (!pipe)
     {
         qDebug() << "pipe open failed";
@@ -72,12 +66,10 @@ void ExecuteCommandThread::run()
     }
     //    qDebug() << "result is: " << result.c_str();
     emit finished(pclose(pipe));
-#elif(SYSTEM_TYPE==1) // windows
+#elif (SYSTEM_TYPE == 1) // windows
     m_process = new QProcess(this);
-    QMetaObject::Connection conn = connect(m_process,
-                                           &QProcess::readyReadStandardOutput,
-                                           this,
-                                           &ExecuteCommandThread::readyRead);
+    QMetaObject::Connection conn
+        = connect(m_process, &QProcess::readyReadStandardOutput, this, &ExecuteCommandThread::readyRead);
     m_process->start(m_command, m_args);
     m_process->waitForFinished(m_timeout);
     disconnect(conn);
