@@ -32,6 +32,7 @@ else()
 endif()
 
 include(libzip)
+include(qtaes)
 
 # Setup build type if it's not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -102,6 +103,7 @@ target_link_libraries(
 target_link_libraries(
   ${PROJECT_NAME} PUBLIC
   avm-libzip
+  avm-qtaes
 )
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
