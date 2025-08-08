@@ -77,7 +77,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   PUBLIC_HEADER "${public_headers}"
 )
 
-
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     option(GEN_USING_SANITIZERS "Using ASan and UBSan for gen and its tests" ON)
     if (BUILD_TESTING)

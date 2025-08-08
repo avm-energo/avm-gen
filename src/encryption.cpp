@@ -1,7 +1,7 @@
 #include <QCryptographicHash>
 #include <QSysInfo>
-#include <QtAES/QAESEncryption>
 #include <gen/encryption.h>
+#include <qaesencryption.h>
 
 Encryption &Encryption::getInstance()
 {
