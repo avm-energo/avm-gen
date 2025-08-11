@@ -22,7 +22,7 @@ void HttpEngine::Request(const QUrl &url)
     connect(reply, &QNetworkReply::downloadProgress, this, &HttpEngine::DownloadProgress);
     connect(reply, &QNetworkReply::finished, this, &HttpEngine::HttpFinished);
     connect(reply, &QIODevice::readyRead, this, &HttpEngine::HttpReadyRead);
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(HttpError(QNetworkReply::NetworkError)));
+    connect(reply, &QNetworkReply::errorOccurred, this, &HttpEngine::HttpError);
     connect(this, &HttpEngine::FinishReply, reply, &QNetworkReply::abort);
 }
 
