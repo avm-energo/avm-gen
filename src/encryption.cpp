@@ -1,7 +1,7 @@
 #include <QCryptographicHash>
 #include <QSysInfo>
-#include <QtAES/QAESEncryption>
 #include <gen/encryption.h>
+#include <qaesencryption.h>
 
 Encryption &Encryption::getInstance()
 {
@@ -27,6 +27,5 @@ Encryption::Encryption()
 {
     m_key = QCryptographicHash::
         hash(QSysInfo::machineUniqueId().first(16), QCryptographicHash::Sha256);
-    m_iv = QCryptographicHash::
-        hash(QSysInfo::machineUniqueId().last(16), QCryptographicHash::Sha256);
+    m_iv = QCryptographicHash::hash(QSysInfo::machineUniqueId().last(16), QCryptographicHash::Md5);
 }
