@@ -1,3 +1,30 @@
+libavm-gen (1.10.2) unstable; urgency=low
+
+  [+] Encryption class
+
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 24 Jun 2025 09:51:54 +0300
+
+libavm-gen (1.10.1) unstable; urgency=low
+
+  [*] Logger has been splitted to dynamic Logger & static MessageHandler for QT Debug messages
+  [*] Settings not initialized fix
+  [+] LogLevel for MessageHandler
+  [+] ExecuteProcess for Windows
+
+ -- AVM-Energo <support@avmenergo.ru>  Wed, 06 Aug 2025 13:17:05 +0300
+
+libavm-gen (1.10.0) unstable; urgency=low
+
+  [*] XZ replaced by ZipLib & Zlib
+
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 22 Jul 2025 15:45:01 +0300
+
+libavm-gen (1.9.18) unstable; urgency=low
+
+  [*] Logs are now being written into share logs dir
+
+ -- AVM-Energo <support@avmenergo.ru>  Mon, 14 Jul 2025 10:43:42 +0300
+
 libavm-gen (1.9.17) unstable; urgency=low
 
   [*] Settings are now singletone
