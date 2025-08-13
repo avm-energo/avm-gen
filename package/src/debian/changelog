@@ -1,8 +1,14 @@
+libavm-gen (1.10.3) unstable; urgency=low
+
+  [+] libavm-qtaes libavm-qtrsa
+
+ -- AVM-Energo <support@avmenergo.ru>  Wed, 13 Aug 2025 12:53:10 +0300
+
 libavm-gen (1.10.2) unstable; urgency=low
 
   [+] Encryption class
 
- -- AVM-Energo <support@avmenergo.ru>  Tue, 24 Jun 2025 09:51:54 +0300
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 11 Aug 2025 14:14:54 +0300
 
 libavm-gen (1.10.1) unstable; urgency=low
 
