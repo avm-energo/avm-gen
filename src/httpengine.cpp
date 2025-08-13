@@ -5,6 +5,8 @@
 
 HttpEngine::HttpEngine(QObject *parent) : QObject(parent)
 {
+    m_filePieceMultipartId = qRegisterMetaType<HttpEngine::FilePieceMultipart>();
+    m_stringPieceMultipartId = qRegisterMetaType<HttpEngine::StringPieceMultipart>();
     m_networkManager = new QNetworkAccessManager(this);
 #ifndef QT_NO_SSL
     connect(m_networkManager, &QNetworkAccessManager::sslErrors, this, &HttpEngine::SSLErrors);
@@ -19,6 +21,16 @@ HttpEngine::~HttpEngine()
 void HttpEngine::Request(const QUrl &url)
 {
     QNetworkReply *reply = m_networkManager->get(QNetworkRequest(url));
+    connect(reply, &QNetworkReply::downloadProgress, this, &HttpEngine::DownloadProgress);
+    connect(reply, &QNetworkReply::finished, this, &HttpEngine::HttpFinished);
+    connect(reply, &QIODevice::readyRead, this, &HttpEngine::HttpReadyRead);
+    connect(reply, &QNetworkReply::errorOccurred, this, &HttpEngine::HttpError);
+    connect(this, &HttpEngine::FinishReply, reply, &QNetworkReply::abort);
+}
+
+void HttpEngine::Post(const QUrl &url, QHttpMultiPart *body)
+{
+    QNetworkReply *reply = m_networkManager->post(QNetworkRequest(url), body);
     connect(reply, &QNetworkReply::downloadProgress, this, &HttpEngine::DownloadProgress);
     connect(reply, &QNetworkReply::finished, this, &HttpEngine::HttpFinished);
     connect(reply, &QIODevice::readyRead, this, &HttpEngine::HttpReadyRead);
@@ -143,6 +155,58 @@ QJsonDocument HttpEngine::GetQuery(NetIP ip, int port, const QString &query, con
 QString HttpEngine::GetFile(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
 {
     return Files::SaveToTempFile(GetQueryInBA(ip, port, query, args, isSSL));
+}
+
+QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, const QList<QVariant> &list, bool isSSL)
+{
+    QString url = (isSSL) ? "https://" : "http://";
+    url += IP::toString(ip) + ":" + QString::number(port) + "/" + query;
+    const QString urlSpec = url.trimmed(); // removes whitespaces
+    const QUrl newUrl = QUrl::fromUserInput(urlSpec);
+    qDebug() << "Post query: " << urlSpec;
+    if (!newUrl.isValid())
+    {
+        qWarning() << "Invalid url";
+        return QJsonDocument();
+    }
+    QHttpMultiPart *body = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+    foreach (QVariant item, list)
+    {
+        if (item.typeId() == m_stringPieceMultipartId)
+        {
+            StringPieceMultipart part = item.value<HttpEngine::StringPieceMultipart>();
+            QHttpPart textPart;
+            textPart.setHeader(
+                QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"" + part.name + "\""));
+            textPart.setBody(part.data.toUtf8());
+            body->append(textPart);
+        }
+        else if (item.typeId() == m_filePieceMultipartId)
+        {
+            FilePieceMultipart part = item.value<HttpEngine::FilePieceMultipart>();
+            QHttpPart filePart;
+            filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
+                QVariant("form-data; name=\"" + part.name + "\"; filename=\"" + part.filename + "\""));
+            filePart.setBody(part.data);
+            body->append(filePart);
+        }
+        else
+        {
+            QHttpPart baPart;
+            baPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"fieldName\""));
+            baPart.setBody(item.toByteArray());
+            body->append(baPart);
+        }
+    }
+    m_httpData.clear();
+    m_httpRequestAborted = false;
+    ReqBusy = true;
+    Post(newUrl, body);
+    while ((ReqBusy) && (!m_httpRequestAborted))
+        StdFunc::Wait();
+    if (m_httpRequestAborted)
+        return QJsonDocument();
+    return QJsonDocument::fromJson(m_httpData);
 }
 
 QByteArray HttpEngine::GetQueryInBA(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)

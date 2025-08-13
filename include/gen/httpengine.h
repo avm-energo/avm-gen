@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QHttpMultiPart>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -12,6 +13,19 @@ class GENLIB_EXPORT HttpEngine : public QObject
     Q_OBJECT
 
 public:
+    struct StringPieceMultipart
+    {
+        QString name;
+        QString data;
+    };
+
+    struct FilePieceMultipart
+    {
+        QString filename;
+        QString name;
+        QByteArray data;
+    };
+
     explicit HttpEngine(QObject *parent = nullptr);
     ~HttpEngine();
 
@@ -29,7 +43,7 @@ public:
     /// \details Отправить GET-запрос на HTTP-сервер и получить результаты в JSON массиве
     /// \param ip - ip-адрес сервера
     /// \param port - порт http-сервера
-    /// \param query - строка запроса (query из примера https://ip.com/query?id=12&param=34
+    /// \param query - строка запроса (query из примера https://ip.com/query?id=12&param=34)
     /// \param args - строки дополнительных параметров (id=12 и param=34 из предыдущего примера)
     /// \param isSSL - флаг, означающий запрос https (isSSL=true) или http (isSSL=false)
     /// \return JSON документ
@@ -39,12 +53,21 @@ public:
     /// \details Отправить GET-запрос на HTTP-сервер и получить результат в виде файла
     /// \param ip - ip-адрес сервера
     /// \param port - порт http-сервера
-    /// \param query - строка запроса (query из примера https://ip.com/query?id=12&param=34
+    /// \param query - строка запроса (query из примера https://ip.com/query?id=12&param=34)
     /// \param args - строки дополнительных параметров (id=12 и param=34 из предыдущего примера)
     /// \param isSSL - флаг, означающий запрос https (isSSL=true) или http (isSSL=false)
     /// \return имя временного файла, полученного от сервера
     QString GetFile(
         NetIP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
+    /// \brief Отправить запрос на сервер
+    /// \details Отправить POST-запрос с данными на сервер и получить результаты в JSON массиве
+    /// \param ip - ip-адрес сервера
+    /// \param port - порт сервера
+    /// \param query - строка запроса (query из примера https://ip.com/query)
+    /// \param list - список данных для передачи (QList<QVariant>)
+    /// \return JSON документ
+    QJsonDocument PostQuery(
+        NetIP ip, int port = 80, const QString &query = "", const QList<QVariant> &list = {}, bool isSSL = true);
 
 public slots:
     void CancelDownload();
@@ -69,6 +92,11 @@ private:
     QByteArray m_httpData;
     bool m_httpRequestAborted;
     bool ReqBusy;
+    int m_filePieceMultipartId, m_stringPieceMultipartId;
 
     void Request(const QUrl &url);
+    void Post(const QUrl &url, QHttpMultiPart *body);
 };
+
+Q_DECLARE_METATYPE(HttpEngine::FilePieceMultipart)
+Q_DECLARE_METATYPE(HttpEngine::StringPieceMultipart)
