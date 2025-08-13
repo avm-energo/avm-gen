@@ -174,3 +174,15 @@ void Files::removeOlderThan(const QString &dir, const QString &filenameMask, con
             QFile::remove(fi.fileName());
     }
 }
+
+QString Files::getFileName(const QString &filePath)
+{
+    QFileInfo fi(filePath);
+    return fi.fileName();
+}
+
+QString Files::getDirName(const QString &filePath)
+{
+    QFileInfo fi(filePath);
+    return fi.path();
+}

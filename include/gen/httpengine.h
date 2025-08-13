@@ -23,7 +23,6 @@ public:
     {
         QString filename;
         QString name;
-        QByteArray data;
     };
 
     explicit HttpEngine(QObject *parent = nullptr);

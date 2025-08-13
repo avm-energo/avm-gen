@@ -31,4 +31,14 @@ const QString GENLIB_EXPORT SaveToTempFile(const QByteArray &src);
 
 void GENLIB_EXPORT removeOlderThan(
     const QString &dir, const QString &filenameMask, const QDateTime &datetime = QDateTime::currentDateTime());
+
+/// \brief Returns filename without path to it
+/// \param filepath - full path with file name
+/// \return filename without path
+QString GENLIB_EXPORT getFileName(const QString &filePath);
+
+/// \brief Returns directory of the file
+/// \param filepath - full path with file name
+/// \return Directory name
+QString GENLIB_EXPORT getDirName(const QString &filePath);
 } // namespace Files

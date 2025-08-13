@@ -1,3 +1,4 @@
+#include <QFileInfo>
 #include <QUrl>
 #include <gen/files.h>
 #include <gen/httpengine.h>
@@ -184,10 +185,17 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
         else if (item.typeId() == m_filePieceMultipartId)
         {
             FilePieceMultipart part = item.value<HttpEngine::FilePieceMultipart>();
+            QFile *file = new QFile(part.filename);
+            if (!file->open(QIODevice::ReadOnly))
+            {
+                delete body;
+                return QJsonDocument();
+            }
             QHttpPart filePart;
             filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
-                QVariant("form-data; name=\"" + part.name + "\"; filename=\"" + part.filename + "\""));
-            filePart.setBody(part.data);
+                QVariant(
+                    "form-data; name=\"" + part.name + "\"; filename=\"" + Files::getFileName(part.filename) + "\""));
+            filePart.setBodyDevice(file);
             body->append(filePart);
         }
         else
