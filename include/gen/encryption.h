@@ -14,6 +14,8 @@ public:
 
     QString encrypt(const QString &source);
     QString decrypt(const QString &source);
+    QString encryptRSA(const QString &source, const QByteArray &pubKey);
+    QString decryptRSA(const QString &source, const QByteArray &privKey);
 
 signals:
 
