@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(avm-gen
   DESCRIPTION "General library for AVM-Energo C++ projects"
-  VERSION 1.10.3)
+  VERSION 1.10.4)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -32,8 +32,6 @@ else()
 endif()
 
 include(libzip)
-include(qtaes)
-include(qtrsa)
 
 # Setup build type if it's not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -103,8 +101,6 @@ target_link_libraries(
 target_link_libraries(
   ${PROJECT_NAME} PUBLIC
   avm-libzip
-  avm-qtaes
-  avm-qtrsa
 )
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
