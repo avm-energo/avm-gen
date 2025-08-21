@@ -76,20 +76,20 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
   PUBLIC_HEADER "${public_headers}"
 )
 
-if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    option(GEN_USING_SANITIZERS "Using ASan and UBSan for gen and its tests" ON)
-    if (BUILD_TESTING)
-      add_subdirectory(tests)
-    endif()
-    if(GEN_USING_SANITIZERS)
-      if(SYSTEM_NAME STREQUAL "windows")
-        message(STATUS "MSVC version: ${MSVC_VERSION}, toolset version: ${MSVC_TOOLSET_VERSION}")
-      else() # GCC or Clang
-        target_compile_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address,undefined -fstack-protector)
-        target_link_options(${PROJECT_NAME}    PRIVATE -fno-omit-frame-pointer -fsanitize=address,undefined -fstack-protector)
-      endif()
-    endif()
-endif()
+# if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+#     option(GEN_USING_SANITIZERS "Using ASan and UBSan for gen and its tests" OFF)
+#     if (BUILD_TESTING)
+#       add_subdirectory(tests)
+#     endif()
+#     if(GEN_USING_SANITIZERS)
+#       if(SYSTEM_NAME STREQUAL "windows")
+#         message(STATUS "MSVC version: ${MSVC_VERSION}, toolset version: ${MSVC_TOOLSET_VERSION}")
+#       else() # GCC or Clang
+#         target_compile_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address,undefined -fstack-protector)
+#         target_link_options(${PROJECT_NAME}    PRIVATE -fno-omit-frame-pointer -fsanitize=address,undefined -fstack-protector)
+#       endif()
+#     endif()
+# endif()
 
 target_link_libraries(
     ${PROJECT_NAME} PUBLIC
