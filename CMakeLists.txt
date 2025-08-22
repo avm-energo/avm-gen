@@ -109,7 +109,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC -DCMAKE_CONFIG)
 if(SYSTEM_NAME STREQUAL "windows")
   target_compile_options(${PROJECT_NAME} PRIVATE)
 else() # # GCC or Clang
-  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
+  target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Wno-nullability-extension)
 endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC
