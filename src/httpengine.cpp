@@ -13,6 +13,10 @@ HttpEngine::HttpEngine(QObject *parent) : QObject(parent)
     connect(m_networkManager, &QNetworkAccessManager::sslErrors, this, &HttpEngine::SSLErrors);
 #endif
     m_httpRequestAborted = false;
+    m_timeoutTimer = new QTimer;
+    m_timeoutTimer->setInterval(10000);
+    m_timeoutTimer->setSingleShot(true);
+    connect(m_timeoutTimer, &QTimer::timeout, this, &HttpEngine::CancelDownload);
 }
 
 HttpEngine::~HttpEngine()
@@ -21,6 +25,7 @@ HttpEngine::~HttpEngine()
 
 void HttpEngine::Request(const QUrl &url)
 {
+    m_timeoutTimer->start();
     QNetworkReply *reply = m_networkManager->get(QNetworkRequest(url));
     connect(reply, &QNetworkReply::downloadProgress, this, &HttpEngine::DownloadProgress);
     connect(reply, &QNetworkReply::finished, this, &HttpEngine::HttpFinished);
@@ -31,6 +36,7 @@ void HttpEngine::Request(const QUrl &url)
 
 void HttpEngine::Post(const QUrl &url, QHttpMultiPart *body)
 {
+    m_timeoutTimer->start();
     QNetworkReply *reply = m_networkManager->post(QNetworkRequest(url), body);
     connect(reply, &QNetworkReply::downloadProgress, this, &HttpEngine::DownloadProgress);
     connect(reply, &QNetworkReply::finished, this, &HttpEngine::HttpFinished);
@@ -53,6 +59,7 @@ void HttpEngine::DownloadProgress(quint64 bytesreceived, quint64 bytesoverall)
 
 void HttpEngine::HttpFinished()
 {
+    m_timeoutTimer->stop();
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
     if (reply == nullptr)
     {
@@ -124,6 +131,7 @@ void HttpEngine::SSLErrors(QNetworkReply *, const QList<QSslError> &errors)
 
 void HttpEngine::HttpError(QNetworkReply::NetworkError code)
 {
+    m_timeoutTimer->stop();
     switch (code)
     {
     case QNetworkReply::ConnectionRefusedError:
@@ -215,6 +223,11 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
     if (m_httpRequestAborted)
         return QJsonDocument();
     return QJsonDocument::fromJson(m_httpData);
+}
+
+void HttpEngine::setTimeoutTimer(int msec)
+{
+    m_timeoutTimer->setInterval(msec);
 }
 
 QByteArray HttpEngine::GetQueryInBA(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)

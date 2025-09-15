@@ -4,6 +4,7 @@
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QTimer>
 #include <QUrl>
 #include <gen/error.h>
 #include <gen/netip.h>
@@ -67,6 +68,7 @@ public:
     /// \return JSON документ
     QJsonDocument PostQuery(
         NetIP ip, int port = 80, const QString &query = "", const QList<QVariant> &list = {}, bool isSSL = true);
+    void setTimeoutTimer(int msec = 10000);
 
 public slots:
     void CancelDownload();
@@ -92,6 +94,7 @@ private:
     bool m_httpRequestAborted;
     bool ReqBusy;
     int m_filePieceMultipartId, m_stringPieceMultipartId;
+    QTimer *m_timeoutTimer;
 
     void Request(const QUrl &url);
     void Post(const QUrl &url, QHttpMultiPart *body);
