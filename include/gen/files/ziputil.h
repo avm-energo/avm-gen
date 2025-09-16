@@ -1,8 +1,9 @@
 #include <QFile>
 #include <gen/error.h>
+#include <gen/gen_export.h>
 #include <zip.h>
 
-class ZipUtil
+class GENLIB_EXPORT ZipUtil
 {
 private:
     ZipUtil() { };
