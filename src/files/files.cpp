@@ -171,7 +171,7 @@ void Files::removeOlderThan(const QString &dir, const QString &filenameMask, con
     for (QFileInfo fi : flist)
     {
         if (fi.lastModified().secsTo(datetime) > 0) // time of file is lower
-            QFile::remove(fi.fileName());
+            QFile::remove(fi.filePath());
     }
 }
 

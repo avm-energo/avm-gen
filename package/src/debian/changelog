@@ -1,3 +1,9 @@
+libavm-gen (1.10.5) unstable; urgency=low
+
+  [*] Bugfix in Files::removeOlderThan
+
+ -- AVM-Energo <support@avmenergo.ru>  Mon, 22 Sep 2025 09:22:32 +0300
+
 libavm-gen (1.10.4) unstable; urgency=low
 
   [-] Encryption class to use external avm-crypto lib
