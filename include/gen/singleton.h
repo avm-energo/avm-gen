@@ -1,7 +1,6 @@
 #pragma once
 
 #include <gen/gen_export.h>
-#include <memory>
 
 /*! \brief Basic class for singleton pattern designed classes.
  *
@@ -13,23 +12,13 @@ template <typename T> class Singleton
 {
 public:
     static T &GetInstance();
-    Singleton(const Singleton &) = delete;
-    Singleton &operator=(const Singleton) = delete;
-
-protected:
-    /// \brief The token empty helper struct.
-    struct token
-    {
-    };
-
-    Singleton()
-    {
-    }
+    // Singleton(Singleton const &) = delete;
+    // void operator=(Singleton const &) = delete;
 };
 
 /// \brief Returns instance of singleton class.
 template <typename T> T &Singleton<T>::GetInstance()
 {
-    static const std::unique_ptr<T> instance { new T { token {} } };
-    return *instance;
+    static T instance;
+    return instance;
 }

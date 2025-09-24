@@ -9,7 +9,7 @@ class GENLIB_EXPORT ErrorQueue : public QObject, public Singleton<ErrorQueue>
 {
     Q_OBJECT
 public:
-    explicit ErrorQueue(token);
+    explicit ErrorQueue();
     const std::vector<ErrorMsg> *errMsgPool();
     ErrorMsg popError();
     void pushError(const ErrorMsg &msg);

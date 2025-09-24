@@ -2,7 +2,7 @@
 
 constexpr auto LOG_BUFFER_SIZE = 1000;
 
-ErrorQueue::ErrorQueue(Singleton::token)
+ErrorQueue::ErrorQueue()
 {
     m_errMsgPool = {};
     m_newErrors = 0;
