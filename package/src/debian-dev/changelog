@@ -1,3 +1,9 @@
+libavm-gen-dev (1.10.6) unstable; urgency=low
+
+  [*] ZipUtil: now adding directories recursively
+
+ -- AVM-Energo <support@avmenergo.ru>  Thu, 25 Sep 2025 18:03:19 +0300
+
 libavm-gen-dev (1.10.5) unstable; urgency=low
 
   [*] Bugfix in Files::removeOlderThan
