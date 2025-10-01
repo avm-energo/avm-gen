@@ -45,6 +45,8 @@ public:
     void writeStart(const QString &filename);
     void setLogLevel(LogLevels level);
     void setLogLevel(const QString &level);
+    static LogLevels qtMessageTypeToLoglevel(QtMsgType type);
+    static MessageTypes qtMessageTypeToMessageType(QtMsgType type);
     static QStringList logLevelsList();
 
     static const QMap<QString, Logger::LogLevels> s_logLevelsMap;

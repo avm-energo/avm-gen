@@ -6,12 +6,6 @@
 #include <QString>
 #include <gen/gen_export.h>
 
-// Макросы для выдачи сообщений
-#define ERMSG qCritical
-#define DBGMSG qDebug
-#define INFOMSG qInfo
-#define WARNMSG qWarning
-
 /// \brief Namespace for critical message logging
 namespace Error
 {

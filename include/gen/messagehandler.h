@@ -22,8 +22,10 @@ public:
     static void messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     static void setMessageHandlerFilename(const QString &filename);
     static void setLogLevel(Logger::LogLevels level);
+    static void setQueueLevel(Logger::LogLevels level);
 
 private:
     static Logger s_log;
+    static Logger::LogLevels s_queueLevel;
     static QMutex m_mutex;
 };

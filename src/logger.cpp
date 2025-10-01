@@ -73,6 +73,22 @@ void Logger::setLogLevel(const QString &level)
     m_logLevel = s_logLevelsMap.value(level);
 }
 
+Logger::MessageTypes Logger::qtMessageTypeToMessageType(QtMsgType type)
+{
+    const QMap<QtMsgType, Logger::MessageTypes> c_msgTypesTranslateMap { { QtDebugMsg, Logger::Debug },
+        { QtInfoMsg, Logger::Info }, { QtWarningMsg, Logger::Warning }, { QtCriticalMsg, Logger::Critical },
+        { QtFatalMsg, Logger::Fatal } };
+    return c_msgTypesTranslateMap[type];
+}
+
+Logger::LogLevels Logger::qtMessageTypeToLoglevel(QtMsgType type)
+{
+    const QMap<QtMsgType, Logger::LogLevels> c_msgTypesTranslateMap { { QtDebugMsg, LOGLEVEL_DEBUG },
+        { QtInfoMsg, LOGLEVEL_INFO }, { QtWarningMsg, LOGLEVEL_WARN }, { QtCriticalMsg, LOGLEVEL_CRIT },
+        { QtFatalMsg, LOGLEVEL_FATAL } };
+    return c_msgTypesTranslateMap[type];
+}
+
 QStringList Logger::logLevelsList()
 {
     return s_logLevelsMap.keys();
