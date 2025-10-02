@@ -138,7 +138,7 @@ bool Files::rotateFiles(const QString &path, const QString &extension, int count
         {
             if (fn.rename(tempNew) == false) // error
             {
-                ERMSG("Cannot rename file");
+                qDebug() << "Cannot rename file";
                 return false;
             }
         }
