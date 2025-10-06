@@ -50,11 +50,12 @@ public:
     static void setWorkDir(const QString &dir);
 
     static QString logDir();
-    static void initialize();
+    static void initialize(const QString &appName, const QString &orgName, const QString &version);
 
 private:
     static Settings &instance();
     static QString s_workDir;
     static QString s_oldGroup;
+    static bool s_settingsPathUpdated;
     QSettings conf;
 };

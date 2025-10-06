@@ -1,3 +1,9 @@
+libavm-gen-dev (1.10.7) unstable; urgency=low
+
+  [*] Settings: before using it one should call initialize() with appropriate Org & App names to store configs in proper place
+
+ -- AVM-Energo <support@avmenergo.ru>  Mon, 06 Oct 2025 13:56:05 +0300
+
 libavm-gen-dev (1.10.6) unstable; urgency=low
 
   [*] ZipUtil: now adding directories recursively

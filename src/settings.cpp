@@ -1,9 +1,12 @@
+#include <QCoreApplication>
 #include <QDir>
 #include <QStandardPaths>
 #include <gen/settings.h>
 
 QString Settings::s_workDir = "";
 QString Settings::s_oldGroup = "";
+bool Settings::s_settingsPathUpdated = false;
+
 #ifdef Q_OS_WINDOWS
 constexpr char c_dirDelimiter[] = "\\";
 #else
@@ -18,15 +21,12 @@ Settings::Settings()
 
 void Settings::pushGroup(const QString &newGroup)
 {
-    // s_oldGroup = instance().conf.group();
-    // instance().conf.endGroup();
     instance().conf.beginGroup(newGroup);
 }
 
 void Settings::popGroup()
 {
     instance().conf.endGroup();
-    // instance().conf.beginGroup(s_oldGroup);
 }
 
 QStringList Settings::groups(const QString &key)
@@ -42,6 +42,11 @@ QStringList Settings::groups(const QString &key)
 
 utils::Convertable Settings::get(const QString &key, const QVariant &defValue)
 {
+    if (!s_settingsPathUpdated)
+    {
+        qDebug() << "Application name & organization name was not set!";
+        return utils::Convertable { defValue };
+    }
     QString oldGroup = instance().conf.group();
     utils::Convertable Value = utils::Convertable { instance().conf.value(key, defValue) };
     return utils::Convertable { instance().conf.value(key, defValue) };
@@ -49,16 +54,31 @@ utils::Convertable Settings::get(const QString &key, const QVariant &defValue)
 
 void Settings::set(const QString &key, const QVariant &value)
 {
+    if (!s_settingsPathUpdated)
+    {
+        qDebug() << "Application name & organization name was not set!";
+        return;
+    }
     instance().conf.setValue(key, value);
 }
 
 void Settings::remove(const QString &name)
 {
+    if (!s_settingsPathUpdated)
+    {
+        qDebug() << "Application name & organization name was not set!";
+        return;
+    }
     instance().conf.remove(name);
 }
 
 bool Settings::groupExist(const QString &name)
 {
+    if (!s_settingsPathUpdated)
+    {
+        qDebug() << "Application name & organization name was not set!";
+        return false;
+    }
     return instance().conf.contains(name);
 }
 
@@ -100,8 +120,12 @@ QString Settings::logDir()
     return dataDir() + "logs/";
 }
 
-void Settings::initialize()
+void Settings::initialize(const QString &appName, const QString &orgName, const QString &version)
 {
+    QCoreApplication::setApplicationName(appName);
+    QCoreApplication::setOrganizationName(orgName);
+    QCoreApplication::setApplicationVersion(version);
+    s_settingsPathUpdated = true;
     for (const QString &dirstr : { configDir(), dataDir(), logDir() })
     {
         QDir dir(dirstr);
@@ -113,6 +137,7 @@ void Settings::initialize()
 
 Settings &Settings::instance()
 {
+    assert(s_settingsPathUpdated);
     static Settings singleton;
     return singleton;
 }
