@@ -3,7 +3,7 @@
 #include <QObject>
 #include <gen/utils/convertable.h>
 
-class MemSettings : public QObject
+class GENLIB_EXPORT MemSettings : public QObject
 {
     Q_OBJECT
 public:
