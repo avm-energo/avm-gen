@@ -36,6 +36,11 @@ QVariant &Convertable::operator*() noexcept
     return m_data;
 }
 
+Convertable::operator QVariant() const noexcept
+{
+    return m_data;
+}
+
 const QVariant &Convertable::operator*() const noexcept
 {
     return m_data;
@@ -56,34 +61,44 @@ Convertable::operator QByteArray() const noexcept
     return m_data.toByteArray();
 }
 
-Convertable::operator std::int16_t() const noexcept
+Convertable::operator i8() const noexcept
 {
-    return static_cast<std::int16_t>(m_data.toInt());
+    return static_cast<i8>(m_data.toInt());
 }
 
-Convertable::operator std::uint16_t() const noexcept
+Convertable::operator u8() const noexcept
 {
-    return static_cast<std::uint16_t>(m_data.toUInt());
+    return static_cast<u8>(m_data.toUInt());
 }
 
-Convertable::operator std::int32_t() const noexcept
+Convertable::operator i16() const noexcept
 {
-    return static_cast<std::int32_t>(m_data.toInt());
+    return static_cast<i16>(m_data.toInt());
 }
 
-Convertable::operator std::uint32_t() const noexcept
+Convertable::operator u16() const noexcept
 {
-    return static_cast<std::uint32_t>(m_data.toUInt());
+    return static_cast<u16>(m_data.toUInt());
 }
 
-Convertable::operator std::int64_t() const noexcept
+Convertable::operator i32() const noexcept
 {
-    return static_cast<std::int64_t>(m_data.toLongLong());
+    return static_cast<i32>(m_data.toInt());
 }
 
-Convertable::operator std::uint64_t() const noexcept
+Convertable::operator u32() const noexcept
 {
-    return static_cast<std::uint64_t>(m_data.toULongLong());
+    return static_cast<u32>(m_data.toUInt());
+}
+
+Convertable::operator i64() const noexcept
+{
+    return static_cast<i64>(m_data.toLongLong());
+}
+
+Convertable::operator u64() const noexcept
+{
+    return static_cast<u64>(m_data.toULongLong());
 }
 
 } // namespace utils

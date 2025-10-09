@@ -47,7 +47,6 @@ utils::Convertable Settings::get(const QString &key, const QVariant &defValue)
         qDebug() << "Application name & organization name was not set!";
         return utils::Convertable { defValue };
     }
-    QString oldGroup = instance().conf.group();
     utils::Convertable Value = utils::Convertable { instance().conf.value(key, defValue) };
     return utils::Convertable { instance().conf.value(key, defValue) };
 }

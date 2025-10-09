@@ -2,15 +2,15 @@
 
 #include <QtCore/QtGlobal>
 
-using u8 = quint8;
-using u16 = quint16;
-using u32 = quint32;
-using u64 = quint64;
+using u8 = std::uint8_t;
+using u16 = std::uint16_t;
+using u32 = std::uint32_t;
+using u64 = std::uint64_t;
 
-using i8 = qint8;
-using i16 = qint16;
-using i32 = qint32;
-using i64 = qint64;
+using i8 = std::int8_t;
+using i16 = std::int16_t;
+using i32 = std::int32_t;
+using i64 = std::int64_t;
 
 constexpr u16 U16MAX = 0xFFFF;
 constexpr u32 U32MAX = 0xFFFFFFFF;

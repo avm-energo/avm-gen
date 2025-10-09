@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QVariant>
-#include <cstdint>
 #include <gen/gen_export.h>
+#include <gen/integers.h>
 
 namespace utils
 {
@@ -33,6 +33,7 @@ public:
     /// \brief Indirection operator overloading (for const type).
     const QVariant &operator*() const noexcept;
 
+    operator QVariant() const noexcept;
     /// \brief Implicit type conversion to bool value.
     operator bool() const noexcept;
     /// \brief Implicit type conversion to string value.
@@ -40,12 +41,14 @@ public:
 
     operator QByteArray() const noexcept;
 
-    operator std::int16_t() const noexcept;
-    operator std::uint16_t() const noexcept;
-    operator std::int32_t() const noexcept;
-    operator std::uint32_t() const noexcept;
-    operator std::int64_t() const noexcept;
-    operator std::uint64_t() const noexcept;
+    operator i8() const noexcept;
+    operator u8() const noexcept;
+    operator i16() const noexcept;
+    operator u16() const noexcept;
+    operator i32() const noexcept;
+    operator u32() const noexcept;
+    operator i64() const noexcept;
+    operator u64() const noexcept;
 };
 
 } // namespace utils
