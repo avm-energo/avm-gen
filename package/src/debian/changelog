@@ -1,3 +1,9 @@
+libavm-gen (1.10.8) unstable; urgency=low
+
+  [+] MemSettings to store temporary settings in QMap with changed signal
+
+ -- AVM-Energo <support@avmenergo.ru>  Thu, 09 Oct 2025 12:28:46 +0300
+
 libavm-gen (1.10.7) unstable; urgency=low
 
   [*] Settings: before using it one should call initialize() with appropriate Org & App names to store configs in proper place
