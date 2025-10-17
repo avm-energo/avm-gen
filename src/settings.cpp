@@ -59,6 +59,7 @@ void Settings::set(const QString &key, const QVariant &value)
         return;
     }
     instance().conf.setValue(key, value);
+    instance().conf.sync();
 }
 
 void Settings::remove(const QString &name)
