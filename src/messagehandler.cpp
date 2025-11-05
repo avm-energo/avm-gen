@@ -9,8 +9,6 @@ Logger::LogLevels MessageHandler::s_queueLevel = Logger::LogLevels::LOGLEVEL_WAR
 void MessageHandler::messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QMutexLocker locker(&m_mutex);
-    qDebug() << "LogLevel set: " << s_queueLevel;
-    qDebug() << "Msg type: " << type;
     if (Logger::qtMessageTypeToLoglevel(type) <= s_queueLevel)
     {
         QStringList buffer = QString(context.file).split("\\");
