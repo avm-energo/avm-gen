@@ -1,6 +1,7 @@
 libavm-gen (1.10.9) unstable; urgency=low
 
   [+] Xml::isNodeExist
+  [+] Xml::elementByTag
 
  -- AVM-Energo <support@avmenergo.ru>  Thu, 06 Nov 2025 15:48:28 +0300
 
