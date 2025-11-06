@@ -1,3 +1,9 @@
+libavm-gen-dev (1.10.9) unstable; urgency=low
+
+  [+] Xml::isNodeExist
+
+ -- AVM-Energo <support@avmenergo.ru>  Thu, 06 Nov 2025 15:48:28 +0300
+
 libavm-gen-dev (1.10.8) unstable; urgency=low
 
   [+] MemSettings to store temporary settings in QMap with changed signal

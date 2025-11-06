@@ -50,4 +50,4 @@ unix*
 /src/share*
 /src/lib*
 /src/include*
-CMakeLists.txt.user
+CMakeLists.txt.user*

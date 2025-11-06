@@ -45,6 +45,12 @@ void XmlParse::callIfNodeExist(
         functor(node);
 }
 
+bool XmlParse::isNodeExist(const QDomNode &parent, const QString &tagName)
+{
+    auto node = parent.firstChildElement(tagName);
+    return !node.isNull();
+}
+
 void XmlParse::callForEachChild(const QDomNode &parent, const std::function<void(const QDomNode &)> &functor)
 {
     auto child = parent.firstChild();

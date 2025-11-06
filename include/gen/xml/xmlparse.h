@@ -60,6 +60,8 @@ public:
     /// узла parent существует дочерний узел с именем tagName.
     static void GENLIB_EXPORT callIfNodeExist(const QDomNode &parent, const QString &tagName, //
         const std::function<void(const QDomNode &node)> &functor);
+    /// \brief Check if child node of <node> with tag <tag> exists
+    static bool isNodeExist(const QDomNode &parent, const QString &tagName);
     /// \brief Callback для вызова функции functor, для каждого
     /// дочернего узла node указанного узла parent.
     static void GENLIB_EXPORT callForEachChild(
