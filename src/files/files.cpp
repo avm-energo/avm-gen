@@ -156,7 +156,8 @@ const QString Files::SaveToTempFile(const QByteArray &src)
 {
     QTemporaryFile file;
     file.setAutoRemove(false);
-    file.open();
+    if (!file.open())
+        return QString();
     file.write(src);
     file.close();
     return file.fileName();

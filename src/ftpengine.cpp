@@ -91,7 +91,11 @@ void FtpEngine::get()
             ba = m_controlSocket->readAll();
             qDebug() << "GET: " << ba;
             QFile file(m_downloadPath);
-            file.open(QFile::WriteOnly);
+            if (!file.open(QFile::WriteOnly))
+            {
+                emit error(Error::Msg::GeneralError);
+                return;
+            }
             while ((!ba.startsWith("226")) && !timeout)
             {
                 if (m_dataSocket->waitForReadyRead(1000))
