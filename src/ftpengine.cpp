@@ -91,29 +91,27 @@ void FtpEngine::get()
             ba = m_controlSocket->readAll();
             qDebug() << "GET: " << ba;
             QFile file(m_downloadPath);
-            if (!file.open(QFile::WriteOnly))
+            if (file.open(QFile::WriteOnly))
             {
-                emit error(Error::Msg::GeneralError);
+                while ((!ba.startsWith("226")) && !timeout)
+                {
+                    if (m_dataSocket->waitForReadyRead(1000))
+                    {
+                        ba = m_dataSocket->readAll();
+                        qDebug() << ba.size() << " bytes read";
+                        file.write(ba);
+                        ba = m_controlSocket->readAll();
+                        qDebug() << "GET: " << ba;
+                    }
+                    else
+                    {
+                        timeout = true;
+                    }
+                }
+                file.close();
+                emit finished();
                 return;
             }
-            while ((!ba.startsWith("226")) && !timeout)
-            {
-                if (m_dataSocket->waitForReadyRead(1000))
-                {
-                    ba = m_dataSocket->readAll();
-                    qDebug() << ba.size() << " bytes read";
-                    file.write(ba);
-                    ba = m_controlSocket->readAll();
-                    qDebug() << "GET: " << ba;
-                }
-                else
-                {
-                    timeout = true;
-                }
-            }
-            file.close();
-            emit finished();
-            return;
         }
     }
     emit error(Error::Msg::GeneralError);

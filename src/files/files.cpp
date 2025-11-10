@@ -156,11 +156,13 @@ const QString Files::SaveToTempFile(const QByteArray &src)
 {
     QTemporaryFile file;
     file.setAutoRemove(false);
-    if (!file.open())
-        return QString();
-    file.write(src);
-    file.close();
-    return file.fileName();
+    if (file.open())
+    {
+        file.write(src);
+        file.close();
+        return file.fileName();
+    }
+    return QString();
 }
 
 void Files::removeOlderThan(const QString &dir, const QString &filenameMask, const QDateTime &datetime)

@@ -54,14 +54,15 @@ void Logger::writeStart(const QString &filename)
     Files::makePath(logFile);
     QTextStream out;
     out.setDevice(&logFile);
-    if (!logFile.open(QFile::ReadWrite | QFile::Text | QFile::Append))
-        return;
-    out << "=====================================\nLog file started at "
-        << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") + "\n"
-        << QCoreApplication::applicationName() << " v." << QCoreApplication::applicationVersion();
-    out.flush();
-    Files::checkNGzip(&logFile);
-    logFile.close();
+    if (logFile.open(QFile::ReadWrite | QFile::Text | QFile::Append))
+    {
+        out << "=====================================\nLog file started at "
+            << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") + "\n"
+            << QCoreApplication::applicationName() << " v." << QCoreApplication::applicationVersion();
+        out.flush();
+        Files::checkNGzip(&logFile);
+        logFile.close();
+    }
 }
 
 void Logger::setLogLevel(LogLevels level)
