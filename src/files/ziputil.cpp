@@ -68,6 +68,42 @@ Error::Msg ZipUtil::CompressDir(const QString &dirname, const QString &zipFileNa
     return Error::Msg::NoError;
 }
 
+Error::Msg ZipUtil::AddFile(const QString &filename, const QString &zipFileName, const QByteArray &ba)
+{
+    zip_t *za;
+    int err;
+    std::string zipfilenamestr = zipFileName.toStdString();
+
+    if ((za = zip_open(zipfilenamestr.c_str(), 0, &err)) == nullptr)
+    {
+        zip_error_t error;
+        zip_error_init_with_code(&error, err);
+        qDebug() << "Cannot open zip archive " << zipFileName << ", error is: " << zip_error_strerror(&error);
+        zip_error_fini(&error);
+        return Error::Msg::FileOpenError;
+    }
+
+    if (!ba.isEmpty())
+    {
+        QFileInfo fi(filename);
+        if (!addFile(za, filename, fi.fileName()))
+            return Error::Msg::FileWriteError;
+    }
+    else
+    {
+        if (!addFileBA(za, ba.data(), filename))
+            return Error::Msg::FileWriteError;
+    }
+
+    if ((zip_close(za)) < 0)
+    {
+        qDebug() << "Cannot close archive " << zipFileName << ", error: " << zip_strerror(za);
+        zip_discard(za);
+        return Error::Msg::FileWriteError;
+    }
+    return Error::Msg::NoError;
+}
+
 Error::Msg ZipUtil::DecompressFile(const QString &zipFileName, const QString &dirname)
 {
     zip_t *za;
@@ -203,7 +239,7 @@ QByteArray ZipUtil::DecompressFileToBA(const QString &zipFileName, const QString
     return ba;
 }
 
-QStringList ZipUtil::getArchiveContentsList(const QString &zipFileName)
+QStringList ZipUtil::GetArchiveContentsList(const QString &zipFileName)
 {
     zip_t *za;
     struct zip_stat sb;
@@ -253,6 +289,27 @@ bool ZipUtil::addFile(zip_t *za, const QString &filenameToAdd, const QString &zi
         return false;
     }
 
+    if ((zip_file_add(za, zipFileNameStr.c_str(), sourceFile, ZIP_FL_OVERWRITE)) < 0)
+    {
+        qDebug() << "Cannot add precompressed file: " << zip_strerror(za);
+        zip_source_free(sourceFile);
+        zip_discard(za);
+        return false;
+    }
+    return true;
+}
+
+bool ZipUtil::addFileBA(zip_t *za, const QByteArray &ba, const QString &zipFileName)
+{
+    std::string zipFileNameStr = zipFileName.toStdString();
+    zip_source_t *sourceFile;
+    /* The data can come from any source. To keep the example simple, it is provided in a static buffer here. */
+    if ((sourceFile = zip_source_buffer(za, ba.data(), 0, 0)) == nullptr)
+    {
+        qDebug() << "Cannot create buffer source: " << zip_strerror(za);
+        zip_discard(za);
+        return false;
+    }
     if ((zip_file_add(za, zipFileNameStr.c_str(), sourceFile, ZIP_FL_OVERWRITE)) < 0)
     {
         qDebug() << "Cannot add precompressed file: " << zip_strerror(za);
