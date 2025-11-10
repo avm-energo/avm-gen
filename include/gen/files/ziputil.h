@@ -1,4 +1,5 @@
 #include <QFile>
+#include <QString>
 #include <gen/error.h>
 #include <gen/gen_export.h>
 #include <zip.h>
@@ -35,5 +36,4 @@ public:
 private:
     static bool addFile(zip_t *za, const QString &filenameToAdd, const QString &zipFileName);
     static bool addFileBA(zip_t *za, const QByteArray &ba, const QString &zipFileName);
-    static bool addDir(zip_t *za, const QString &dirToAdd, const QString &parentDir = "");
 };

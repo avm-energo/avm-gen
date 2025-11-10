@@ -58,42 +58,42 @@ enum Msg
 
 /// \brief Map with keys as Msg and values as QString with description of error.
 const QMap<Msg, QString> MsgStr {
-    { ResEmpty, "Пустой результат" },                                         //
-    { GeneralError, "Ошибка" },                                               //
-    { NoError, "Успешно" },                                                   //
-    { Timeout, "Таймаут операции" },                                          //
-    { CrcError, "Ошибка контрольной суммы" },                                 //
-    { FlashError, "Ошибка записи во Flash-память" },                          //
-    { SizeError, "Ошибка размера данных" },                                   //
-    { WrongCommandError, "Некорректная команда" },                            //
-    { WrongFormatError, "Формат неверен" },                                   //
-    { UnknownBlock, "Неизвестный блок данных" },                              //
-    { UnknownFileReq, "Запрошен неизвестный файл" },                          //
-    { UnknownFileSent, "Отправлен неизвестный файл" },                        //
-    { NoMezzanine, "Нет мезонина" },                                          //
-    { WrongType, "Неверный тип платы" },                                      //
-    { FileNameError, "Нет такого файла" },                                    //
-    { WrongBlockAC, "Ошибка блока Bac" },                                     //
-    { DescError, "Ошибка описания S2" },                                      //
-    { StartupInitError, "Ошибка задания начальных значений" },                //
-    { HeaderSizeError, "Неверный размер заголовка S2" },                      //
-    { NoIdError, "Нет такого ИД S2" },                                        //
-    { NoConfError, "Нет конфигурации" },                                      //
-    { NoTuneError, "Нет настроечных параметров" },                            //
-    { WriteError, "Ошибка записи" },                                          //
-    { NoDeviceError, "Нет такого устройства" },                               //
-    { ReadError, "Ошибка чтения" },                                           //
-    { OpenError, "Ошибка открытия порта" },                                   //
-    { NullDataError, "Приняты нулевые данные" },                              //
-    { FileNameError, "Ошибка номера файла" },                                 //
-    { FileOpenError, "Ошибка открытия файла" },                               //
-    { FileWriteError, "Ошибка записи файла" },                                //
-    { Cancelled, "Операция прервана" },                                       //
-    { StepError, "Некорректный номер шага" },                                 //
-    { TuneCoefError, "Ошибка в настроечных коэффициентах, деление на ноль" }, //
-    { PswCheckError, "Неправильный пароль" },                                 //
-    { DataError, "Ошибка данных" },                                           //
-    { UnknownError, "Неизвестная ошибка" }                                    //
+    { ResEmpty, QString::fromUtf8("Пустой результат") },                                         //
+    { GeneralError, QString::fromUtf8("Ошибка") },                                               //
+    { NoError, QString::fromUtf8("Успешно") },                                                   //
+    { Timeout, QString::fromUtf8("Таймаут операции") },                                          //
+    { CrcError, QString::fromUtf8("Ошибка контрольной суммы") },                                 //
+    { FlashError, QString::fromUtf8("Ошибка записи во Flash-память") },                          //
+    { SizeError, QString::fromUtf8("Ошибка размера данных") },                                   //
+    { WrongCommandError, QString::fromUtf8("Некорректная команда") },                            //
+    { WrongFormatError, QString::fromUtf8("Формат неверен") },                                   //
+    { UnknownBlock, QString::fromUtf8("Неизвестный блок данных") },                              //
+    { UnknownFileReq, QString::fromUtf8("Запрошен неизвестный файл") },                          //
+    { UnknownFileSent, QString::fromUtf8("Отправлен неизвестный файл") },                        //
+    { NoMezzanine, QString::fromUtf8("Нет мезонина") },                                          //
+    { WrongType, QString::fromUtf8("Неверный тип платы") },                                      //
+    { FileNameError, QString::fromUtf8("Нет такого файла") },                                    //
+    { WrongBlockAC, QString::fromUtf8("Ошибка блока Bac") },                                     //
+    { DescError, QString::fromUtf8("Ошибка описания S2") },                                      //
+    { StartupInitError, QString::fromUtf8("Ошибка задания начальных значений") },                //
+    { HeaderSizeError, QString::fromUtf8("Неверный размер заголовка S2") },                      //
+    { NoIdError, QString::fromUtf8("Нет такого ИД S2") },                                        //
+    { NoConfError, QString::fromUtf8("Нет конфигурации") },                                      //
+    { NoTuneError, QString::fromUtf8("Нет настроечных параметров") },                            //
+    { WriteError, QString::fromUtf8("Ошибка записи") },                                          //
+    { NoDeviceError, QString::fromUtf8("Нет такого устройства") },                               //
+    { ReadError, QString::fromUtf8("Ошибка чтения") },                                           //
+    { OpenError, QString::fromUtf8("Ошибка открытия порта") },                                   //
+    { NullDataError, QString::fromUtf8("Приняты нулевые данные") },                              //
+    { FileNameError, QString::fromUtf8("Ошибка номера файла") },                                 //
+    { FileOpenError, QString::fromUtf8("Ошибка открытия файла") },                               //
+    { FileWriteError, QString::fromUtf8("Ошибка записи файла") },                                //
+    { Cancelled, QString::fromUtf8("Операция прервана") },                                       //
+    { StepError, QString::fromUtf8("Некорректный номер шага") },                                 //
+    { TuneCoefError, QString::fromUtf8("Ошибка в настроечных коэффициентах, деление на ноль") }, //
+    { PswCheckError, QString::fromUtf8("Неправильный пароль") },                                 //
+    { DataError, QString::fromUtf8("Ошибка данных") },                                           //
+    { UnknownError, QString::fromUtf8("Неизвестная ошибка") }                                    //
 };
 
 Q_ENUM_NS(Msg)
