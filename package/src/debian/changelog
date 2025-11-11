@@ -1,3 +1,10 @@
+libavm-gen (1.10.10) unstable; urgency=low
+
+  [+] ZipUtil::DecompressFileToBa & getArchiveContentsList primary for the QXlsx
+  [+] ZipUtil::AddFile from bytearray or from file
+
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 11 Nov 2025 09:15:53 +0300
+
 libavm-gen (1.10.9) unstable; urgency=low
 
   [+] Xml::isNodeExist

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(avm-gen
   DESCRIPTION "General library for AVM-Energo C++ projects"
-  VERSION 1.10.9)
+  VERSION 1.10.10)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,13 +21,13 @@ include(CMakePackageConfigHelpers)
 string(TOLOWER "${CMAKE_SYSTEM_NAME}" SYSTEM_NAME)
 
 if(SYSTEM_NAME STREQUAL "linux")
-    message(STATUS "Compiling for linux")
+    message(STATUS "${PROJECT_NAME} compiling for linux")
     add_compile_definitions(SYSTEM_TYPE=0)
 elseif(SYSTEM_NAME STREQUAL "windows")
-    message(STATUS "Compiling for windows")
+    message(STATUS "${PROJECT_NAME} compiling for windows")
     add_compile_definitions(SYSTEM_TYPE=1)
 else()
-    message(STATUS "Compiling for unknown")
+    message(STATUS "${PROJECT_NAME} compiling for unknown")
     add_compile_definitions(SYSTEM_TYPE=2)
 endif()
 
@@ -46,6 +46,8 @@ find_package(Qt${QT_VERSION_MAJOR}
   COMPONENTS Core Network Xml REQUIRED
 )
 
+message(STATUS "QT version is: ${QT_VERSION}")
+
 #------------------------------------------------------------------------------#
 ############################## Target definition ###############################
 #------------------------------------------------------------------------------#
@@ -56,12 +58,12 @@ file(GLOB_RECURSE public_headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/include LI
 
 # Library building settings
 if(BUILD_SHARED_LIBS)
-    message(STATUS "GEN SHARED LIBRARY")
+    message(STATUS "${PROJECT_NAME} SHARED LIBRARY")
     add_library(${PROJECT_NAME} SHARED ${h_sources} ${cpp_sources})
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DGEN_EXPORTS)
     target_compile_definitions(${PROJECT_NAME} INTERFACE -DGEN_IMPORTS)
 else()
-    message(STATUS "GEN STATIC LIBRARY")
+    message(STATUS "${PROJECT_NAME} STATIC LIBRARY")
     add_library(${PROJECT_NAME} STATIC ${h_sources} ${cpp_sources})
     target_compile_definitions(${PROJECT_NAME} PUBLIC -DHAVE_STATIC_BUILD)
 endif()
