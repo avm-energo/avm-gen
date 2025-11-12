@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtDebug>
 #include <gen/gen_export.h>
+#include <gen/strings.h>
 
 class XmlParse
 {
@@ -11,7 +12,8 @@ public:
     XmlParse();
 
     /// \brief Парсит ноду с дочерними элементами в QStringList.
-    static const QStringList GENLIB_EXPORT parseArray(const QDomNode &node, const QString &tag);
+    static const QStringList GENLIB_EXPORT parseArray(
+        const QDomNode &node, const QString &tag, const QStringList &defList = STRLISTINF);
     /// \brief Парсинг значений указанного типа в из ноды tag в QList.
     template <typename T> static const QList<T> parseNumArray(const QDomNode &node, const QString &tag)
     {
@@ -55,7 +57,8 @@ public:
     }
 
     /// \brief Возвращает содержимое ноды tagName в QString.
-    static const QString GENLIB_EXPORT parseString(const QDomNode &node, const QString &tagName);
+    static const QString GENLIB_EXPORT parseString(
+        const QDomNode &node, const QString &tagName, const QString &defString = STRINF);
     /// \brief Callback для вызова функции functor, если у указанного
     /// узла parent существует дочерний узел с именем tagName.
     static void GENLIB_EXPORT callIfNodeExist(const QDomNode &parent, const QString &tagName, //

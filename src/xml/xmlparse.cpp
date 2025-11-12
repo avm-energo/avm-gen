@@ -4,7 +4,7 @@ XmlParse::XmlParse()
 {
 }
 
-const QStringList XmlParse::parseArray(const QDomNode &node, const QString &tag)
+const QStringList XmlParse::parseArray(const QDomNode &node, const QString &tag, const QStringList &defList)
 {
     QStringList retList = {};
     auto strArrNode = node.firstChildElement(tag);
@@ -25,16 +25,18 @@ const QStringList XmlParse::parseArray(const QDomNode &node, const QString &tag)
             }
         }
     }
+    else
+        return defList;
     return retList;
 }
 
-const QString XmlParse::parseString(const QDomNode &node, const QString &tagName)
+const QString XmlParse::parseString(const QDomNode &node, const QString &tagName, const QString &defString)
 {
     auto textNode = node.firstChildElement(tagName);
     if (!textNode.isNull())
         return textNode.text();
     else
-        return "";
+        return defString;
 }
 
 void XmlParse::callIfNodeExist(
