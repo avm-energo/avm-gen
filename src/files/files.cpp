@@ -113,7 +113,7 @@ void Files::checkNGzip(QFile *logFile)
         if (rotateFiles(filename))
         {
             auto &zip = ZipUtil::getInstance();
-            if (zip.CompressFile(filename, filename + ".0.zip") == Error::Msg::NoError)
+            if (zip.CompressFile(filename + ".0.zip", filename) == Error::Msg::NoError)
             {
                 logFile->resize(0);
                 logFile->flush();

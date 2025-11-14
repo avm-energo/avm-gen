@@ -15,14 +15,14 @@ public:
 
     static ZipUtil &getInstance();
     /// \brief Create archive \a zipFileName with only one file \a filename in CREATE mode
-    static Error::Msg CompressFile(const QString &filename, const QString &zipFileName);
+    static Error::Msg CompressFile(const QString &zipFileName, const QString &filename);
     /// \brief Create archive \a zipFileName with directory \a dirname in CREATE mode
-    static Error::Msg CompressDir(const QString &dirname, const QString &zipFileName);
+    static Error::Msg CompressDir(const QString &zipFileName, const QString &dirname);
     /// \brief Adds one file to archive in ADD mode
     /// \param zipFileName - archive name
     /// \param filename - the name of file in archive and the name of file to add if \a ba is empty
     /// \param ba [optional] - source for file
-    static Error::Msg AddFile(const QString &filename, const QString &zipFileName, const QByteArray &ba = QByteArray());
+    static Error::Msg AddFile(const QString &zipFileName, const QString &filename, const QByteArray &ba = QByteArray());
     /// \brief Uncompress archive \a zipFileName contents to the directory \a dirname
     static Error::Msg DecompressFile(const QString &zipFileName, const QString &dirname);
     /// \brief Uncompress file from zip archive
@@ -34,6 +34,6 @@ public:
     static QStringList GetArchiveContentsList(const QString &zipFileName);
 
 private:
-    static bool addFile(zip_t *za, const QString &filenameToAdd, const QString &zipFileName);
+    static bool addFile(zip_t *za, const QString &filenameToAdd, const QString &fileNameInZip);
     static bool addFileBA(zip_t *za, const QByteArray &ba, const QString &zipFileName);
 };
