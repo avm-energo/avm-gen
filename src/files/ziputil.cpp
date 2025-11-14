@@ -99,9 +99,9 @@ Error::Msg ZipUtil::AddFile(const QString &zipFileName, const QString &filename,
         }
     }
 
-    if (ba.isEmpty())
+    if (!ba.isEmpty())
     {
-        if (!addFileBA(za, ba.data(), filename))
+        if (!addFileBA(za, ba, filename))
             return Error::Msg::FileWriteError;
     }
     else
@@ -319,7 +319,7 @@ bool ZipUtil::addFileBA(zip_t *za, const QByteArray &ba, const QString &fileName
     std::string fileNameInZipStr = fileNameInZip.toStdString();
     zip_source_t *sourceFile;
     /* The data can come from any source. To keep the example simple, it is provided in a static buffer here. */
-    if ((sourceFile = zip_source_buffer(za, ba.data(), 0, 0)) == nullptr)
+    if ((sourceFile = zip_source_buffer_create(&ba.data()[0], ba.size(), 0, 0)) == nullptr)
     {
         qDebug() << "Cannot create buffer source: " << zip_strerror(za);
         zip_discard(za);
