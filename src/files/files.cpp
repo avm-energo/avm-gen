@@ -189,3 +189,14 @@ QString Files::getDirName(const QString &filePath)
     QFileInfo fi(filePath);
     return fi.path();
 }
+
+bool Files::rename(const QString &oldFileName, const QString &newFileName)
+{
+    QFile fn(oldFileName);
+    if (fn.exists())
+    {
+        fn.rename(newFileName);
+        return true;
+    }
+    return false;
+}

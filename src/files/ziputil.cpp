@@ -1,6 +1,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QtDebug>
+#include <gen/files.h>
 #include <gen/files/ziputil.h>
 #include <string>
 
@@ -74,13 +75,28 @@ Error::Msg ZipUtil::AddFile(const QString &filename, const QString &zipFileName,
     int err;
     std::string zipfilenamestr = zipFileName.toStdString();
 
-    if ((za = zip_open(zipfilenamestr.c_str(), 0, &err)) == nullptr)
+    if (!Files::isFileExist(zipFileName))
     {
-        zip_error_t error;
-        zip_error_init_with_code(&error, err);
-        qDebug() << "Cannot open zip archive " << zipFileName << ", error is: " << zip_error_strerror(&error);
-        zip_error_fini(&error);
-        return Error::Msg::FileOpenError;
+        if ((za = zip_open(zipfilenamestr.c_str(), ZIP_CREATE, &err)) == nullptr)
+        {
+            zip_error_t error;
+            zip_error_init_with_code(&error, err);
+            const char *errorstr = zip_error_strerror(&error);
+            zip_error_fini(&error);
+            return Error::Msg::FileOpenError;
+        }
+        qDebug() << "Created file:" << zipFileName;
+    }
+    else
+    {
+        if ((za = zip_open(zipfilenamestr.c_str(), 0, &err)) == nullptr)
+        {
+            zip_error_t error;
+            zip_error_init_with_code(&error, err);
+            const char *errorstr = zip_error_strerror(&error);
+            zip_error_fini(&error);
+            return Error::Msg::FileOpenError;
+        }
     }
 
     if (!ba.isEmpty())
@@ -98,6 +114,7 @@ Error::Msg ZipUtil::AddFile(const QString &filename, const QString &zipFileName,
     if ((zip_close(za)) < 0)
     {
         qDebug() << "Cannot close archive " << zipFileName << ", error: " << zip_strerror(za);
+        const char *errorstr = zip_strerror(za);
         zip_discard(za);
         return Error::Msg::FileWriteError;
     }
