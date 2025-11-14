@@ -81,7 +81,7 @@ Error::Msg ZipUtil::AddFile(const QString &filename, const QString &zipFileName,
         {
             zip_error_t error;
             zip_error_init_with_code(&error, err);
-            const char *errorstr = zip_error_strerror(&error);
+            qDebug() << "Cannot open archive " << zipFileName << ", error: " << zip_strerror(za);
             zip_error_fini(&error);
             return Error::Msg::FileOpenError;
         }
@@ -93,28 +93,26 @@ Error::Msg ZipUtil::AddFile(const QString &filename, const QString &zipFileName,
         {
             zip_error_t error;
             zip_error_init_with_code(&error, err);
-            const char *errorstr = zip_error_strerror(&error);
+            qDebug() << "Cannot open archive " << zipFileName << ", error: " << zip_strerror(za);
             zip_error_fini(&error);
             return Error::Msg::FileOpenError;
         }
     }
 
-    if (!ba.isEmpty())
+    if (ba.isEmpty())
     {
-        QFileInfo fi(filename);
-        if (!addFile(za, filename, fi.fileName()))
+        if (!addFileBA(za, ba.data(), filename))
             return Error::Msg::FileWriteError;
     }
     else
     {
-        if (!addFileBA(za, ba.data(), filename))
+        if (!addFile(za, filename, filename))
             return Error::Msg::FileWriteError;
     }
 
     if ((zip_close(za)) < 0)
     {
         qDebug() << "Cannot close archive " << zipFileName << ", error: " << zip_strerror(za);
-        const char *errorstr = zip_strerror(za);
         zip_discard(za);
         return Error::Msg::FileWriteError;
     }
