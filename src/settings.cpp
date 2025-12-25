@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QStandardPaths>
+#include <QtDebug>
 #include <gen/settings.h>
 
 QString Settings::s_workDir = "";

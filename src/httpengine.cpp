@@ -1,5 +1,6 @@
 #include <QFileInfo>
 #include <QUrl>
+#include <QVariant>
 #include <gen/files.h>
 #include <gen/httpengine.h>
 #include <gen/stdfunc.h>
