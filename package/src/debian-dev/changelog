@@ -1,3 +1,12 @@
+libavm-gen-dev (1.11.0) unstable; urgency=low
+
+  [*] include dir gen -> avm-gen
+  [+] httpengine make QVariant::typeId being compiled under qt 5.x for deb11
+  [*] CMakeLists: find Qt6 then 5
+  [*] public headers are now properly copied into /usr/libxx/include/avm-gen while preserving directory structure
+
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 30 Dec 2025 14:44:12 +0300
+
 libavm-gen-dev (1.10.10) unstable; urgency=low
 
   [+] ZipUtil::DecompressFileToBa & getArchiveContentsList primary for the QXlsx
