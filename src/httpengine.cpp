@@ -183,7 +183,7 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
     foreach (QVariant item, list)
     {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        if (item.metaType().id() == m_stringPieceMultipartId)
+        if (item.userType() == m_stringPieceMultipartId)
 #else
         if (item.typeId() == m_stringPieceMultipartId)
 #endif
@@ -196,7 +196,7 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
             body->append(textPart);
         }
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        else if (item.metaType().id() == m_filePieceMultipartId)
+        else if (item.userType() == m_filePieceMultipartId)
 #else
         else if (item.typeId() == m_filePieceMultipartId)
 #endif
@@ -214,9 +214,7 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
                     "form-data; name=\"" + part.name + "\"; filename=\"" + Files::getFileName(part.filename) + "\""));
             filePart.setBodyDevice(file);
             body->append(filePart);
-        }
-        else
-        {
+        } else {
             QHttpPart baPart;
             baPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"fieldName\""));
             baPart.setBody(item.toByteArray());
@@ -245,7 +243,7 @@ QByteArray HttpEngine::GetQueryInBA(NetIP ip, int port, const QString &query, co
     url += IP::toString(ip) + ":" + QString::number(port) + "/" + query + "?";
     if (!args.isEmpty())
     {
-        for (QString arg : args)
+        for (const QString &arg : args)
             url += arg + "&";
     }
     url.chop(1);
