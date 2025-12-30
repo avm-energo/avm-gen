@@ -1,4 +1,4 @@
-#include "gen/error.h"
+#include <avm-gen/error.h>
 
 QStringList &operator<<(QStringList &l, const ErrorMsg &obj)
 {

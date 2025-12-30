@@ -1,8 +1,8 @@
 #pragma once
 
-#include <gen/error.h>
-#include <gen/gen_export.h>
-#include <gen/singleton.h>
+#include <avm-gen/error.h>
+#include <avm-gen/gen_export.h>
+#include <avm-gen/singleton.h>
 #include <vector>
 
 class GENLIB_EXPORT ErrorQueue : public QObject, public Singleton<ErrorQueue>

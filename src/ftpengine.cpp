@@ -1,7 +1,7 @@
 #include <QRegularExpressionMatchIterator>
-#include <gen/files.h>
-#include <gen/ftpengine.h>
-#include <gen/stdfunc.h>
+#include <avm-gen/files.h>
+#include <avm-gen/ftpengine.h>
+#include <avm-gen/stdfunc.h>
 
 FtpEngine::FtpEngine(QObject *parent) : QObject(parent)
 {

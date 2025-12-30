@@ -1,4 +1,4 @@
-#include "gen/utils/convertable.h"
+#include <avm-gen/utils/convertable.h>
 
 namespace utils
 {

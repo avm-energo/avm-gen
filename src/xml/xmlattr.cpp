@@ -1,5 +1,5 @@
-#include <gen/xml/xmlattr.h>
-#include <gen/xml/xmlbase.h>
+#include <avm-gen/xml/xmlattr.h>
+#include <avm-gen/xml/xmlbase.h>
 
 XmlAttr::XmlAttr()
 {

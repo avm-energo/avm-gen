@@ -4,10 +4,10 @@
 #include <QStorageInfo>
 #include <QTemporaryFile>
 #include <QtDebug>
-#include <gen/files.h>
-#include <gen/files/ziputil.h>
-#include <gen/settings.h>
-#include <gen/stdfunc.h>
+#include <avm-gen/files.h>
+#include <avm-gen/files/ziputil.h>
+#include <avm-gen/settings.h>
+#include <avm-gen/stdfunc.h>
 
 constexpr auto LOG_MAX_SIZE = 1048576;
 

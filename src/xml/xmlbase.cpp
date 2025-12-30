@@ -1,8 +1,8 @@
 #include <QDir>
 #include <QFile>
 #include <QtDebug>
-#include <gen/settings.h>
-#include <gen/xml/xmlbase.h>
+#include <avm-gen/settings.h>
+#include <avm-gen/xml/xmlbase.h>
 
 QDomDocument XmlBase::s_xmlDocument = QDomDocument();
 

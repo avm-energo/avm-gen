@@ -2,8 +2,8 @@
 
 #include <QObject>
 #include <QString>
-#include <gen/gen_export.h>
-#include <gen/uint24.h>
+#include <avm-gen/gen_export.h>
+#include <avm-gen/uint24.h>
 #include <memory>
 #include <type_traits>
 

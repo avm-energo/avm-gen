@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QByteArray>
-#include <gen/std_ext.h>
+#include <avm-gen/std_ext.h>
 #include <vector>
 
 namespace Files

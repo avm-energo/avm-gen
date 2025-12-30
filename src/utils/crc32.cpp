@@ -1,4 +1,4 @@
-#include "gen/utils/crc32.h"
+#include <avm-gen/utils/crc32.h>
 
 namespace utils
 {

@@ -2,8 +2,8 @@
 
 #include <QDateTime>
 #include <QFile>
-#include <gen/error.h>
-#include <gen/gen_export.h>
+#include <avm-gen/error.h>
+#include <avm-gen/gen_export.h>
 
 namespace Files
 {

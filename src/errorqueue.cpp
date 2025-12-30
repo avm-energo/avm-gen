@@ -1,4 +1,4 @@
-#include "gen/errorqueue.h"
+#include <avm-gen/errorqueue.h>
 
 constexpr auto LOG_BUFFER_SIZE = 1000;
 

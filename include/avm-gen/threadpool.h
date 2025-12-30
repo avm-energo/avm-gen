@@ -3,7 +3,7 @@
 #include <QMap>
 #include <QObject>
 #include <QThread>
-#include <gen/gen_export.h>
+#include <avm-gen/gen_export.h>
 
 /*
  * ThreadPool class to simplify running various work in different threads

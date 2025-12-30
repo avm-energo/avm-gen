@@ -2,7 +2,7 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QtDebug>
-#include <gen/settings.h>
+#include <avm-gen/settings.h>
 
 QString Settings::s_workDir = "";
 QString Settings::s_oldGroup = "";

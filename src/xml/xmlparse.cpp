@@ -1,4 +1,4 @@
-#include <gen/xml/xmlparse.h>
+#include <avm-gen/xml/xmlparse.h>
 
 XmlParse::XmlParse()
 {

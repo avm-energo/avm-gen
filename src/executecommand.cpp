@@ -1,7 +1,6 @@
-#include "gen/executecommand.h"
-
 #include <QDebug>
 #include <QThread>
+#include <avm-gen/executecommand.h>
 
 ExecuteCommandAsync::ExecuteCommandAsync(QObject *parent) : QObject(parent)
 {

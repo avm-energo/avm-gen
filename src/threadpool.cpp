@@ -1,4 +1,4 @@
-#include <gen/threadpool.h>
+#include <avm-gen/threadpool.h>
 
 ThreadPool::ThreadPool(QObject *parent) : QObject { parent }
 {

@@ -3,7 +3,7 @@
 #include <QByteArray>
 #include <QDomDocument>
 #include <QStringList>
-#include <gen/gen_export.h>
+#include <avm-gen/gen_export.h>
 
 class XmlAttr
 {

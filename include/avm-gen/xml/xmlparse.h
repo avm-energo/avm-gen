@@ -3,8 +3,8 @@
 #include <QDomNode>
 #include <QObject>
 #include <QtDebug>
-#include <gen/gen_export.h>
-#include <gen/strings.h>
+#include <avm-gen/gen_export.h>
+#include <avm-gen/strings.h>
 
 class XmlParse
 {

@@ -1,5 +1,3 @@
-#include "gen/stdfunc.h"
-
 #include <QCoreApplication>
 #include <QDataStream>
 #include <QDateTime>
@@ -14,8 +12,9 @@
 #include <QTextStream>
 #include <QThread>
 #include <QTimer>
-#include <gen/error.h>
-#include <gen/pch.h>
+#include <avm-gen/error.h>
+#include <avm-gen/pch.h>
+#include <avm-gen/stdfunc.h>
 
 decltype(StdFunc::s_state) StdFunc::s_state {};
 

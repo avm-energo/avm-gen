@@ -1,6 +1,6 @@
-#include <gen/errorqueue.h>
-#include <gen/messagehandler.h>
-#include <gen/stdfunc.h>
+#include <avm-gen/errorqueue.h>
+#include <avm-gen/messagehandler.h>
+#include <avm-gen/stdfunc.h>
 
 QMutex MessageHandler::m_mutex = QMutex();
 Logger MessageHandler::s_log;

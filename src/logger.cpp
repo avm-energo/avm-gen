@@ -1,8 +1,7 @@
-#include "gen/logger.h"
-
-#include <gen/files.h>
-#include <gen/settings.h>
-#include <gen/stdfunc.h>
+#include <avm-gen/files.h>
+#include <avm-gen/logger.h>
+#include <avm-gen/settings.h>
+#include <avm-gen/stdfunc.h>
 
 static QString s_messageHandlerLogFileName = "logger.log";
 

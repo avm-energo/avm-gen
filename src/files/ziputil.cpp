@@ -1,8 +1,8 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QtDebug>
-#include <gen/files.h>
-#include <gen/files/ziputil.h>
+#include <avm-gen/files.h>
+#include <avm-gen/files/ziputil.h>
 #include <string>
 
 ZipUtil &ZipUtil::getInstance()

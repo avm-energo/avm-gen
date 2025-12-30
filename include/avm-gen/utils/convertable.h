@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QVariant>
-#include <gen/gen_export.h>
-#include <gen/integers.h>
+#include <avm-gen/gen_export.h>
+#include <avm-gen/integers.h>
 
 namespace utils
 {

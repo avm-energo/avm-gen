@@ -1,4 +1,4 @@
-#include <gen/memsettings.h>
+#include <avm-gen/memsettings.h>
 
 MemSettings::MemSettings(QObject *parent) : QObject { parent }
 {

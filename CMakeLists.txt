@@ -31,7 +31,12 @@ else()
     add_compile_definitions(SYSTEM_TYPE=2)
 endif()
 
-include(libzip)
+find_package(avm-libzip QUIET)
+if(${avm-libzip_FOUND})
+  message(STATUS "Found package avm-libzip")
+else()
+  include(libzip)
+endif()
 
 # Setup build type if it's not specified
 if(NOT CMAKE_BUILD_TYPE)
@@ -41,7 +46,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-find_package(QT NAMES Qt5 Qt6)
+find_package(QT NAMES Qt6 Qt5)
 find_package(Qt${QT_VERSION_MAJOR}
   COMPONENTS Core Network Xml REQUIRED
 )
@@ -54,7 +59,6 @@ message(STATUS "QT version is: ${QT_VERSION}")
 # Define target sources
 file(GLOB_RECURSE cpp_sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE h_sources ${PROJECT_SOURCE_DIR}/include/*.h)
-file(GLOB_RECURSE public_headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/include LIST_DIRECTORIES true ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/*.h)
 
 # Library building settings
 if(BUILD_SHARED_LIBS)
@@ -75,7 +79,6 @@ add_library(avm-energo::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES
   VERSION ${PROJECT_VERSION}
   SOVERSION ${PROJECT_VERSION_MAJOR}
-  PUBLIC_HEADER "${public_headers}"
 )
 
 # if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
@@ -126,8 +129,14 @@ install(TARGETS ${PROJECT_NAME}
         EXPORT ${PROJECT_NAME}_Targets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+# --- Copying public headers with the directory structure ---
+install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" # source directory
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # target directory (source included ${PROJECT_NAME} already
+        FILES_MATCHING # install only matched files
+        PATTERN "*.h" # select header files
+)
 
 # create version file for cmake project
 write_basic_package_version_file(${PROJECT_NAME}ConfigVersion.cmake

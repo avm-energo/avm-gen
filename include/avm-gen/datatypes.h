@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QVariant>
-#include <gen/uint24.h>
+#include <avm-gen/uint24.h>
 
 #ifdef __linux__
 #include <ctime>

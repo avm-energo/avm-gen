@@ -1,7 +1,6 @@
-#include "gen/timefunc.h"
-
 #include <QDateTime>
-#include <gen/settings.h>
+#include <avm-gen/settings.h>
+#include <avm-gen/timefunc.h>
 
 TimeFunc::TimeFunc()
 {

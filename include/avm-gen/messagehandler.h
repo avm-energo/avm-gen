@@ -11,8 +11,8 @@
 #pragma once
 
 #include <QObject>
-#include <gen/gen_export.h>
-#include <gen/logger.h>
+#include <avm-gen/gen_export.h>
+#include <avm-gen/logger.h>
 
 class GENLIB_EXPORT MessageHandler
 {

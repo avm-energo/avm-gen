@@ -6,8 +6,8 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QUrl>
-#include <gen/error.h>
-#include <gen/netip.h>
+#include <avm-gen/error.h>
+#include <avm-gen/netip.h>
 
 class GENLIB_EXPORT HttpEngine : public QObject
 {

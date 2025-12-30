@@ -1,9 +1,9 @@
 #include <QFileInfo>
 #include <QUrl>
 #include <QVariant>
-#include <gen/files.h>
-#include <gen/httpengine.h>
-#include <gen/stdfunc.h>
+#include <avm-gen/files.h>
+#include <avm-gen/httpengine.h>
+#include <avm-gen/stdfunc.h>
 
 HttpEngine::HttpEngine(QObject *parent) : QObject(parent)
 {
@@ -182,7 +182,11 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
     QHttpMultiPart *body = new QHttpMultiPart(QHttpMultiPart::FormDataType);
     foreach (QVariant item, list)
     {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        if (item.metaType().id() == m_stringPieceMultipartId)
+#else
         if (item.typeId() == m_stringPieceMultipartId)
+#endif
         {
             StringPieceMultipart part = item.value<HttpEngine::StringPieceMultipart>();
             QHttpPart textPart;
@@ -191,7 +195,11 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
             textPart.setBody(part.data.toUtf8());
             body->append(textPart);
         }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        else if (item.metaType().id() == m_filePieceMultipartId)
+#else
         else if (item.typeId() == m_filePieceMultipartId)
+#endif
         {
             FilePieceMultipart part = item.value<HttpEngine::FilePieceMultipart>();
             QFile *file = new QFile(part.filename);

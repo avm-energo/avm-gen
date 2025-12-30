@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <gen/gen_export.h>
-#include <gen/integers.h>
+#include <avm-gen/gen_export.h>
+#include <avm-gen/integers.h>
 
 constexpr unsigned int UINT24_MAX = 16777215;
 

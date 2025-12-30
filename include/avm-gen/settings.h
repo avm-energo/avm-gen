@@ -3,7 +3,7 @@
 #include <QMap>
 #include <QSettings>
 #include <QString>
-#include <gen/utils/convertable.h>
+#include <avm-gen/utils/convertable.h>
 
 class GENLIB_EXPORT Settings
 {

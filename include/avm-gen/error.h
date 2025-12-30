@@ -4,7 +4,7 @@
 #include <QMap>
 #include <QObject>
 #include <QString>
-#include <gen/gen_export.h>
+#include <avm-gen/gen_export.h>
 
 /// \brief Namespace for critical message logging
 namespace Error

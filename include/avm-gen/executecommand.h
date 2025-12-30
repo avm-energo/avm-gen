@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QProcess>
-#include <gen/gen_export.h>
+#include <avm-gen/gen_export.h>
 
 class GENLIB_EXPORT ExecuteCommandAsync : public QObject
 {

@@ -1,7 +1,7 @@
 #include <QFile>
 #include <QString>
-#include <gen/error.h>
-#include <gen/gen_export.h>
+#include <avm-gen/error.h>
+#include <avm-gen/gen_export.h>
 #include <zip.h>
 
 class GENLIB_EXPORT ZipUtil

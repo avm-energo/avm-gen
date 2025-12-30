@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <array>
-#include <gen/gen_export.h>
+#include <avm-gen/gen_export.h>
 
 static constexpr auto NET_IP_SIZE = 4; ///< число октетов IP адресе
 using NetIP = std::array<quint8, NET_IP_SIZE>;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QByteArray>
-#include <gen/gen_export.h>
+#include <avm-gen/gen_export.h>
 
 namespace utils
 {

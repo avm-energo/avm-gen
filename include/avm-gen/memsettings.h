@@ -1,7 +1,7 @@
 #pragma once
 #include <QMap>
 #include <QObject>
-#include <gen/utils/convertable.h>
+#include <avm-gen/utils/convertable.h>
 
 class GENLIB_EXPORT MemSettings : public QObject
 {

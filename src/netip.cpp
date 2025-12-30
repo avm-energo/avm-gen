@@ -1,4 +1,4 @@
-#include <gen/netip.h>
+#include <avm-gen/netip.h>
 
 const NetIP IP::DefIP()
 {

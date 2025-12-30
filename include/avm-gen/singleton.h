@@ -1,6 +1,6 @@
 #pragma once
 
-#include <gen/gen_export.h>
+#include <avm-gen/gen_export.h>
 
 /*! \brief Basic class for singleton pattern designed classes.
  *

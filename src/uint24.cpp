@@ -1,4 +1,4 @@
-#include "gen/uint24.h"
+#include <avm-gen/uint24.h>
 
 uint24::uint24() noexcept : value { 0, 0, 0 }
 {
