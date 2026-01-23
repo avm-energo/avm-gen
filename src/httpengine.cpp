@@ -24,6 +24,34 @@ HttpEngine::~HttpEngine()
 {
 }
 
+QByteArray HttpEngine::GetQueryInBA(const QString &server, const QString &query, const QStringList &args)
+{
+    QString url = server + "/" + query + "?";
+    if (!args.isEmpty())
+    {
+        for (const QString &arg : args)
+            url += arg + "&";
+    }
+    url.chop(1);
+    const QString urlSpec = url.trimmed(); // removes whitespaces
+    const QUrl newUrl = QUrl::fromUserInput(urlSpec);
+    qDebug() << "Get query: " << urlSpec;
+    if (!newUrl.isValid())
+    {
+        qWarning() << "Invalid url";
+        return QByteArray();
+    }
+    m_httpData.clear();
+    m_httpRequestAborted = false;
+    ReqBusy = true;
+    Request(newUrl);
+    while ((ReqBusy) && (!m_httpRequestAborted))
+        StdFunc::Wait();
+    if (m_httpRequestAborted)
+        return QByteArray();
+    return m_httpData;
+}
+
 void HttpEngine::Request(const QUrl &url)
 {
     m_timeoutTimer->start();
@@ -159,12 +187,17 @@ void HttpEngine::HttpError(QNetworkReply::NetworkError code)
 
 QJsonDocument HttpEngine::GetQuery(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
 {
-    return QJsonDocument::fromJson(GetQueryInBA(ip, port, query, args, isSSL));
+    return QJsonDocument::fromJson(GetQueryInBAByIP(ip, port, query, args, isSSL));
+}
+
+QString HttpEngine::GetFile(const QString &server, const QString &query, const QStringList &args)
+{
+    return Files::SaveToTempFile(GetQueryInBA(server, query, args));
 }
 
 QString HttpEngine::GetFile(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
 {
-    return Files::SaveToTempFile(GetQueryInBA(ip, port, query, args, isSSL));
+    return Files::SaveToTempFile(GetQueryInBAByIP(ip, port, query, args, isSSL));
 }
 
 QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, const QList<QVariant> &list, bool isSSL)
@@ -214,7 +247,9 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
                     "form-data; name=\"" + part.name + "\"; filename=\"" + Files::getFileName(part.filename) + "\""));
             filePart.setBodyDevice(file);
             body->append(filePart);
-        } else {
+        }
+        else
+        {
             QHttpPart baPart;
             baPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"fieldName\""));
             baPart.setBody(item.toByteArray());
@@ -237,31 +272,8 @@ void HttpEngine::setTimeoutTimer(int msec)
     m_timeoutTimer->setInterval(msec);
 }
 
-QByteArray HttpEngine::GetQueryInBA(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
+QByteArray HttpEngine::GetQueryInBAByIP(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
 {
-    QString url = (isSSL) ? "https://" : "http://";
-    url += IP::toString(ip) + ":" + QString::number(port) + "/" + query + "?";
-    if (!args.isEmpty())
-    {
-        for (const QString &arg : args)
-            url += arg + "&";
-    }
-    url.chop(1);
-    const QString urlSpec = url.trimmed(); // removes whitespaces
-    const QUrl newUrl = QUrl::fromUserInput(urlSpec);
-    qDebug() << "Get query: " << urlSpec;
-    if (!newUrl.isValid())
-    {
-        qWarning() << "Invalid url";
-        return QByteArray();
-    }
-    m_httpData.clear();
-    m_httpRequestAborted = false;
-    ReqBusy = true;
-    Request(newUrl);
-    while ((ReqBusy) && (!m_httpRequestAborted))
-        StdFunc::Wait();
-    if (m_httpRequestAborted)
-        return QByteArray();
-    return m_httpData;
+    QString url = (isSSL) ? "https://" : "http://" + IP::toString(ip) + ":" + QString::number(port);
+    return GetQueryInBA(url, query, args);
 }

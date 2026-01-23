@@ -31,13 +31,21 @@ public:
 
     /// \brief Получить результаты запроса
     /// \details Отправить GET-запрос на HTTP-сервер и получить результаты в JSON массиве
+    /// \param server - имя сервера в виде "https://www.example.com:80"
+    /// \param query - строка запроса (query из примера https://ip.com/query?id=12&param=34
+    /// \param args - строки дополнительных параметров (id=12 и param=34 из предыдущего примера)
+    /// \return массив данных (QByteArray)
+    QByteArray GetQueryInBA(const QString &server, const QString &query = "", const QStringList &args = QStringList());
+
+    /// \brief Получить результаты запроса
+    /// \details Отправить GET-запрос на HTTP-сервер и получить результаты в JSON массиве
     /// \param ip - ip-адрес сервера
     /// \param port - порт http-сервера
     /// \param query - строка запроса (query из примера https://ip.com/query?id=12&param=34
     /// \param args - строки дополнительных параметров (id=12 и param=34 из предыдущего примера)
     /// \param isSSL - флаг, означающий запрос https (isSSL=true) или http (isSSL=false)
     /// \return массив данных (QByteArray)
-    QByteArray GetQueryInBA(
+    QByteArray GetQueryInBAByIP(
         NetIP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
     /// \brief Получить результаты запроса
     /// \details Отправить GET-запрос на HTTP-сервер и получить результаты в JSON массиве
@@ -49,6 +57,15 @@ public:
     /// \return JSON документ
     QJsonDocument GetQuery(
         NetIP ip, int port = 80, const QString &query = "", const QStringList &args = QStringList(), bool isSSL = true);
+
+    /// \brief Получить файл
+    /// \details Отправить GET-запрос на HTTP-сервер и получить результат в виде файла
+    /// \param server - имя сервера
+    /// \param query - строка запроса (query из примера https://ip.com/query?id=12&param=34)
+    /// \param args - строки дополнительных параметров (id=12 и param=34 из предыдущего примера)
+    /// \return имя временного файла, полученного от сервера
+    QString GetFile(const QString &server, const QString &query = "", const QStringList &args = QStringList());
+
     /// \brief Получить файл
     /// \details Отправить GET-запрос на HTTP-сервер и получить результат в виде файла
     /// \param ip - ip-адрес сервера
