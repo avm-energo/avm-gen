@@ -11,7 +11,7 @@ public:
 
     void set(const QString &key, const QVariant &value);
     utils::Convertable get(const QString &key) const;
-    template <typename T> T get(const QString &name)
+    template <typename T> T get(const QString &name) const
     {
         return static_cast<T>(get(name));
     }
