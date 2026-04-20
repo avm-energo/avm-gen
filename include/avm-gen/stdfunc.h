@@ -55,21 +55,71 @@ public:
 
     StdFunc() = default;
 
+    /*! \brief Initialization function for static class fields.
+     *  \details Initialize next fields by values: system home directory, organization, device IP, etc...
+     */
     static void Init();
+
+    /// \brief Converts a version from quint32 datatype to string view.
     static QString VerToStr(quint32);
+
+    /// \brief Converts a version from string view to quint32 datatype.
     static quint32 StrToVer(const QString &str);
+
+    /*! \brief Checks that the number is in the specified interval.
+     *  \param var Checked number.
+     *  \param base,tolerance Limits of specified interval.
+     */
     static bool FloatIsWithinLimits(double var, double base, double tolerance);
-    static float ToFloat(const QString &text, bool *ok = nullptr);
+
+    /// \brief Converts a value from string view to float point datatype.
+    static float ToFloat(const QString &text, bool &ok);
+
+    /*! \brief Converts \a value to a human-readable string.
+     *  \param value      Float value to format.
+     *  \param precision  Number of digits after the decimal point.
+     *  \param exp        If true, uses scientific ('e') notation; otherwise fixed ('f').
+     *  \return Formatted string, or "***" when value is infinite / exceeds MAXFLOAT.
+     */
     static QString toString(float value, int precision = 5, bool exp = false);
 
+    /*! \brief Returns the name of the OS user running this process.
+     *  \details Runs the platform "whoami" command synchronously.
+     *  \warning Spins on processEvents() until the process exits; avoid calling
+     *           from a thread that does not have an event loop.
+     */
     static QString WhoAmI();
+
+    /// \brief Sets cancel s_state when enabled.
     static void Cancel();
+
+    /// \brief Turns off cancel s_state.
     static void ClearCancel();
+
+    /// \brief Returns cancel s_state.
     static bool IsCancelled();
+
+    /// \brief Disallows to set cancel s_state.
     static void SetCancelDisabled();
+
+    /// \brief Allows to set cancel s_state.
     static void SetCancelEnabled();
+
+    /*! \brief Returns the 1-based position of the first set bit (LSB = position 1).
+     *  \details Scans from bit 0 upward and returns the position of the first '1'.
+     *  \param dword 32-bit bitstring to examine.
+     *  \return 1-based index of the first set bit, or 0 if \a dword is 0.
+     */
     static int IndexByBit(quint32 dword);
+
+    /*! \brief Returns the 32bit bitstring by index position.
+     *  \details Returns 32bit bitstring with '1' in index position.
+     *  \param index Position of '1' from LSB.
+     *  \return Example: 0 => 0, 1 => 1, 2 => 2, 3 => 4, ...
+     */
     static quint32 BitByIndex(int idx);
+
+    /// \brief Puts the thread to sleep for a given time in ms.
     static void Wait(int ms = MAINSLEEP);
 
     static inline int goldenRatio(int value)
@@ -83,9 +133,25 @@ public:
         return defaultRatio + multiplier;
     }
 
+    /*! \brief Ping IP address, return IP address if host is alive or return 0 if host is dead
+     *  \details Platform dependent ping function, ping IP address through cmdline utility,
+     *  parse cmd output. If output contains TTL host is alive else host is dead.
+     *  \return IP address if host is alive, otherwise returns 0.
+     */
     static quint32 Ping(quint32 addr);
+
+    /*! \brief Checks port and IPv4 address for connection.
+     *  \details Checks if the connection can be made with given IP address and port.
+     *  \param ip4Addr[in] IPv4 host address.
+     *  \param port[in] Connection port.
+     *  \return IPv4 address if connection can be made, 0 otherwise.
+     */
     static quint32 CheckPort(quint32 ip4Addr, quint16 port);
 
+    /*! \brief Removes specified substring from specified string.
+     *  \param str[in, out] The string from which the substring will be removed.
+     *  \param substr[i] The substring that will be removed from string.
+     */
     static void RemoveSubstr(std::string &str, std::string &substr);
 
     /*! \brief Template function for joining items into QList

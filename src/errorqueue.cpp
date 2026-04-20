@@ -16,6 +16,7 @@ const std::vector<ErrorMsg> *ErrorQueue::errMsgPool()
 ErrorMsg ErrorQueue::popError()
 {
     ErrorMsg error = m_errMsgPool.front();
+    m_errMsgPool.erase(m_errMsgPool.begin());
     return error;
 }
 

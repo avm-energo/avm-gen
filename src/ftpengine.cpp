@@ -9,13 +9,7 @@ FtpEngine::FtpEngine(QObject *parent) : QObject(parent)
     m_dataSocket = new QTcpSocket(this);
 }
 
-FtpEngine::~FtpEngine()
-{
-    if (m_controlSocket != nullptr)
-        delete m_controlSocket;
-    if (m_dataSocket != nullptr)
-        delete m_dataSocket;
-}
+FtpEngine::~FtpEngine() = default;
 
 Error::Msg FtpEngine::connectToHost(NetIP ip, quint16 port, const QString &user, const QString &password)
 {
@@ -61,8 +55,7 @@ Error::Msg FtpEngine::list(QList<QString> &fileList)
             if (m_dataSocket->waitForReadyRead())
             {
                 ba = m_dataSocket->readAll();
-                QRegularExpression re;
-                re.setPattern("((.+?)(?=\\r\\n))");
+                static const QRegularExpression re("((.+?)(?=\\r\\n))");
                 QRegularExpressionMatchIterator i = re.globalMatch(ba);
                 while (i.hasNext())
                     fileList.append(i.next().captured(1));
@@ -143,7 +136,7 @@ void FtpEngine::DownloadProgress(quint64 bytesreceived, quint64 bytesoverall)
 void FtpEngine::sendCommand(const QString &command)
 {
     QByteArray ba = command.toUtf8();
-    m_controlSocket->write(ba.data());
+    m_controlSocket->write(ba); // use QByteArray overload, not char*
     m_controlSocket->waitForBytesWritten();
 }
 
@@ -159,17 +152,15 @@ Error::Msg FtpEngine::pasvMode()
     else
         return Error::Msg::GeneralError;
 
-    // get IP & Port from bytearray
-    QRegularExpression re;
-    re.setPattern("[0-9]+");
+    // Parse the six numbers from the 227 response: "227 Entering Passive Mode (h1,h2,h3,h4,p1,p2)"
+    static const QRegularExpression re("[0-9]+");
     QRegularExpressionMatchIterator i = re.globalMatch(ba);
     QStringList list;
     if (i.hasNext())
-        i.next(); // skip 227 code
+        i.next(); // skip the leading 227 status code
     while (i.hasNext())
-    {
         list.append(i.next().captured(0));
-    }
+
     if (list.size() > 5)
     {
         m_dataSocket->close();
@@ -179,6 +170,9 @@ Error::Msg FtpEngine::pasvMode()
             return Error::Msg::NoError;
     }
     else
-        return Error::Msg::NoError;
+    {
+        qWarning() << "PASV response parsing failed: not enough address components";
+        return Error::Msg::GeneralError;
+    }
     return Error::Msg::GeneralError;
 }

@@ -18,14 +18,10 @@
 
 decltype(StdFunc::s_state) StdFunc::s_state {};
 
-/*! \brief Initialization function for static class fields.
- *  \details Initialize next fields by values: system home directory, organization, device IP, etc...
- */
 void StdFunc::Init()
 {
 }
 
-/// \brief Converts a version from quint32 datatype to string view.
 QString StdFunc::VerToStr(quint32 num)
 {
     int mv = (num & 0xFF000000) >> 24;
@@ -36,7 +32,6 @@ QString StdFunc::VerToStr(quint32 num)
     return tmpString;
 }
 
-/// \brief Converts a version from string view to quint32 datatype.
 quint32 StdFunc::StrToVer(const QString &str)
 {
     auto dotPos = str.indexOf('.');
@@ -48,21 +43,15 @@ quint32 StdFunc::StrToVer(const QString &str)
     return (mv | lv | sv);
 }
 
-/// \brief Converts a value from string view to float point datatype.
-float StdFunc::ToFloat(const QString &text, bool *ok)
+float StdFunc::ToFloat(const QString &text, bool &ok)
 {
-    bool floatok;
     float tmpf;
-    tmpf = text.toFloat(&floatok);
-    if (!floatok)
+    tmpf = text.toFloat(&ok);
+    if (!ok)
     {
         qCritical() << "Значение " << text << " не может быть переведено во float";
-        if (ok != 0)
-            *ok = false;
         return 0;
     }
-    if (ok != 0)
-        *ok = true;
     return tmpf;
 }
 
@@ -70,16 +59,12 @@ QString StdFunc::toString(float value, int precision, bool exp)
 {
     if (value >= MAXFLOAT || value <= -MAXFLOAT)
         return "***";
-    else if (exp == true)
+    else if (exp)
         return QString::number(value, 'e', precision);
     else
         return QString::number(value, 'f', precision);
 }
 
-/*! \brief Checks that the number is in the specified interval.
- *  \param var Checked number.
- *  \param base,tolerance Limits of specified interval.
- */
 bool StdFunc::FloatIsWithinLimits(double var, double base, double tolerance)
 {
     auto tmpf = fabs(var - base);
@@ -100,55 +85,40 @@ QString StdFunc::WhoAmI()
     return process.readAll();
 }
 
-/// \brief Sets cancel s_state when enabled.
 void StdFunc::Cancel()
 {
     if (s_state.cancelEnabled)
         s_state.cancelled = true;
 }
 
-/// \brief Turns off cancel s_state.
 void StdFunc::ClearCancel()
 {
     s_state.cancelled = false;
 }
 
-/// \brief Returns cancel s_state.
 bool StdFunc::IsCancelled()
 {
     return s_state.cancelled;
 }
 
-/// \brief Disallows to set cancel s_state.
 void StdFunc::SetCancelDisabled()
 {
     s_state.cancelEnabled = false;
 }
 
-/// \brief Allows to set cancel s_state.
 void StdFunc::SetCancelEnabled()
 {
     s_state.cancelEnabled = true;
 }
 
-/*! \brief Returns the position of first bit set.
- *  \details Returns position of the first '1' starting from LSB.
- *  \param dword 32bit bitstring.
- */
 int StdFunc::IndexByBit(quint32 dword)
 {
-    quint32 bit = 0x00000001;
     for (int i = 0; i < 32; ++i)
-        if (dword & bit)
+        if (dword & (quint32(1) << i))
             return (i + 1);
     return 0;
 }
 
-/*! \brief Returns the 32bit bitstring by index position.
- *  \details Returns 32bit bitstring with '1' in index position.
- *  \param index Position of '1' from LSB.
- *  \return Example: 0 => 0, 1 => 1, 2 => 2, 3 => 4, ...
- */
 quint32 StdFunc::BitByIndex(int index)
 {
     quint32 bit = 0x00000001;
@@ -157,7 +127,6 @@ quint32 StdFunc::BitByIndex(int index)
     return (bit << (index - 1));
 }
 
-/// \brief Puts the thread to sleep for a given time in ms.
 void StdFunc::Wait(int ms)
 {
     QTimer timer;
@@ -166,23 +135,8 @@ void StdFunc::Wait(int ms)
     QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
     timer.start(ms);
     loop.exec();
-
-    /*
-    QElapsedTimer tmr;
-    tmr.start();
-    while (tmr.elapsed() < ms)
-    {
-        QCoreApplication::processEvents(QEventLoop::AllEvents);
-        QThread::msleep(MAINSLEEP);
-    }
-    */
 }
 
-/*! \brief Ping IP address, return IP address if host is alive or return 0 if host is dead
- *  \details Platform dependent ping function, ping IP address through cmdline utility,
- *  parse cmd output. If output contains TTL host is alive else host is dead.
- *  \return IP address if host is alive, otherwise returns 0.
- */
 quint32 StdFunc::Ping(quint32 addr)
 {
     QString exec = "ping";
@@ -215,12 +169,6 @@ quint32 StdFunc::Ping(quint32 addr)
     return 0;
 }
 
-/*! \brief Checks port and IPv4 address for connection.
- *  \details Checks if the connection can be made with given IP address and port.
- *  \param ip4Addr[in] IPv4 host address.
- *  \param port[in] Connection port.
- *  \return IPv4 address if connection can be made, 0 otherwise.
- */
 quint32 StdFunc::CheckPort(quint32 ip4Addr, quint16 port)
 {
     QHostAddress host(ip4Addr);
@@ -235,8 +183,6 @@ quint32 StdFunc::CheckPort(quint32 ip4Addr, quint16 port)
         ip4Addr = 0;
     });
     timer->start();
-    // qDebug() << "Timer started";
-    Q_ASSERT(sock != nullptr);
     sock->connectToHost(host, port);
     loop->exec(QEventLoop::ExcludeUserInputEvents);
     sock->disconnect();
@@ -249,10 +195,6 @@ quint32 StdFunc::CheckPort(quint32 ip4Addr, quint16 port)
     return ip4Addr;
 }
 
-/*! \brief Removes specified substring from specified string.
- *  \param str[in, out] The string from which the substring will be removed.
- *  \param substr[i] The substring that will be removed from string.
- */
 void StdFunc::RemoveSubstr(std::string &str, std::string &substr)
 {
     std::string::size_type n = substr.length();

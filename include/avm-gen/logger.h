@@ -39,14 +39,48 @@ public:
         const char *prefix;
     };
 
+    /// \brief Constructs Logger with default WARN log level and "logger.log" filename.
     Logger();
 
+    /*! \brief Writes a message to the log file if its level passes the current threshold.
+     *  \param type  Message type (Debug, Info, Warning, Critical, Fatal).
+     *  \param msg   The text to write.
+     *  \details Thread-safe via QMutexLocker. After writing the line the function
+     *           calls Files::checkNGzip() to compress and rotate the log when it
+     *           exceeds the size limit.
+     */
     void writeLog(MessageTypes type, const QString &msg);
+
+    /*! \brief Opens the log file, writes a start banner, and stores the path.
+     *  \param filename  Base filename (without directory); placed under Settings::logDir().
+     *  \details Called once at application startup to mark a new session in the log.
+     *           Thread-safe via QMutexLocker.
+     */
     void writeStart(const QString &filename);
+
+    /// \brief Sets the minimum log level by enum value.
     void setLogLevel(LogLevels level);
+
+    /*! \brief Sets the minimum log level by string name.
+     *  \param level One of: "Debug", "Info", "Warn", "Error", "Fatal".
+     *  \details Falls back to LOGLEVEL_DEBUG (0) if the string is not recognised;
+     *           prefer the enum overload when the value is known at compile time.
+     */
     void setLogLevel(const QString &level);
+
+    /*! \brief Converts a Qt message type to the library's MessageTypes enum.
+     *  \param type  QtMsgType value produced by Qt's message system.
+     *  \return Corresponding Logger::MessageTypes value.
+     */
     static LogLevels qtMessageTypeToLoglevel(QtMsgType type);
+
+    /*! \brief Converts a Qt message type to the library's LogLevels enum.
+     *  \param type  QtMsgType value produced by Qt's message system.
+     *  \return Corresponding Logger::LogLevels value.
+     */
     static MessageTypes qtMessageTypeToMessageType(QtMsgType type);
+
+    /// \brief Returns the list of valid log-level name strings accepted by setLogLevel(QString).
     static QStringList logLevelsList();
 
     static const QMap<QString, Logger::LogLevels> s_logLevelsMap;

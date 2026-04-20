@@ -5,7 +5,6 @@
 #include <avm-gen/settings.h>
 
 QString Settings::s_workDir = "";
-QString Settings::s_oldGroup = "";
 bool Settings::s_settingsPathUpdated = false;
 
 #ifdef Q_OS_WINDOWS
@@ -48,7 +47,6 @@ utils::Convertable Settings::get(const QString &key, const QVariant &defValue)
         qDebug() << "Application name & organization name was not set!";
         return utils::Convertable { defValue };
     }
-    utils::Convertable Value = utils::Convertable { instance().conf.value(key, defValue) };
     return utils::Convertable { instance().conf.value(key, defValue) };
 }
 
@@ -131,7 +129,7 @@ void Settings::initialize(const QString &appName, const QString &orgName, const 
     {
         QDir dir(dirstr);
         if (!dir.exists())
-            dir.mkdir(dirstr);
+            dir.mkpath(dirstr);
     }
     s_workDir = QString(get("workDir", dataDir()));
 }

@@ -1,3 +1,4 @@
+#include <QFileInfo>
 #include <avm-gen/errorqueue.h>
 #include <avm-gen/messagehandler.h>
 #include <avm-gen/stdfunc.h>
@@ -11,8 +12,7 @@ void MessageHandler::messageHandlerWithErrorQueue(QtMsgType type, const QMessage
     QMutexLocker locker(&m_mutex);
     if (Logger::qtMessageTypeToLoglevel(type) <= s_queueLevel)
     {
-        QStringList buffer = QString(context.file).split("\\");
-        QString sourceFile = buffer.isEmpty() ? "" : buffer.takeLast();
+        const QString sourceFile = QFileInfo(QString(context.file)).fileName();
 
         std::string function = context.function ? context.function : "";
         std::string rubbish(" __cdecl");

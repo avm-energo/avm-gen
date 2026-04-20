@@ -18,10 +18,29 @@ class GENLIB_EXPORT MessageHandler
 {
 public:
     MessageHandler() { };
+
+    /*! \brief Minimal Qt message handler that only writes to the log file (no ErrorQueue).
+     *  \details Thread-safe via m_mutex.
+     *           Install with: qInstallMessageHandler(MessageHandler::messageHandler).
+     */
     static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
+    /*! \brief Qt message handler that logs to file AND pushes qualifying messages to ErrorQueue.
+     *  \details Strips MSVC "__cdecl" decorations from the function name.  Thread-safe via
+     *           m_mutex.  Install with: qInstallMessageHandler(MessageHandler::messageHandlerWithErrorQueue).
+     */
     static void messageHandlerWithErrorQueue(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
+    /*! \brief Opens the log file and writes the start banner.
+     *  \param filename  Base filename (without directory); forwarded to Logger::writeStart().
+     *  \details Call this once at application startup after initialising Settings.
+     */
     static void setMessageHandlerFilename(const QString &filename);
+
+    /// \brief Sets the minimum log level for file output.
     static void setLogLevel(Logger::LogLevels level);
+
+    /// \brief Sets the minimum log level at which messages are also pushed to ErrorQueue.
     static void setQueueLevel(Logger::LogLevels level);
 
 private:

@@ -23,6 +23,8 @@ Logger::Logger()
     m_logLevel = Logger::LogLevels::LOGLEVEL_WARN;
     m_logFilename = "logger.log";
     m_mutex = new QMutex;
+    // NOTE: m_mutex is heap-allocated to keep ABI stability across shared-library builds,
+    // but consider making it a direct member (QMutex m_mutex) in the next ABI break.
 }
 
 void Logger::writeLog(Logger::MessageTypes type, const QString &msg)
@@ -71,23 +73,30 @@ void Logger::setLogLevel(LogLevels level)
 
 void Logger::setLogLevel(const QString &level)
 {
+    if (!s_logLevelsMap.contains(level))
+    {
+        qWarning() << "Unknown log level string:" << level << "— keeping current level";
+        return;
+    }
     m_logLevel = s_logLevelsMap.value(level);
 }
 
 Logger::MessageTypes Logger::qtMessageTypeToMessageType(QtMsgType type)
 {
-    const QMap<QtMsgType, Logger::MessageTypes> c_msgTypesTranslateMap { { QtDebugMsg, Logger::Debug },
+    // Static map: constructed once, looked up on every call.
+    static const QMap<QtMsgType, Logger::MessageTypes> c_map { { QtDebugMsg, Logger::Debug },
         { QtInfoMsg, Logger::Info }, { QtWarningMsg, Logger::Warning }, { QtCriticalMsg, Logger::Critical },
         { QtFatalMsg, Logger::Fatal } };
-    return c_msgTypesTranslateMap[type];
+    return c_map.value(type, Logger::Info);
 }
 
 Logger::LogLevels Logger::qtMessageTypeToLoglevel(QtMsgType type)
 {
-    const QMap<QtMsgType, Logger::LogLevels> c_msgTypesTranslateMap { { QtDebugMsg, LOGLEVEL_DEBUG },
+    // Static map: constructed once, looked up on every call.
+    static const QMap<QtMsgType, Logger::LogLevels> c_map { { QtDebugMsg, LOGLEVEL_DEBUG },
         { QtInfoMsg, LOGLEVEL_INFO }, { QtWarningMsg, LOGLEVEL_WARN }, { QtCriticalMsg, LOGLEVEL_CRIT },
         { QtFatalMsg, LOGLEVEL_FATAL } };
-    return c_msgTypesTranslateMap[type];
+    return c_map.value(type, LOGLEVEL_INFO);
 }
 
 QStringList Logger::logLevelsList()
@@ -95,7 +104,7 @@ QStringList Logger::logLevelsList()
     return s_logLevelsMap.keys();
 }
 
-/// Категории мы сейчас не используем, задел на будущее
+/// The categories we've not used yet, the reserve for the future
 Q_LOGGING_CATEGORY(logDebug, "Debug")
 Q_LOGGING_CATEGORY(logInfo, "Info")
 Q_LOGGING_CATEGORY(logWarning, "Warning")

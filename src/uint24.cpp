@@ -1,4 +1,5 @@
 #include <avm-gen/uint24.h>
+#include <cstring> // memcpy
 
 uint24::uint24() noexcept : value { 0, 0, 0 }
 {
@@ -24,24 +25,18 @@ uint24 &uint24::operator=(const uint24 &input) noexcept
 
 uint24 &uint24::operator=(const u32 input) noexcept
 {
-    value[0] = ((unsigned char *)&input)[0];
-    value[1] = ((unsigned char *)&input)[1];
-    value[2] = ((unsigned char *)&input)[2];
+    memcpy(value, &input, 3);
     return *this;
 }
 
 uint24::operator u32() const noexcept
 {
-    /* Sign extend negative quantities */
-    if (value[2] & 0x80)
-        return (0xff << 24) | (value[2] << 16) | (value[1] << 8) | value[0];
-    else
-        return (value[2] << 16) | (value[1] << 8) | value[0];
+    return (static_cast<u32>(value[2]) << 16) | (static_cast<u32>(value[1]) << 8) | static_cast<u32>(value[0]);
 }
 
 uint24::operator u16() const noexcept
 {
-    return (value[1] << 8) | value[0];
+    return static_cast<u16>((value[1] << 8) | value[0]);
 }
 
 uint24 uint24::operator+(const uint24 &val) const noexcept

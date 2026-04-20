@@ -14,7 +14,7 @@ HttpEngine::HttpEngine(QObject *parent) : QObject(parent)
     connect(m_networkManager, &QNetworkAccessManager::sslErrors, this, &HttpEngine::SSLErrors);
 #endif
     m_httpRequestAborted = false;
-    m_timeoutTimer = new QTimer;
+    m_timeoutTimer = new QTimer(this);
     m_timeoutTimer->setInterval(10000);
     m_timeoutTimer->setSingleShot(true);
     connect(m_timeoutTimer, &QTimer::timeout, this, &HttpEngine::CancelDownload);
@@ -54,6 +54,7 @@ QByteArray HttpEngine::GetQueryInBA(const QString &server, const QString &query,
 
 void HttpEngine::Request(const QUrl &url)
 {
+    m_url = url;
     m_timeoutTimer->start();
     QNetworkReply *reply = m_networkManager->get(QNetworkRequest(url));
     connect(reply, &QNetworkReply::downloadProgress, this, &HttpEngine::DownloadProgress);
@@ -137,10 +138,6 @@ void HttpEngine::HttpReadyRead()
         ReqBusy = false;
         return;
     }
-    // this slot gets called every time the QNetworkReply has new data.
-    // We read all of its new data and write it into the file.
-    // That way we use less RAM than when reading it at the finished()
-    // signal of the QNetworkReply
     m_httpData.append(reply->readAll());
 }
 
@@ -148,7 +145,7 @@ void HttpEngine::HttpReadyRead()
 void HttpEngine::SSLErrors(QNetworkReply *, const QList<QSslError> &errors)
 {
     QString errorString;
-    foreach (const QSslError &error, errors)
+    for (const QSslError &error : errors)
     {
         if (!errorString.isEmpty())
             errorString += '\n';
@@ -202,8 +199,8 @@ QString HttpEngine::GetFile(NetIP ip, int port, const QString &query, const QStr
 
 QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, const QList<QVariant> &list, bool isSSL)
 {
-    QString url = (isSSL) ? "https://" : "http://";
-    url += IP::toString(ip) + ":" + QString::number(port) + "/" + query;
+    const QString scheme = isSSL ? QStringLiteral("https://") : QStringLiteral("http://");
+    const QString url = scheme + IP::toString(ip) + ":" + QString::number(port) + "/" + query;
     const QString urlSpec = url.trimmed(); // removes whitespaces
     const QUrl newUrl = QUrl::fromUserInput(urlSpec);
     qDebug() << "Post query: " << urlSpec;
@@ -213,7 +210,7 @@ QJsonDocument HttpEngine::PostQuery(NetIP ip, int port, const QString &query, co
         return QJsonDocument();
     }
     QHttpMultiPart *body = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-    foreach (QVariant item, list)
+    for (const QVariant &item : list)
     {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         if (item.userType() == m_stringPieceMultipartId)
@@ -274,6 +271,7 @@ void HttpEngine::setTimeoutTimer(int msec)
 
 QByteArray HttpEngine::GetQueryInBAByIP(NetIP ip, int port, const QString &query, const QStringList &args, bool isSSL)
 {
-    QString url = (isSSL) ? "https://" : "http://" + IP::toString(ip) + ":" + QString::number(port);
+    const QString scheme = isSSL ? QStringLiteral("https://") : QStringLiteral("http://");
+    const QString url = scheme + IP::toString(ip) + ":" + QString::number(port);
     return GetQueryInBA(url, query, args);
 }

@@ -38,7 +38,12 @@ public:
         ThreadStatus status;
     };
 
+    /// \brief Constructs a ThreadPool with the thread ID counter starting at 1.
     explicit ThreadPool(QObject *parent = nullptr);
+
+    /*! \brief Destructor — quits and waits for every managed thread, then deletes it.
+     *  \details Iterates the map from the front, removing entries as they are cleaned up.
+     */
     ~ThreadPool();
 
     template <typename Functor> int create(QObject *context, Functor &&runMethod, void (QObject::*finishSignal)())
@@ -78,8 +83,20 @@ public:
         m_threadMap[id] = thr;
         return id;
     }
+
+    /*! \brief Starts the thread identified by \a id.
+     *  \pre \a id must have been registered via create(); otherwise behaviour is undefined.
+     */
     void start(int id);
+
+    /*! \brief Asks the thread identified by \a id to quit and blocks until it exits.
+     *  \pre \a id must have been registered via create(); otherwise behaviour is undefined.
+     */
     void finish(int id);
+
+    /*! \brief Returns the current status of the thread identified by \a id.
+     *  \return DELETED if \a id is not registered, otherwise the Thread::status value.
+     */
     ThreadStatus status(int id);
 
 signals:

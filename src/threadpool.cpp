@@ -35,7 +35,7 @@ void ThreadPool::finish(int id)
 
 ThreadPool::ThreadStatus ThreadPool::status(int id)
 {
-    if (m_threadMap.keys().contains(id))
+    if (m_threadMap.contains(id))
         return m_threadMap[id].status;
     else
         return DELETED;

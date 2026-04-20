@@ -76,7 +76,7 @@ QStringList Files::Drives()
     return sl;
 }
 
-QStringList Files::SearchForFile(QStringList &filepaths, const QString &filename, bool subdirs)
+QStringList Files::SearchForFile(const QStringList &filepaths, const QString &filename, bool subdirs)
 {
     QStringList files;
     for (const QString &filepath : filepaths)
@@ -90,7 +90,7 @@ QStringList Files::SearchForFile(QStringList &filepaths, const QString &filename
     return files;
 }
 
-QString Files::GetFirstDriveWithLabel(QStringList &filepaths, const QString &label)
+QString Files::GetFirstDriveWithLabel(const QStringList &filepaths, const QString &label)
 {
     QString str = "";
     int i = 0;
@@ -152,7 +152,7 @@ void Files::makePath(const QFile &path)
     QDir().mkpath(fi.dir().path());
 }
 
-const QString Files::SaveToTempFile(const QByteArray &src)
+QString Files::SaveToTempFile(const QByteArray &src)
 {
     QTemporaryFile file;
     file.setAutoRemove(false);
@@ -170,10 +170,10 @@ void Files::removeOlderThan(const QString &dir, const QString &filenameMask, con
     QDir dirToCheck(dir);
     dirToCheck.setNameFilters(QStringList(filenameMask));
     dirToCheck.setSorting(QDir::Time | QDir::Reversed);
-    QFileInfoList flist = dirToCheck.entryInfoList();
-    for (QFileInfo fi : flist)
+    const QFileInfoList flist = dirToCheck.entryInfoList();
+    for (const QFileInfo &fi : flist)
     {
-        if (fi.lastModified().secsTo(datetime) > 0) // time of file is lower
+        if (fi.lastModified().secsTo(datetime) > 0) // file is older than threshold
             QFile::remove(fi.filePath());
     }
 }
@@ -194,9 +194,6 @@ bool Files::rename(const QString &oldFileName, const QString &newFileName)
 {
     QFile fn(oldFileName);
     if (fn.exists())
-    {
-        fn.rename(newFileName);
-        return true;
-    }
+        return fn.rename(newFileName);
     return false;
 }

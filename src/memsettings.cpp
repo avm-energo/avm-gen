@@ -13,5 +13,5 @@ void MemSettings::set(const QString &key, const QVariant &value)
 
 utils::Convertable MemSettings::get(const QString &key) const
 {
-    return utils::Convertable(m_settingsMap[key]);
+    return utils::Convertable(m_settingsMap.value(key));
 }
