@@ -1,3 +1,13 @@
+libavm-gen (2.0.0) unstable; urgency=low
+
+  [*] the code is bugfixed and refactoring with the help of Claude Code
+  [+] ErMsgPool is now clearing after the message pops
+  [*] HttpEngine: the url might be improper
+  [*] Settings::initialize: makePath instead of mkdir to create full path to settings
+  [*] TimeFunc::Wait & WaitFor are rewritten on QEventLoop instead of processEvents in loop
+
+ -- AVM-Energo <support@avmenergo.ru>  Tue, 21 Apr 2026 14:47:38 +0300
+
 libavm-gen (1.11.0) unstable; urgency=low
 
   [*] include dir gen -> avm-gen
