@@ -37,6 +37,12 @@ public:
      */
     static void setMessageHandlerFilename(const QString &filename);
 
+    /*! \brief Opens the log file and writes the start banner.
+     *  \param filename  Base filename (without directory); forwarded to Logger::writeRawStart().
+     *  \details Call this once at application startup after initialising Settings.
+     */
+    static void setRawMessageHandlerFilename(const QString &filename);
+
     /// \brief Sets the minimum log level for file output.
     static void setLogLevel(Logger::LogLevels level);
 

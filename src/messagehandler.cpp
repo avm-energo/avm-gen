@@ -36,6 +36,11 @@ void MessageHandler::setMessageHandlerFilename(const QString &filename)
     s_log.writeStart(filename);
 }
 
+void MessageHandler::setRawMessageHandlerFilename(const QString &filename)
+{
+    s_log.writeRawStart(filename);
+}
+
 void MessageHandler::setLogLevel(Logger::LogLevels level)
 {
     s_log.setLogLevel(level);
