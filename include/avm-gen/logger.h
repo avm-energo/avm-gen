@@ -58,6 +58,13 @@ public:
      */
     void writeStart(const QString &filename);
 
+    /*! \brief Opens the log file, writes a start banner, and stores the path.
+     *  \param filename  Base filename (with directory).
+     *  \details Called once at application startup to mark a new session in the log.
+     *           Thread-safe via QMutexLocker.
+     */
+    void writeRawStart(const QString &filename);
+
     /// \brief Sets the minimum log level by enum value.
     void setLogLevel(LogLevels level);
 
@@ -90,4 +97,6 @@ private:
     LogLevels m_logLevel;
     QString m_logFilename;
     QMutex *m_mutex;
+
+    void writeStart();
 };

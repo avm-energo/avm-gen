@@ -21,7 +21,7 @@ const QMap<Logger::MessageTypes, Logger::MsgDescr> c_msgTypes {
 Logger::Logger()
 {
     m_logLevel = Logger::LogLevels::LOGLEVEL_WARN;
-    m_logFilename = "logger.log";
+    m_logFilename = Settings::logDir() + "logger.log";
     m_mutex = new QMutex;
     // NOTE: m_mutex is heap-allocated to keep ABI stability across shared-library builds,
     // but consider making it a direct member (QMutex m_mutex) in the next ABI break.
@@ -49,21 +49,14 @@ void Logger::writeLog(Logger::MessageTypes type, const QString &msg)
 
 void Logger::writeStart(const QString &filename)
 {
-    QMutexLocker locker(m_mutex);
     m_logFilename = Settings::logDir() + filename;
-    QFile logFile(m_logFilename);
-    Files::makePath(logFile);
-    QTextStream out;
-    out.setDevice(&logFile);
-    if (logFile.open(QFile::ReadWrite | QFile::Text | QFile::Append))
-    {
-        out << "=====================================\nLog file started at "
-            << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") + "\n"
-            << QCoreApplication::applicationName() << " v." << QCoreApplication::applicationVersion();
-        out.flush();
-        Files::checkNGzip(&logFile);
-        logFile.close();
-    }
+    writeStart();
+}
+
+void Logger::writeRawStart(const QString &filename)
+{
+    m_logFilename = filename;
+    writeStart();
 }
 
 void Logger::setLogLevel(LogLevels level)
@@ -102,6 +95,24 @@ Logger::LogLevels Logger::qtMessageTypeToLoglevel(QtMsgType type)
 QStringList Logger::logLevelsList()
 {
     return s_logLevelsMap.keys();
+}
+
+void Logger::writeStart()
+{
+    QMutexLocker locker(m_mutex);
+    QFile logFile(m_logFilename);
+    Files::makePath(logFile);
+    QTextStream out;
+    out.setDevice(&logFile);
+    if (logFile.open(QFile::ReadWrite | QFile::Text | QFile::Append))
+    {
+        out << "=====================================\nLog file started at "
+            << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") + "\n"
+            << QCoreApplication::applicationName() << " v." << QCoreApplication::applicationVersion();
+        out.flush();
+        Files::checkNGzip(&logFile);
+        logFile.close();
+    }
 }
 
 /// The categories we've not used yet, the reserve for the future
